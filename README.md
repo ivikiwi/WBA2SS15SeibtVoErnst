@@ -1,1 +1,2 @@
-# WBA-2_Team11
+# WBA2, Team 11
+## Roman Seibt, Markus Ernst, Phuong Thuy Duong Vo
