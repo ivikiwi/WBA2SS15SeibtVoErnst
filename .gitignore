@@ -1,2 +1,3 @@
-#Hier geben wir später Datei-Typen ein, die später nicht committed werden dürfen.
-
+#Node Modules#
+##############
+node_modules
