@@ -7,8 +7,9 @@ fs.readFile(__dirname+"/wolkenkratzer.json", function(err, data) {
 			var emulated = JSON.parse(data.toString());
 
 		for(var i in emulated.wolkenkratzer){
-			console.log(emulated.wolkenkratzer[i].name);
-			console.log(emulated.wolkenkratzer[i].stadt);
-			console.log(emulated.wolkenkratzer[i].hoehe);
+			console.log("Name"+emulated.wolkenkratzer[i].name);
+			console.log("Stadt:"+emulated.wolkenkratzer[i].stadt);
+			console.log("Hoehe:"+emulated.wolkenkratzer[i].hoehe);
+			console.log("--------------------------------------")
 		}
  });
