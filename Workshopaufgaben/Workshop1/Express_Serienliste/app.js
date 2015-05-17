@@ -29,4 +29,9 @@ app.get('/', function(req, res) {
 	}
 });
 
+app.post('/series', jsonParser, function(req, res){
+	series.push(req.body);
+	res.type('plain').send('Added!');
+});
+
 app.listen(8888);
