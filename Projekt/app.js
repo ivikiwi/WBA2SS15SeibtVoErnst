@@ -4,6 +4,22 @@ var jsonParser = bodyParse.json();
 
 var app = express();
 
+var redis = require("redis");
+var client = redis.createClient();
+
+client.set("key", value);
+client.get("key", function(err, rep){
+	console.log(rep);
+})
+
+var series = [{"Name": "Once Upon a Time",
+			"Seasons": "2",
+		},
+		{
+			"Name": "Bla",
+			"Seasons": "3",
+		}]
+
 app.get('/', function(req, res) {
 	var acceptedTypes = req.accepts(['html', 'json']);
 	switch(acceptedTypes) {
@@ -27,5 +43,7 @@ app.post('/series/name', jsonParser, function(req, res){
 	series.push(req.body);
 	res.type('plain').send('Added!');
 });
+
+
 
 app.listen(8888);
