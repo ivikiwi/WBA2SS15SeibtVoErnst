@@ -120,6 +120,54 @@ app.get('/series/description/:id', function(req, res){
 
 });
 
+app.put('/series/name/:id', function(req, res){
+	var seriesAlldata;
+
+
+	db.exists('series:'+req.params.id, function(err, rep){
+
+
+			var updatedSeries = req.body;
+
+			updatedSeries.id = req.params.id;
+
+			var updatedName = req.body;
+
+			updatedSeries.name = updatedName;
+
+
+			db.set('series:'+req.params.id, JSON.stringify(updatedSeries), function(err, rep){
+				res.json(updatedSeries);
+			})
+
+
+
+	});
+
+
+
+
+
+	/*
+	db.get('series:'+req.params.id, function(err, rep){
+		var serie = [];
+
+		if(rep){
+
+				serie.push(JSON.parse(rep));
+
+
+			serie = serie.map(function(series){
+				return {name: series.name};
+			});
+			res.json(serie);
+		} else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});*/
+
+});
+
 
 /*
 var series = [{"Name": "Once Upon a Time",
