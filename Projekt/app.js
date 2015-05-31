@@ -80,6 +80,27 @@ app.get('/series', function(req, res){
 	});
 });
 
+app.get('/series/name/:id', function(req, res){
+	db.get('series:'+req.params.id, function(err, rep){
+		var serieslist = [];
+
+		if(rep.length == 0){
+			res.json(serieslist);
+			return
+		}
+
+				serieslist.push(JSON.parse(rep));
+
+
+			serieslist = serieslist.map(function(series){
+				return {name: series.name};
+			});
+			res.json(serieslist);
+		});
+
+});
+
+
 /*
 var series = [{"Name": "Once Upon a Time",
 			"Seasons": "2",
