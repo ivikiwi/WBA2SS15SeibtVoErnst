@@ -120,6 +120,7 @@ app.get('/series/description/:id', function(req, res){
 
 });
 
+//DIESE METHODE FUNKTIONIERT NOCH NICHT!!! NOCHMAL DRÜBERGUCKEN!!// 
 app.put('/series/name/:id', function(req, res){
 	var seriesAlldata;
 
