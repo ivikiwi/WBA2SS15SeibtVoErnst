@@ -46,6 +46,40 @@ app.put('/series/:id', function(req, res) {
 	});
 });
 
+app.delete('/series/:id', function(req,res){
+	db.del('series:'+req.params.id, function(err, rep){
+		if(rep==1){
+			res.status(200).type('text').send('OK');
+		}
+		else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+});
+
+
+app.get('/series', function(req, res){
+	db.keys('series:*', function(err, rep){
+		var serieslist = [];
+
+		if(rep.length == 0){
+			res.json(serieslist);
+			return
+		}
+
+		db.mget(rep, function(err, rep){
+			rep.forEach(function(val){
+				serieslist.push(JSON.parse(val));
+			});
+
+			serieslist = serieslist.map(function(series){
+				return {id: series.id, name: series.name, description: series.description, seasons: series.seasons};
+			});
+			res.json(serieslist);
+		});
+	});
+});
+
 /*
 var series = [{"Name": "Once Upon a Time",
 			"Seasons": "2",
