@@ -1,17 +1,28 @@
 var express = require('express');
 var bodyParse = require('body-parser');
 var jsonParser = bodyParse.json();
+var redis = require("redis");
 
 var app = express();
+var db = redis.createClient();
 
-var redis = require("redis");
-var client = redis.createClient();
+app.use(bodyParse.json());
 
-client.set("key", value);
-client.get("key", function(err, rep){
-	console.log(rep);
-})
+app.post('/series', function(req, res){
+	var newSeries = req.body;
 
+	db.incr('id:series', function(err, rep){
+		newSeries.id = rep;
+
+		db.set('series:'+newSeries.id, JSON.stringify(newSeries), function(err, rep){
+			res.json(newSeries);
+		});
+	});
+});
+
+
+
+/*
 var series = [{"Name": "Once Upon a Time",
 			"Seasons": "2",
 		},
@@ -19,6 +30,7 @@ var series = [{"Name": "Once Upon a Time",
 			"Name": "Bla",
 			"Seasons": "3",
 		}]
+
 
 app.get('/', function(req, res) {
 	var acceptedTypes = req.accepts(['html', 'json']);
@@ -42,7 +54,7 @@ app.post('/series', jsonParser, function(req, res){
 app.post('/series/name', jsonParser, function(req, res){
 	series.push(req.body);
 	res.type('plain').send('Added!');
-});
+});*/
 
 
 
