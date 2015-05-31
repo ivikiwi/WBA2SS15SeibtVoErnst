@@ -82,21 +82,41 @@ app.get('/series', function(req, res){
 
 app.get('/series/name/:id', function(req, res){
 	db.get('series:'+req.params.id, function(err, rep){
-		var serieslist = [];
+		var serie = [];
 
-		if(rep.length == 0){
-			res.json(serieslist);
-			return
-		}
+		if(rep){
 
-				serieslist.push(JSON.parse(rep));
+				serie.push(JSON.parse(rep));
 
 
-			serieslist = serieslist.map(function(series){
+			serie = serie.map(function(series){
 				return {name: series.name};
 			});
-			res.json(serieslist);
-		});
+			res.json(serie);
+		} else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+
+});
+
+app.get('/series/description/:id', function(req, res){
+	db.get('series:'+req.params.id, function(err, rep){
+		var serie = [];
+
+		if(rep){
+
+				serie.push(JSON.parse(rep));
+
+
+			serie = serie.map(function(series){
+				return {description: series.description};
+			});
+			res.json(serie);
+		} else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
 
 });
 
