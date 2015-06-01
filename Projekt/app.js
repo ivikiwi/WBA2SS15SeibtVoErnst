@@ -33,17 +33,20 @@ app.get('/series/:id', function(req, res){
 
 app.put('/series/:id', function(req, res) {
 	db.get('series:' + req.params.id, function (err, rep) {
+		console.log(req.body.name);
 		var json = JSON.parse(rep);
-		req.body.each(function (key) {
+		console.log(json);
+		for (var key in req.body) {
 			json[key] = req.body[key];
-		});
+		}
 		db.set('series:' + req.params.id, JSON.stringify(json), function (err, rep) {
 			res.json(json);
-		})
-	}) 
+		});
+	});
+		
+	});
 
 	/*db.exists('series:'+req.params.id, function(err, rep){
-		db.get('series:'+req.params.id, function(err, rep){
 		if(rep==1) {
 			var updatedSeries = req.body;
 			updatedSeries.id = req.params.id;
@@ -55,7 +58,7 @@ app.put('/series/:id', function(req, res) {
 			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden.');
 		}
 	});*/
-});
+
 
 app.delete('/series/:id', function(req,res){
 	db.del('series:'+req.params.id, function(err, rep){
@@ -75,7 +78,7 @@ app.get('/series', function(req, res){
 
 		if(rep.length == 0){
 			res.json(serieslist);
-			return
+			return;
 		}
 
 		db.mget(rep, function(err, rep){
