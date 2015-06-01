@@ -8,6 +8,8 @@ var db = redis.createClient();
 
 app.use(bodyParse.json());
 
+
+//--------- POST-Method to post new Series---------//
 app.post('/series', function(req, res){
 	var newSeries = req.body;
 
@@ -20,6 +22,7 @@ app.post('/series', function(req, res){
 	});
 });
 
+//-------- GET-Method to get a series by id--------//
 app.get('/series/:id', function(req, res){
 	db.get('series:'+req.params.id, function(err, rep){
 		if(rep) {
@@ -31,6 +34,7 @@ app.get('/series/:id', function(req, res){
 	});
 });
 
+//---- PUT-Method to change an existing series ----//
 app.put('/series/:id', function(req, res) {
 	db.get('series:' + req.params.id, function (err, rep) {
 		console.log(req.body.name);
@@ -46,20 +50,7 @@ app.put('/series/:id', function(req, res) {
 		
 	});
 
-	/*db.exists('series:'+req.params.id, function(err, rep){
-		if(rep==1) {
-			var updatedSeries = req.body;
-			updatedSeries.id = req.params.id;
-			db.set('series:'+req.params.id, JSON.stringify(updatedSeries), function(err, rep) {
-				res.json(updatedSeries);
-			});
-		}
-		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden.');
-		}
-	});*/
-
-
+//-----DELETE-Method to delete a series by id -----//
 app.delete('/series/:id', function(req,res){
 	db.del('series:'+req.params.id, function(err, rep){
 		if(rep==1){
@@ -72,6 +63,7 @@ app.delete('/series/:id', function(req,res){
 });
 
 
+//----GET-Method to get a list with all existing series---//
 app.get('/series', function(req, res){
 	db.keys('series:*', function(err, rep){
 		var serieslist = [];
@@ -94,6 +86,7 @@ app.get('/series', function(req, res){
 	});
 });
 
+//--------GET-Method to get the name of a series by id --------//
 app.get('/series/name/:id', function(req, res){
 	db.get('series:'+req.params.id, function(err, rep){
 		var serie = [];
@@ -114,6 +107,7 @@ app.get('/series/name/:id', function(req, res){
 
 });
 
+//--------GET-Method to get the description of a series by id -------//
 app.get('/series/description/:id', function(req, res){
 	db.get('series:'+req.params.id, function(err, rep){
 		var serie = [];
@@ -134,57 +128,6 @@ app.get('/series/description/:id', function(req, res){
 
 });
 
-//DIESE METHODE FUNKTIONIERT NOCH NICHT!!! NOCHMAL DRÜBERGUCKEN!!// 
-app.put('/series/name/:id', function(req, res){
-	var seriesAlldata;
-
-
-	db.exists('series:'+req.params.id, function(err, rep){
-
-
-			var updatedSeries = req.body;
-
-			updatedSeries.id = req.params.id;
-
-			var updatedName = req.body;
-
-			updatedSeries.name = updatedName;
-
-
-			db.set('series:'+req.params.id, JSON.stringify(updatedSeries), function(err, rep){
-				res.json(updatedSeries);
-			})
-
-
-
-	});
-});
-
-
-/*
-app.get('/', function(req, res) {
-	var acceptedTypes = req.accepts(['html', 'json']);
-	switch(acceptedTypes) {
-		case 'html':
-			res.type('html').send('<h1>'+JSON.stringify(series)+'</h1>');
-			break;
-		case 'json':
-			res.json(series);
-			break;
-		default:
-			res.status(406).end();
-	}
-});
-
-app.post('/series', jsonParser, function(req, res){
-	series.push(req.body);
-	res.type('plain').send('Added!');
-});
-
-app.post('/series/name', jsonParser, function(req, res){
-	series.push(req.body);
-	res.type('plain').send('Added!');
-});*/
 
 
 
