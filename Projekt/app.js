@@ -32,7 +32,18 @@ app.get('/series/:id', function(req, res){
 });
 
 app.put('/series/:id', function(req, res) {
-	db.exists('series:'+req.params.id, function(err, rep){
+	db.get('series:' + req.params.id, function (err, rep) {
+		var json = JSON.parse(rep);
+		req.body.each(function (key) {
+			json[key] = req.body[key];
+		});
+		db.set('series:' + req.params.id, JSON.stringify(json), function (err, rep) {
+			res.json(json);
+		})
+	}) 
+
+	/*db.exists('series:'+req.params.id, function(err, rep){
+		db.get('series:'+req.params.id, function(err, rep){
 		if(rep==1) {
 			var updatedSeries = req.body;
 			updatedSeries.id = req.params.id;
@@ -43,7 +54,7 @@ app.put('/series/:id', function(req, res) {
 		else {
 			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden.');
 		}
-	});
+	});*/
 });
 
 app.delete('/series/:id', function(req,res){
@@ -144,42 +155,10 @@ app.put('/series/name/:id', function(req, res){
 
 
 	});
-
-
-
-
-
-	/*
-	db.get('series:'+req.params.id, function(err, rep){
-		var serie = [];
-
-		if(rep){
-
-				serie.push(JSON.parse(rep));
-
-
-			serie = serie.map(function(series){
-				return {name: series.name};
-			});
-			res.json(serie);
-		} else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
-		}
-	});*/
-
 });
 
 
 /*
-var series = [{"Name": "Once Upon a Time",
-			"Seasons": "2",
-		},
-		{
-			"Name": "Bla",
-			"Seasons": "3",
-		}]
-
-
 app.get('/', function(req, res) {
 	var acceptedTypes = req.accepts(['html', 'json']);
 	switch(acceptedTypes) {
