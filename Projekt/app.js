@@ -79,7 +79,7 @@ app.get('/series', function(req, res){
 			});
 
 			serieslist = serieslist.map(function(series){
-				return {id: series.id, name: series.name, description: series.description, seasons: series.seasons};
+				return {id: series.id, name: series.name, description: series.description, genre: series.genre};
 			});
 			res.json(serieslist);
 		});
