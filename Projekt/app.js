@@ -142,42 +142,29 @@ app.post('/series/:sid/season', function(req, res){
 	});
 });
 
+//-------- GET-Method to get a series by series-id and season-id--------//
 app.get('/series/:sid/season/:id', function(req, res){
 	db.get('series:'+req.params.sid+':season:'+req.params.id, function(err, rep){
 		if(rep) {
 			res.type('json').send(rep);
 		}
 		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.sid+' wurde nicht gefunden');
-		}
-	});
-});
-
-
-
-//-------- GET-Method to get a series by id--------//
-app.get('/series/:id/season/:id', function(req, res){
-	db.get('season:'+req.params.id, function(err, rep){
-		if(rep) {
-			res.type('json').send(rep);
-		}
-		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+			res.status(404).type('text').send('Die Staffel mit der ID '+req.params.id+' wurde nicht gefunden');
 		}
 	});
 });
 
 
 //---- PUT-Method to change an existing season ----//
-app.put('/series/:id/season/:id', function(req, res) {
-	db.get('season:' + req.params.id, function (err, rep) {
+app.put('/series/:sid/season/:id', function(req, res) {
+	db.get('series:'+req.params.sid+':season:'+req.params.id, function (err, rep) {
 		console.log(req.body.name);
 		var json = JSON.parse(rep);
 		console.log(json);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
-		db.set('season:' + req.params.id, JSON.stringify(json), function (err, rep) {
+		db.set('series:'+req.params.sid+':season:' + req.params.id, JSON.stringify(json), function (err, rep) {
 			res.json(json);
 		});
 	});
@@ -186,20 +173,20 @@ app.put('/series/:id/season/:id', function(req, res) {
 
 
 //-----DELETE-Method to delete a season by id -----//
-app.delete('/series/:id/season/:id', function(req,res){
-	db.del('season:'+req.params.id, function(err, rep){
+app.delete('/series/:sid/season/:id', function(req,res){
+	db.del('series:'+req.params.sid+':season:'+req.params.id, function(err, rep){
 		if(rep==1){
 			res.status(200).type('text').send('OK');
 		}
 		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+			res.status(404).type('text').send('Die Staffel mit der ID '+req.params.id+' wurde nicht gefunden');
 		}
 	});
 });
 
 //----GET-Method to get a list with all existing seasons---//
-app.get('/series/:id/season', function(req, res){
-	db.keys('/season:*', function(err, rep){
+app.get('/series/:sid/season', function(req, res){
+	db.keys('series:'+req.params.sid+':season:*', function(err, rep){
 		var seasonlist = [];
 
 		if(rep.length == 0){
