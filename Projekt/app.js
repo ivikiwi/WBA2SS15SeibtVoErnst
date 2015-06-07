@@ -295,6 +295,83 @@ app.get('/user', function(req, res){
 });
 
 
+////// ---- WATCHED SERIES ----- ///////
+app.post('/user/:uid/watched', function(req, res){
+	var newWatchedSeries = req.body;
+
+	db.incr('user:'+req.params.uid+':watched', function(err, rep){
+	newWatchedSeries.id = rep;
+
+		db.set('user:'+req.params.uid+':watched:'+newWatchedSeries.id, JSON.stringify(newWatchedSeries), function(err, rep){
+			res.json(newWatchedSeries);
+		});
+	});
+});
+
+//-------- GET-Method to get a watched series by user-id and series-id--------//
+app.get('/user/:uid/watched/:id', function(req, res){
+	db.get('user:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
+		if(rep) {
+			res.type('json').send(rep);
+		}
+		else {
+			res.status(404).type('text').send('Die watched Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+});
+
+//-------- PUT-Method to get a watched series by user-id and series-id--------//
+app.put('/user/:uid/watched/:id', function(req, res) {
+	db.get('user:' + req.params.uid + ':watched:' + req.params.id, function (err, rep) {
+		console.log(req.body.name);
+		var json = JSON.parse(rep);
+		console.log(json);
+		for (var key in req.body) {
+			json[key] = req.body[key];
+		}
+		db.set('user:' + req.params.uid + ':watched:' + req.params.id, JSON.stringify(json), function (err, rep) {
+			res.json(json);
+		});
+	});
+		
+	});
+
+
+//-----DELETE-Method to delete a watched series by id -----//
+app.delete('/user/:uid/watched/:id', function(req,res){
+	db.del('user:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
+		if(rep==1){
+			res.status(200).type('text').send('OK');
+		}
+		else {
+			res.status(404).type('text').send('Die watched Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+});
+
+
+//----GET-Method to get a list with all watched series---//
+app.get('/user/:uid/watched', function(req, res){
+	db.keys('user:'+req.params.uid+':watched:*', function(err, rep){
+		var watchedlist = [];
+
+		if(rep.length == 0){
+			res.json(watchedlist);
+			return;
+		}
+
+		db.mget(rep, function(err, rep){
+			rep.forEach(function(val){
+				watchedlist.push(JSON.parse(val));
+			});
+
+			watchedlist = watchedlist.map(function(series){
+				return {id: series.id, seriesid: series.seriesid, season: series.season, episode: series.episode};
+			});
+			res.json(watchedlist);
+		});
+	});
+});
 
 
 
