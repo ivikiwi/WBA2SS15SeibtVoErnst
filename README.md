@@ -20,5 +20,22 @@ Die Anzahl von Staffeln einer Serie wird wie folgt eingetragen:
 {
 	"episodes": "Anzahl an Episoden der Staffel"
 }
-Dabei wird auf folgenden Pfad zugegriffen: http://localhost:port/series/:serienid/season
+Dabei wird auf folgenden Pfad zugegriffen: http://localhost:port/series/:serienid/season/:seasonid
 Wie viele Staffeln eine Serie hat, könnte man anhand der Einträge mit dem key series:serienid:season:* auslesen.
+
+
+##### JSON watched Serie
+Eine angeschaute Serie wird wie folgt eingetragen:
+{
+    "seriesid": "6",
+    "season": "2",
+    "episode": "4"
+  }
+Der Pfad zu einer angeschauten Serie: http://localhost:port/user/:userid/watched/:watchedid
+
+##### JSON User
+Ein User enthält folgende Informationen:
+(noch nicht vollständig)
+{
+	"name": "username"
+}
