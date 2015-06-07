@@ -237,7 +237,7 @@ app.get('/user/:id', function(req, res){
 			res.type('json').send(rep);
 		}
 		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+			res.status(404).type('text').send('Der User mit der ID '+req.params.id+' wurde nicht gefunden');
 		}
 	});
 });
@@ -265,7 +265,7 @@ app.delete('/user/:id', function(req,res){
 			res.status(200).type('text').send('OK');
 		}
 		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+			res.status(404).type('text').send('Der User mit der ID '+req.params.id+' wurde nicht gefunden');
 		}
 	});
 });
