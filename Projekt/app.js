@@ -129,6 +129,65 @@ app.get('/series/description/:id', function(req, res){
 });
 
 
+///////------------ User --------------/////
+
+
+
+//--------- POST-Method to post new User---------//
+app.post('/user', function(req, res){
+	var newSeries = req.body;
+
+	db.incr('id:user', function(err, rep){
+		newSeries.id = rep;
+
+		db.set('user:'+newSeries.id, JSON.stringify(newSeries), function(err, rep){
+			res.json(newSeries);
+		});
+	});
+});
+
+
+
+//-------- GET-Method to get a user by id--------//
+app.get('/user/:id', function(req, res){
+	db.get('user:'+req.params.id, function(err, rep){
+		if(rep) {
+			res.type('json').send(rep);
+		}
+		else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+});
+
+//---- PUT-Method to change an existing user ----//
+app.put('/user/:id', function(req, res) {
+	db.get('user:' + req.params.id, function (err, rep) {
+		console.log(req.body.name);
+		var json = JSON.parse(rep);
+		console.log(json);
+		for (var key in req.body) {
+			json[key] = req.body[key];
+		}
+		db.set('user:' + req.params.id, JSON.stringify(json), function (err, rep) {
+			res.json(json);
+		});
+	});
+		
+	});
+
+//-----DELETE-Method to delete a user by id -----//
+app.delete('/user/:id', function(req,res){
+	db.del('user:'+req.params.id, function(err, rep){
+		if(rep==1){
+			res.status(200).type('text').send('OK');
+		}
+		else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
+		}
+	});
+});
+
 
 
 app.listen(8888);
