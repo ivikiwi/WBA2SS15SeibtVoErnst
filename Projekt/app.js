@@ -189,5 +189,29 @@ app.delete('/user/:id', function(req,res){
 });
 
 
+//----GET-Method to get a list with all existing users---//
+app.get('/user', function(req, res){
+	db.keys('user:*', function(err, rep){
+		var userlist = [];
+
+		if(rep.length == 0){
+			res.json(userlist);
+			return;
+		}
+
+		db.mget(rep, function(err, rep){
+			rep.forEach(function(val){
+				userlist.push(JSON.parse(val));
+			});
+
+			userlist = userlist.map(function(user){
+				return {id: user.id, name: user.name};
+			});
+			res.json(userlist);
+		});
+	});
+});
+
+
 
 app.listen(8888);
