@@ -130,41 +130,30 @@ app.get('/series/description/:id', function(req, res){
 
 
 ///////------------ Seasons -------------///////
-app.post('/series/:id/test', function(req, res){
+app.post('/series/:sid/season', function(req, res){
 	var newSeason = req.body;
 
-	//db.incr('id:season', function(err, rep){
-	//	newSeason.id = rep;
+	db.incr(req.params.sid+':season', function(err, rep){
+	newSeason.id = rep;
 
-		db.set('series:'+req.params.id+'test', JSON.stringify(newSeason), function(err, rep){
-			res.json(newSeason);
-	//	});
-	});
-});
-
-app.get('/series/:id/test', function(req, res){
-	db.get('series:'+req.params.id+':test', function(err, rep){
-		if(rep) {
-			res.type('json').send(rep);
-		}
-		else {
-			res.status(404).type('text').send('Die Serie mit der ID '+req.params.id+' wurde nicht gefunden');
-		}
-	});
-});
-
-
-app.post('/series/:id/season', function(req, res){
-	var newSeason = req.body;
-
-	db.incr('id:season', function(err, rep){
-		newSeason.id = rep;
-
-		db.set('series'+req.params.id+'season:'+newSeason.id, JSON.stringify(newSeason), function(err, rep){
+		db.set('series:'+req.params.sid+':season:'+newSeason.id, JSON.stringify(newSeason), function(err, rep){
 			res.json(newSeason);
 		});
 	});
 });
+
+app.get('/series/:sid/season/:id', function(req, res){
+	db.get('series:'+req.params.sid+':season:'+req.params.id, function(err, rep){
+		if(rep) {
+			res.type('json').send(rep);
+		}
+		else {
+			res.status(404).type('text').send('Die Serie mit der ID '+req.params.sid+' wurde nicht gefunden');
+		}
+	});
+});
+
+
 
 //-------- GET-Method to get a series by id--------//
 app.get('/series/:id/season/:id', function(req, res){
