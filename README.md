@@ -96,3 +96,11 @@ Ein User enthält folgende Informationen:
 	
 }
 
+###Use-Cases
+
+Karl-Heinz schaut in seiner Freizeit neben dem Job gerne die ein oder andere Serie. Da sich Karl-Heinz mit vielen verschiedenen Arbeitskollegen über verschiedene Serien austauscht, schaut er häufig mehrere Serien an einem Tag. Einige seiner Arbeitskollegen lachen manchmal über ihn, weil er dabei häufig durcheinander kommt, und teilweise sogar die spannenden Staffelfinale verpasst, nur weil er dachte er hätte sie schon gesehen.
+
+Karl-Heinz benutzt den von uns angebotenen Service und legt die Serie Game of Thrones an, hier markiert er sich die folgen die er schon gesehen hat. Seit dem kommt er nicht mehr durcheinander. (({{NICHT VOLLSTÄNDIG}}))
+
+Fritz benutzt seit einigen Wochen unseren Service, er steht total auf die Serie „Better Call Saul“, auf dubiosen Wegen besorgt er sich die neue Staffel bereits vor dem offiziellen Release. Ihm fällt auf das die neue Staffel im Programm selbst noch nicht gelistet ist und hat Angst durcheinander zu kommen. Dann entdeckt er, dass er sogar selber neue Staffeln posten kann.
+
