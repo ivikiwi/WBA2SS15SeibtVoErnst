@@ -10,7 +10,7 @@
 
 | Resource                | Methode | Semantik                                                                                    | Content-Type (req) | Content-Type (res) |
 |-------------------------|---------|---------------------------------------------------------------------------------------------|--------------------|--------------------|
-| /series                 | post    | Fügt eine neue Serie in die Datenbank ein                                                   |                    |                    |
+| /series                 | post    | Fügt eine neue Serie in die Datenbank ein                                                   |           application/json         |                    |
 | /series/:id             | get     | Gibt die Informationen einer Serie zurück                                                   |                    |                    |
 | /series/:id             | put     | Aktualisiert die Informationen einer Serie                                                  |                    |                    |
 | /series/:id             | delete  | Löscht eine Serie aus der Datenbank                                                         |                    |                    |
