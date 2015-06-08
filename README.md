@@ -10,18 +10,18 @@
 
 | Resource                | Methode | Semantik                                                                                    | Content-Type (req) | Content-Type (res) |
 |-------------------------|---------|---------------------------------------------------------------------------------------------|--------------------|--------------------|
-| /series                 | post    | Fügt eine neue Serie in die Datenbank ein                                                   |           application/json         |                    |
-| /series/:id             | get     | Gibt die Informationen einer Serie zurück                                                   |                    |                    |
-| /series/:id             | put     | Aktualisiert die Informationen einer Serie                                                  |                    |                    |
-| /series/:id             | delete  | Löscht eine Serie aus der Datenbank                                                         |                    |                    |
-| /series                 | get     | Gibt alle Serien mitsamt relevanten Informationen zurück                                    |                    |                    |
-| /series/name/:id        | get     | Gibt nur den Namen einer bestimmten Serie zurück                                            |                    |                    |
-| /series/description/:id | get     | Gibt nur die Beschreibung einer bestimmten Serie zurück                                     |                    |                    |
-| /series/:sid/season     | post    | Fügt einer bestimmten Serie mithilfe der Serienid eine Staffel hinzu                        |                    |                    |
-| /series/:sid/season/:id | get     | Gibt die Informationen einer bestimmten Staffel mithilfe der Serienid und der Staffelid aus |                    |                    |
-| /series/:sid/season/:id | put     | Aktualisiert die Informationen einer bestimmten Staffel                                     |                    |                    |
-| /series/:sid/season/:id | delete  | Löscht eine bestimmte Staffel                                                               |                    |                    |
-| /series/:sid/season     | get     |                                                                                             |                    |                    |
+| /series                 | post    | Fügt eine neue Serie in die Datenbank ein                                                   |           application/json         |            application/json        |
+| /series/:id             | get     | Gibt die Informationen einer Serie zurück                                                   |     text/plain               |        application/json            |
+| /series/:id             | put     | Aktualisiert die Informationen einer Serie                                                  |     text/plain               |        application/json            |
+| /series/:id             | delete  | Löscht eine Serie aus der Datenbank                                                         |        application/json            |        application/json            |
+| /series                 | get     | Gibt alle Serien mitsamt relevanten Informationen zurück                                    |        text/plain            |          application/json          |
+| /series/name/:id        | get     | Gibt nur den Namen einer bestimmten Serie zurück                                            |          text/plain          |           application/json         |
+| /series/description/:id | get     | Gibt nur die Beschreibung einer bestimmten Serie zurück                                     |        text/plain            |           application/json         |
+| /series/:sid/season     | post    | Fügt einer bestimmten Serie mithilfe der Serienid eine Staffel hinzu                        |       application/json             |        application/json            |
+| /series/:sid/season/:id | get     | Gibt die Informationen einer bestimmten Staffel mithilfe der Serienid und der Staffelid aus |       text/plain             |             application/json       |
+| /series/:sid/season/:id | put     | Aktualisiert die Informationen einer bestimmten Staffel                                     |        application/json            |        application/json            |
+| /series/:sid/season/:id | delete  | Löscht eine bestimmte Staffel                                                               |         application/json           |        application/json            |
+| /series/:sid/season     | get     |                                                                                             |        text/plain            |         application/json           |
 
 
 ##### User
