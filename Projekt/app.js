@@ -13,7 +13,7 @@ app.use(bodyParse.json());
 app.post('/series', function(req, res){
 	var newSeries = req.body;
 
-	db.incr('id:series', function(err, rep){
+	db.incr('id:ss', function(err, rep){
 		newSeries.id = rep;
 
 		db.set('series:'+newSeries.id, JSON.stringify(newSeries), function(err, rep){
@@ -71,10 +71,13 @@ app.get('/series', function(req, res){
 			return;
 		}
 
+		console.log(rep);
+
 		db.mget(rep, function(err, rep){
 			rep.forEach(function(val){
 				serieslist.push(JSON.parse(val));
 			});
+
 
 			serieslist = serieslist.map(function(series){
 				return {id: series.id, name: series.name, description: series.description, genre: series.genre};
@@ -131,7 +134,7 @@ app.get('/series/description/:id', function(req, res){
 app.post('/series/:sid/season', function(req, res){
 	var newSeason = req.body;
 
-	db.incr(req.params.sid+':season', function(err, rep){
+	db.incr(req.params.sid+':sss', function(err, rep){
 	newSeason.id = rep;
 
 		db.set('series:'+req.params.sid+':season:'+newSeason.id, JSON.stringify(newSeason), function(err, rep){
@@ -215,7 +218,7 @@ app.get('/series/:sid/season', function(req, res){
 app.post('/user', function(req, res){
 	var newSeries = req.body;
 
-	db.incr('id:user', function(err, rep){
+	db.incr('id:u', function(err, rep){
 		newSeries.id = rep;
 
 		db.set('user:'+newSeries.id, JSON.stringify(newSeries), function(err, rep){
