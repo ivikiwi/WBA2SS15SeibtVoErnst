@@ -96,6 +96,7 @@ Ein User enthält folgende Informationen:
 	
 }
 
+###Use-Cases
 
 Karl-Heinz schaut in seiner Freizeit neben dem Job gerne die ein oder andere Serie. Da sich Karl-Heinz mit vielen verschiedenen Arbeitskollegen über verschiedene Serien austauscht, schaut er häufig mehrere Serien an einem Tag. Einige seiner Arbeitskollegen lachen manchmal über ihn, weil er dabei häufig durcheinander kommt, und teilweise sogar die spannenden Staffelfinale verpasst, nur weil er dachte er hätte sie schon gesehen.
 
