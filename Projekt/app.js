@@ -37,9 +37,7 @@ app.get('/series/:id', function(req, res){
 //---- PUT-Method to change an existing series ----//
 app.put('/series/:id', function(req, res) {
 	db.get('series:' + req.params.id, function (err, rep) {
-		console.log(req.body.name);
 		var json = JSON.parse(rep);
-		console.log(json);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
@@ -158,9 +156,7 @@ app.get('/series/:sid/season/:id', function(req, res){
 //---- PUT-Method to change an existing season ----//
 app.put('/series/:sid/season/:id', function(req, res) {
 	db.get('series:'+req.params.sid+':season:'+req.params.id, function (err, rep) {
-		console.log(req.body.name);
 		var json = JSON.parse(rep);
-		console.log(json);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
@@ -245,9 +241,7 @@ app.get('/user/:id', function(req, res){
 //---- PUT-Method to change an existing user ----//
 app.put('/user/:id', function(req, res) {
 	db.get('user:' + req.params.id, function (err, rep) {
-		console.log(req.body.name);
 		var json = JSON.parse(rep);
-		console.log(json);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
@@ -299,7 +293,7 @@ app.get('/user', function(req, res){
 app.post('/user/:uid/watched', function(req, res){
 	var newWatchedSeries = req.body;
 
-	db.incr('user:'+req.params.uid+':watched', function(err, rep){
+	db.incr('uzaehler:'+req.params.uid+':watched', function(err, rep){
 	newWatchedSeries.id = rep;
 
 		db.set('user:'+req.params.uid+':watched:'+newWatchedSeries.id, JSON.stringify(newWatchedSeries), function(err, rep){
@@ -323,9 +317,7 @@ app.get('/user/:uid/watched/:id', function(req, res){
 //-------- PUT-Method to get a watched series by user-id and series-id--------//
 app.put('/user/:uid/watched/:id', function(req, res) {
 	db.get('user:' + req.params.uid + ':watched:' + req.params.id, function (err, rep) {
-		console.log(req.body.name);
 		var json = JSON.parse(rep);
-		console.log(json);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
