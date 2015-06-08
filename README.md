@@ -28,16 +28,16 @@
 
 | Ressource              | Methode | Semantik                                                                             | Content-Type (req) | Content-Type (res) |
 |------------------------|---------|--------------------------------------------------------------------------------------|--------------------|--------------------|
-| /user                  | post    | Fügt einen neuen Benutzer hinzu                                                      |                    |                    |
-| /user/:id              | get     | Gibt Informationen über einen bestimmten User zurück                                 |                    |                    |
-| /user/:id              | put     | Aktualisiert Informationen eines bestimmten Users                                    |                    |                    |
-| /user/:id              | delete  | Löscht einen bestimmten User                                                         |                    |                    |
-| /user                  | get     | Gibt alle Benutzer mitsamt relevanter Informationen aus                              |                    |                    |
-| /user/:uid/watched     | post    | Fügt eine "angeschaute" Serie zum jeweiligen Benutzer hinzu                          |                    |                    |
-| /user/:uid/watched/:id | get     | Gibt die Informationen einer bestimmten "angeschauten Serie" eines Benutzers zurück  |                    |                    |
-| /user/:uid/watched/:id | put     | Aktualisiert die Informationen einer bestimmten "angeschauten Serie" eines Benutzers |                    |                    |
-| /user/:uid/watched/:id | delete  | Löscht eine "angeschaute Serie" eines Benutzers                                      |                    |                    |
-| /user/:uid/watched     | get     |                                                                                      |                    |                    |
+| /user                  | post    | Fügt einen neuen Benutzer hinzu                                                      |            text/plain        |        application/json            |
+| /user/:id              | get     | Gibt Informationen über einen bestimmten User zurück                                 |       text/plain             |          application/json          |
+| /user/:id              | put     | Aktualisiert Informationen eines bestimmten Users                                    |      text/plain              |      application/json              |
+| /user/:id              | delete  | Löscht einen bestimmten User                                                         |          application/json          |     application/json               |
+| /user                  | get     | Gibt alle Benutzer mitsamt relevanter Informationen aus                              |      text/plain              |            application/json        |
+| /user/:uid/watched     | post    | Fügt eine "angeschaute" Serie zum jeweiligen Benutzer hinzu                          |        application/json            |         application/json           |
+| /user/:uid/watched/:id | get     | Gibt die Informationen einer bestimmten "angeschauten Serie" eines Benutzers zurück  |        text/plain            |         application/json           |
+| /user/:uid/watched/:id | put     | Aktualisiert die Informationen einer bestimmten "angeschauten Serie" eines Benutzers |       application/json             |      application/json              |
+| /user/:uid/watched/:id | delete  | Löscht eine "angeschaute Serie" eines Benutzers                                      |       application/json             |         application/json           |
+| /user/:uid/watched     | get     |                                                                                      |        text/plain            |        application/json            |
 
 #### Wichtige Notizen zur Benutzung
 
