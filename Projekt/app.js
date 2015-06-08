@@ -134,10 +134,10 @@ app.get('/series/description/:id', function(req, res){
 app.post('/series/:sid/season', function(req, res){
 	var newSeason = req.body;
 
-	db.incr(req.params.sid+':sss', function(err, rep){
+	db.incr(req.params.sid+':sssincr', function(err, rep){
 	newSeason.id = rep;
 
-		db.set('series:'+req.params.sid+':season:'+newSeason.id, JSON.stringify(newSeason), function(err, rep){
+		db.set('ss:'+req.params.sid+':season:'+newSeason.id, JSON.stringify(newSeason), function(err, rep){
 			res.json(newSeason);
 		});
 	});
@@ -145,7 +145,7 @@ app.post('/series/:sid/season', function(req, res){
 
 //-------- GET-Method to get a series by series-id and season-id--------//
 app.get('/series/:sid/season/:id', function(req, res){
-	db.get('series:'+req.params.sid+':season:'+req.params.id, function(err, rep){
+	db.get('ss:'+req.params.sid+':season:'+req.params.id, function(err, rep){
 		if(rep) {
 			res.type('json').send(rep);
 		}
@@ -158,12 +158,12 @@ app.get('/series/:sid/season/:id', function(req, res){
 
 //---- PUT-Method to change an existing season ----//
 app.put('/series/:sid/season/:id', function(req, res) {
-	db.get('series:'+req.params.sid+':season:'+req.params.id, function (err, rep) {
+	db.get('ss:'+req.params.sid+':season:'+req.params.id, function (err, rep) {
 		var json = JSON.parse(rep);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
-		db.set('series:'+req.params.sid+':season:' + req.params.id, JSON.stringify(json), function (err, rep) {
+		db.set('ss:'+req.params.sid+':season:' + req.params.id, JSON.stringify(json), function (err, rep) {
 			res.json(json);
 		});
 	});
@@ -173,7 +173,7 @@ app.put('/series/:sid/season/:id', function(req, res) {
 
 //-----DELETE-Method to delete a season by id -----//
 app.delete('/series/:sid/season/:id', function(req,res){
-	db.del('series:'+req.params.sid+':season:'+req.params.id, function(err, rep){
+	db.del('ss:'+req.params.sid+':season:'+req.params.id, function(err, rep){
 		if(rep==1){
 			res.status(200).type('text').send('OK');
 		}
@@ -185,7 +185,7 @@ app.delete('/series/:sid/season/:id', function(req,res){
 
 //----GET-Method to get a list with all existing seasons---//
 app.get('/series/:sid/season', function(req, res){
-	db.keys('series:'+req.params.sid+':season:*', function(err, rep){
+	db.keys('ss:'+req.params.sid+':season:*', function(err, rep){
 		var seasonlist = [];
 
 		if(rep.length == 0){
@@ -299,7 +299,7 @@ app.post('/user/:uid/watched', function(req, res){
 	db.incr('uzaehler:'+req.params.uid+':watched', function(err, rep){
 	newWatchedSeries.id = rep;
 
-		db.set('user:'+req.params.uid+':watched:'+newWatchedSeries.id, JSON.stringify(newWatchedSeries), function(err, rep){
+		db.set('uu:'+req.params.uid+':watched:'+newWatchedSeries.id, JSON.stringify(newWatchedSeries), function(err, rep){
 			res.json(newWatchedSeries);
 		});
 	});
@@ -307,7 +307,7 @@ app.post('/user/:uid/watched', function(req, res){
 
 //-------- GET-Method to get a watched series by user-id and series-id--------//
 app.get('/user/:uid/watched/:id', function(req, res){
-	db.get('user:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
+	db.get('uu:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
 		if(rep) {
 			res.type('json').send(rep);
 		}
@@ -319,12 +319,12 @@ app.get('/user/:uid/watched/:id', function(req, res){
 
 //-------- PUT-Method to get a watched series by user-id and series-id--------//
 app.put('/user/:uid/watched/:id', function(req, res) {
-	db.get('user:' + req.params.uid + ':watched:' + req.params.id, function (err, rep) {
+	db.get('uu:' + req.params.uid + ':watched:' + req.params.id, function (err, rep) {
 		var json = JSON.parse(rep);
 		for (var key in req.body) {
 			json[key] = req.body[key];
 		}
-		db.set('user:' + req.params.uid + ':watched:' + req.params.id, JSON.stringify(json), function (err, rep) {
+		db.set('uu:' + req.params.uid + ':watched:' + req.params.id, JSON.stringify(json), function (err, rep) {
 			res.json(json);
 		});
 	});
@@ -334,7 +334,7 @@ app.put('/user/:uid/watched/:id', function(req, res) {
 
 //-----DELETE-Method to delete a watched series by id -----//
 app.delete('/user/:uid/watched/:id', function(req,res){
-	db.del('user:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
+	db.del('uu:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
 		if(rep==1){
 			res.status(200).type('text').send('OK');
 		}
@@ -347,7 +347,7 @@ app.delete('/user/:uid/watched/:id', function(req,res){
 
 //----GET-Method to get a list with all watched series---//
 app.get('/user/:uid/watched', function(req, res){
-	db.keys('user:'+req.params.uid+':watched:*', function(err, rep){
+	db.keys('uu:'+req.params.uid+':watched:*', function(err, rep){
 		var watchedlist = [];
 
 		if(rep.length == 0){
