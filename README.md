@@ -80,7 +80,9 @@ Eine angeschaute Serie wird wie folgt eingetragen:
     
     "season": "2",
     
-    "episode": "4"
+    "episode": "4",
+    
+    "status": "watching, completed, plan-to-watch, on-hold oder dropped",
     
   }
   
