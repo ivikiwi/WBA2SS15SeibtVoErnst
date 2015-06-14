@@ -1,5 +1,6 @@
 # WBA2, Team 11
-## Roman Seibt, Markus Ernst, Phuong Thuy Duong Vo
+## Projekt: Viromark
+Roman Seibt, Markus Ernst, Phuong Thuy Duong Vo
 
 
 ### Dokumentation
