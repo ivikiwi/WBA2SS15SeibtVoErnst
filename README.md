@@ -75,7 +75,7 @@ Wie viele Staffeln eine Serie hat, könnte man anhand der Einträge mit dem key 
 Eine angeschaute Serie wird wie folgt eingetragen:
 
 {
-    "status": "watching, completed, plan-to-watch, on-hold oder dropped" 
+    "status": "watching, completed, plan-to-watch, on-hold oder dropped",
 
     "seriesid": "6",
     
