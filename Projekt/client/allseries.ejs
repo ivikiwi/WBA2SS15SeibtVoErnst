@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title>Alle Serien</title>
+	</head>
+	<body>
+		<h1>Alle Serien</h1>
+		<ul>
+			<%
+				for(var i=0; i < series.length; i++) {
+					%><li><%= series[i].name %></li><%
+				}
+			%>
+		</ul>
+	</body>
+</html>
