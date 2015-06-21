@@ -46,7 +46,7 @@ Roman Seibt, Markus Ernst, Phuong Thuy Duong Vo
 Eine einzelne Serie auf dem Server enthält folgende Informationen:
 
 (Noch unvollständig, muss noch bearbeitet werden.)
-
+```json
 {
 
 	"name": "Name der Serie",
@@ -56,16 +56,16 @@ Eine einzelne Serie auf dem Server enthält folgende Informationen:
 	"genre": "Eines oder mehrere Genren der Serie"
 	
 }
-
+```
 ##### JSON Staffel
 Die Anzahl von Staffeln einer Serie wird wie folgt eingetragen:
-
+```json
 {
 
 	"episodes": "Anzahl an Episoden der Staffel"
 	
 }
-
+```
 Dabei wird auf folgenden Pfad zugegriffen: http://localhost:port/series/:serienid/season/:seasonid
 
 Wie viele Staffeln eine Serie hat, könnte man anhand der Einträge mit dem key series:serienid:season:* auslesen.
@@ -73,7 +73,7 @@ Wie viele Staffeln eine Serie hat, könnte man anhand der Einträge mit dem key 
 
 ##### JSON watched Serie
 Eine angeschaute Serie wird wie folgt eingetragen:
-
+```json
 {
 
     "seriesid": "6",
@@ -85,20 +85,20 @@ Eine angeschaute Serie wird wie folgt eingetragen:
     "status": "watching, completed, plan-to-watch, on-hold oder dropped",
     
   }
-  
+```  
 Der Pfad zu einer angeschauten Serie: http://localhost:port/user/:userid/watched/:watchedid
 
 ##### JSON User
 Ein User enthält folgende Informationen:
 
 (noch nicht vollständig)
-
+```json
 {
 
 	"name": "username"
 	
 }
-
+```
 ###Use-Cases
 
 1. Karl-Heinz schaut in seiner Freizeit, neben dem Job, gerne die eine oder andere Serie. Da sich Karl-Heinz mit verschiedenen Arbeitskollegen über Serien austauscht, schaut er häufig mehrere Serien an einem Tag. Einige seiner Arbeitskollegen lachen manchmal über ihn, weil er dabei häufig durcheinander kommt, und teilweise sogar die spannenden Staffelfinale verpasst, nur weil er dachte, er hätte sie schon gesehen. 
