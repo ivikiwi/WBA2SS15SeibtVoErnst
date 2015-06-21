@@ -48,22 +48,16 @@ Eine einzelne Serie auf dem Server enthält folgende Informationen:
 (Noch unvollständig, muss noch bearbeitet werden.)
 ```json
 {
-
 	"name": "Name der Serie",
-	
 	"description": "Beschreibung der Serie",
-	
 	"genre": "Eines oder mehrere Genren der Serie"
-	
 }
 ```
 ##### JSON Staffel
 Die Anzahl von Staffeln einer Serie wird wie folgt eingetragen:
 ```json
 {
-
 	"episodes": "Anzahl an Episoden der Staffel"
-	
 }
 ```
 Dabei wird auf folgenden Pfad zugegriffen: http://localhost:port/series/:serienid/season/:seasonid
@@ -75,15 +69,10 @@ Wie viele Staffeln eine Serie hat, könnte man anhand der Einträge mit dem key 
 Eine angeschaute Serie wird wie folgt eingetragen:
 ```json
 {
-
     "seriesid": "6",
-    
     "season": "2",
-    
     "episode": "4",
-    
     "status": "watching, completed, plan-to-watch, on-hold oder dropped",
-    
   }
 ```  
 Der Pfad zu einer angeschauten Serie: http://localhost:port/user/:userid/watched/:watchedid
@@ -94,9 +83,7 @@ Ein User enthält folgende Informationen:
 (noch nicht vollständig)
 ```json
 {
-
 	"name": "username"
-	
 }
 ```
 ###Use-Cases
