@@ -16,7 +16,14 @@ function getAllUsers(db) {
 				userlist = userlist.map(function(user){
 					return {id: user.id, name: user.name};
 				});
-				res.json(userlist);
+				var currentReply = userlist;
+				var reply = {
+    			series: currentReply
+				};
+
+
+
+				res.json(reply);
 			});
 		});
 	};

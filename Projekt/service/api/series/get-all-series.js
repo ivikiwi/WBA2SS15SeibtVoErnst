@@ -19,7 +19,15 @@ function getAllSeries(db) {
 						genre: series.genre
 					};
 				});
-				res.json(seriesList);
+
+				var currentReply = seriesList;
+				var reply = {
+    			series: currentReply
+				};
+
+
+
+				res.json(reply);
 			});
 		});
 	}
