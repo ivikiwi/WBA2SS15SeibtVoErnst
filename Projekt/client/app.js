@@ -108,6 +108,41 @@ app.get('/allseries/:id', jsonParser, function(req, res){
 });
 
 
+app.get('/user/:id', jsonParser, function(req, res){
+	fs.readFile('./user.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+		if(err) {
+			throw err;
+		} else {
+			var options = {
+				host: 'localhost',
+				port: 8888,
+				path: '/user/'+req.params.id,
+				method: 'GET',
+				headers: {
+					accept: 'application/json'
+				}
+			}
+			var externalRequest = http.request(options, function(externalRequest) {
+				console.log('Connected');
+				externalRequest.on('data', function(chunk) {
+
+					var seriesdata = JSON.parse(chunk);
+
+					var html = ejs.render(filestring, seriesdata);
+					res.setHeader('content-type', 'text/html');
+					res.writeHead(200);
+					res.write(html);
+					res.end();
+
+				});
+
+			});
+
+			externalRequest.end();
+		}
+	});
+});
+
 
 
 
