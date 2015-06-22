@@ -80,7 +80,7 @@ app.get('/allseries/:id', jsonParser, function(req, res){
 			var options = {
 				host: 'localhost',
 				port: 8888,
-				path: '/series/:id',
+				path: '/series/'+req.params.id,
 				method: 'GET',
 				headers: {
 					accept: 'application/json'
