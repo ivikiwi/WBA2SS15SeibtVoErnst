@@ -126,9 +126,9 @@ app.get('/user/:id', jsonParser, function(req, res){
 				console.log('Connected');
 				externalRequest.on('data', function(chunk) {
 
-					var seriesdata = JSON.parse(chunk);
+					var userdata = JSON.parse(chunk);
 
-					var html = ejs.render(filestring, seriesdata);
+					var html = ejs.render(filestring, userdata);
 					res.setHeader('content-type', 'text/html');
 					res.writeHead(200);
 					res.write(html);
