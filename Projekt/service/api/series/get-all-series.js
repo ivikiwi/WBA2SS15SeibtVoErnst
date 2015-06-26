@@ -16,7 +16,9 @@ function getAllSeries(db) {
 						id: series.id,
 						name: series.name,
 						description: series.description,
-						genre: series.genre
+						genre: series.genre,
+						bewertung: series.bewertung,
+						bewertungz: series.bewertungz
 					};
 				});
 
