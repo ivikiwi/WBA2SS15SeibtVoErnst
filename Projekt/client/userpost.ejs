@@ -1,0 +1,99 @@
+<html>
+	<head>
+	<meta charset="utf-8" /> 
+	
+
+		<title>User anlegen</title>
+			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
+		<style>
+		body {
+		font-family: 'Raleway', sans-serif;
+		background-color: #e0eaf5;
+		font-size:15px;
+		}
+
+		h3 {
+		font-weight:700;
+		}
+
+		a {
+		color:#468dc4;
+		text-decoration:none;
+		}
+
+		.seriesbox {
+		clear:both;
+		margin-bottom:40px;
+		padding:20px;
+		background-color:#fff;
+		}
+
+		.description {
+		min-height: 208px;
+		}
+		.seriesimage {
+		float:left;
+		padding-right:20px;
+		}
+
+		strong {
+		font-weight:600;
+		}
+		</style>
+		
+		<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			var frm = $('#userReg');
+			frm.on('submit', function(ev){
+				
+				var data = { "name": $('#userRegName').val() };
+				
+				$.ajax({
+				type: 'POST',
+				url: 'http://localhost:8888/user',
+				data: data,
+				/*contentType: 'application/json',*/
+				success: function(data) {
+   				/* … */
+				},
+				error: function(xhr, options, e) {
+			    /* hier, das */
+    			console.log(e);
+				}
+
+				}).done(function(){
+				alert(data.name+' wurde hinzugefuegt.');
+				}).fail(function(e){
+				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+
+				});
+				ev.preventDefault();
+			});
+
+			});
+		</script>
+	</head>
+	<body>
+		<h1>User anlegen</h1>
+		<div>
+		
+					<div class="seriesbox">
+					
+					<div class="description">
+					
+						<form name="userReg" action="/" method="post" id="userReg">
+						Username:     <input type="text" size="40" id="userRegName" name="name">
+ 					<input type="submit" value="Anlegen">
+
+
+</form>
+
+
+					</div></div>
+
+		</div>
+
+
+	</body>
+</html>
