@@ -18,7 +18,7 @@ function getAllUsers(db) {
 				});
 				var currentReply = userlist;
 				var reply = {
-    			series: currentReply
+    			user: currentReply
 				};
 
 
