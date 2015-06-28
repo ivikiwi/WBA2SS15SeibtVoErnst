@@ -9,38 +9,18 @@
 	<body>
 		<h1>Alle Serien</h1>
 		<div>
+					<%
+				for(var i=0; i < watchedseries.length; i++) {
+					%>
 					<div class="seriesbox">
+					
 					<div class="description">
-					<h3><%= user %></h3>
-					<strong>Genre:</strong> <%= series[i].genre %><br />
-					<strong>Beschreibung:</strong> <%= series[i].description %><br /><br />
-					<!-- Serienbewertung -->
-					<form name="seriesRating" onsubmit="return false;" id="seriesRating">
-					 <select id="ratingValue" name="top5">
-   					 <option>1</option>
-   					 <option>2</option>
-   					 <option>3</option>
-   					 <option>4</option>
-   					 <option>5</option>
-   					 <option>6</option>
-   					 <option>7</option>
-   					 <option>8</option>
-   					 <option>9</option>
-   					 <option>10</option>
- 					 </select>
- 					<input type="submit" value="Bewerten" onclick="ratingf();">
- 					</form>
+					<h3><a href="../../allseries/<%= watchedseries[i].seriesid %>">Bla</a></h3>
+					<p><%= series[0].name %></p>
+					</div></div><%
 
- 					<script>
- 					function ratingf() {
-   					 var singleRate = document.getElementById("ratingValue").value;
-   					 var neuebewertung = genre;
-    				alert(genre);
-					}
- 					</script>
-
-
-					</div></div>
+				}
+			%>
 		</div>
 
 
