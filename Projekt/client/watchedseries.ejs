@@ -9,20 +9,12 @@
 	<body>
 		<h1>Alle Serien</h1>
 		<div>
-		<%
-				for(var i=0; i < series.length; i++) {
-					%>
 					<div class="seriesbox">
-					<div class="seriesimage"><a href="/allseries/<%=series[i].id%>"><img width="148" height="208" src="/cover/<%=series[i].id%>"></a>
-					</div>
 					<div class="description">
-					<h3><a href="/allseries/<%=series[i].id%>"><%= series[i].name %></a></h3>
+					<h3><%= user %></h3>
 					<strong>Genre:</strong> <%= series[i].genre %><br />
 					<strong>Beschreibung:</strong> <%= series[i].description %><br /><br />
-					</div></div><%
-
-				}
-			%>
+					</div></div>
 		</div>
 
 
