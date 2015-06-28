@@ -1,5 +1,4 @@
 var express = require('express');
-var querystring = require('querystring');
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 var ejs = require('ejs');
@@ -259,8 +258,6 @@ app.post('/postuser', function(req, res){
 				accept: 'application/json',
 				'Content-Type': 'application/json',
        		    'Content-Length': Buffer.byteLength(data)
-       		    //'Content-Type': 'application/x-www-form-urlencoded',
-       			//'Content-Length': Buffer.byteLength(data)
 				}
 			};
 
