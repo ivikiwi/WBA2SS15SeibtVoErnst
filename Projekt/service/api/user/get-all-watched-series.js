@@ -16,7 +16,15 @@ function getAllWatchedSeries(db) {
 				watchedlist = watchedlist.map(function(series){
 					return {id: series.id, seriesid: series.seriesid, season: series.season, episode: series.episode};
 				});
-				res.json(watchedlist);
+
+
+				var currentReply = watchedlist;
+				var reply = {
+    			watchedseries: currentReply
+				};
+
+
+				res.json(reply);
 			});
 		});
 	};
