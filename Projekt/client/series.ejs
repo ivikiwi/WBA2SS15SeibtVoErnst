@@ -4,41 +4,7 @@
 
 		<title>Single-Series</title>
 			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
-		<style>
-		body {
-		font-family: 'Raleway', sans-serif;
-		background-color: #e0eaf5;
-		font-size:15px;
-		}
-
-		h3 {
-		font-weight:700;
-		}
-
-		a {
-		color:#468dc4;
-		text-decoration:none;
-		}
-
-		.seriesbox {
-		clear:both;
-		margin-bottom:40px;
-		padding:20px;
-		background-color:#fff;
-		}
-
-		.description {
-		min-height: 208px;
-		}
-		.seriesimage {
-		float:left;
-		padding-right:20px;
-		}
-
-		strong {
-		font-weight:600;
-		}
-		</style>
+		<link rel="stylesheet" href="/css/style.css">
 	</head>
 	<body>
 		<h1><%= name %></h1>
@@ -50,6 +16,32 @@
 					<div class="description">
 					<strong>Genre:</strong> <%= genre %><br />
 					<strong>Beschreibung:</strong> <%= description %><br /><br />
+					<strong>Bewertung: </strong><%= bewertung %><br /><br />
+					<!--Serienbewertung-->
+					<form name="seriesRating" onsubmit="return false;" id="seriesRating">
+					 <select id="ratingValue" name="top5">
+   					 <option>1</option>
+   					 <option>2</option>
+   					 <option>3</option>
+   					 <option>4</option>
+   					 <option>5</option>
+   					 <option>6</option>
+   					 <option>7</option>
+   					 <option>8</option>
+   					 <option>9</option>
+   					 <option>10</option>
+ 					 </select>
+ 					<input type="submit" value="Bewerten" onclick="ratingf();">
+ 					</form>
+
+ 					<script>
+ 					function ratingf() {
+   					 var singleRate = document.getElementById("ratingValue").value;
+   					 var neuebewertung = genre;
+    				alert(genre);
+					}
+ 					</script>
+
 					</div></div>
 
 		</div>
