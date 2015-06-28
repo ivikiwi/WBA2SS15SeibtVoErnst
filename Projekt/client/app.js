@@ -331,7 +331,7 @@ app.post('/postuser', function(req, res){
 	
 });
 
-app.get('/user/:id', jsonParser, function(req, res){
+app.get('/user/:id/watched', jsonParser, function(req, res){
 	fs.readFile('./watchedseries.ejs', {encoding: 'utf-8'}, function(err, filestring) {
 		if(err) {
 			throw err;
@@ -339,7 +339,7 @@ app.get('/user/:id', jsonParser, function(req, res){
 			var options = {
 				host: 'localhost',
 				port: 8888,
-				path: '/user/',
+				path: '/user/'+req.params.id,
 				method: 'GET',
 				headers: {
 					accept: 'application/json'
