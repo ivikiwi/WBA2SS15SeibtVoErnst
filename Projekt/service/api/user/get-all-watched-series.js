@@ -1,32 +1,31 @@
 function getAllWatchedSeries(app, db) {
 	return function(req, res) {
-		db.keys('uu:'+req.params.uid+':watched:*', function(err, rep){
-			var watchedlist = [];
-
-			if(rep.length == 0){
-				res.json(watchedlist);
+		db.keys("uu:" + req.params.uid + ":watched:*", function(err, rep) {
+			var watchedList = [];
+			if (rep.length === 0) {
+				res.json(watchedList);
 				return;
 			}
-
-			db.mget(rep, function(err, rep){
-				rep.forEach(function(val){
-					watchedlist.push(JSON.parse(val));
+			db.mget(rep, function(err, rep) {
+				rep.forEach(function(val) {
+					watchedList.push(JSON.parse(val));
 				});
-
-				watchedlist = watchedlist.map(function(series){
-					return {id: series.id, seriesid: series.seriesid, season: series.season, episode: series.episode};
+				var replies = [];
+				watchedList.forEach(function(series) {
+					db.get("series:" + series.seriesid, function(seriesError, seriesReply) {
+						if (seriesReply) {
+							replies.push(JSON.parse(seriesReply));
+						}
+						if (replies.length === watchedList.length) {
+							res.type("json").send({
+								replies: replies,
+								watched: watchedList
+							});
+						}
+					});
 				});
-
-
-				var currentReply = watchedlist;
-				var reply = {
-    			watchedseries: currentReply
-				};
-
-
-				res.json(reply);
 			});
 		});
-	};
+	}
 }
 module.exports = getAllWatchedSeries;

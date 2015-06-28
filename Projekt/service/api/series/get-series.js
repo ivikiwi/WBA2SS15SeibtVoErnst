@@ -1,5 +1,6 @@
 function getSeries(app, db) {
 	return function(req, res) {
+		
 		db.get("series:" + req.params.id, function(err, rep) {
 			if (rep) {
 				res.type("json").send(rep);
