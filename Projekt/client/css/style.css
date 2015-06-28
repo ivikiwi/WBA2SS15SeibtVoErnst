@@ -1,0 +1,33 @@
+body {
+		font-family: 'Raleway', sans-serif;
+		background-color: #e0eaf5;
+		font-size:15px;
+		}
+
+h3 {
+		font-weight:700;
+		}
+
+a {
+		color:#468dc4;
+		text-decoration:none;
+		}
+
+.seriesbox {
+		clear:both;
+		margin-bottom:40px;
+		padding:20px;
+		background-color:#fff;
+		}
+
+.description {
+		min-height: 208px;
+		}
+.seriesimage {
+		float:left;
+		padding-right:20px;
+		}
+
+strong {
+		font-weight:600;
+		}
