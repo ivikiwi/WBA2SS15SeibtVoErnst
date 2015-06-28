@@ -1,18 +1,16 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+var express = require("express");
+var bodyParser = require("body-parser");
 var jsonParser = bodyParser.json();
-var ejs = require('ejs');
-var fs = require('fs');
-var http = require('http');
-
+var ejs = require("ejs");
+var fs = require("fs");
+var http = require("http");
 var app = express();
-
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
-app.get('/allseries', jsonParser, function(req, res){
+//first get-method
+app.get('/user/:uid/allseries', jsonParser, function(req, res){
 	fs.readFile('./allseries.ejs', {encoding: 'utf-8'}, function(err, filestring) {
 		if(err) {
 			throw err;
@@ -99,7 +97,84 @@ app.get('/css/:stylesheetname', function (req, res, next) {
 });
 
 
-app.get('/allseries/:id', jsonParser, function(req, res){
+
+//Bootstrap CSS
+app.get('/dist/css/:stylesheetname', function (req, res, next) {
+
+  var options = {
+    root: __dirname + '/dist/css',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
+
+  var fileName = req.params.stylesheetname;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
+//Bootstrap JS
+app.get('/dist/js/:jsname', function (req, res, next) {
+
+  var options = {
+    root: __dirname + '/dist/js',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
+
+  var fileName = req.params.jsname;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
+//Bootstrap JS
+app.get('/dist/fonts/:bfonts', function (req, res, next) {
+
+  var options = {
+    root: __dirname + '/dist/fonts',
+    dotfiles: 'deny',
+    headers: {
+        'x-timestamp': Date.now(),
+        'x-sent': true
+    }
+  };
+
+  var fileName = req.params.bfonts;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
+
+app.get('/user/:uid/allseries/:id', jsonParser, function(req, res){
 	fs.readFile('./series.ejs', {encoding: 'utf-8'}, function(err, filestring) {
 		if(err) {
 			throw err;
@@ -118,7 +193,6 @@ app.get('/allseries/:id', jsonParser, function(req, res){
 				externalRequest.on('data', function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
-
 					var html = ejs.render(filestring, seriesdata);
 					res.setHeader('content-type', 'text/html');
 					res.writeHead(200);
@@ -248,7 +322,6 @@ app.get('/userpost', jsonParser, function(req, res){
 
 app.use('/userlogin', function(req, res){
 		var currentUser = req.body;
-		 console.log(req.body);
 			var options = {
 				host: 'localhost',
 				port: 8888,
@@ -260,31 +333,11 @@ app.use('/userlogin', function(req, res){
 			}
 
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				console.log(options);
 				externalRequest.on('data', function(chunk) {
 
 					var userdata = JSON.parse(chunk);
-					console.log(userdata);
 					console.log(currentUser);
-					function checkForValue(json, value) {
-  				  	for (name in json) {
-     			    if (typeof (json[name]) === "object") {
-     			    	console.log(json[name]);
-     		        return checkForValue(json[name], value);
 
-        } else if (json[name] === value) {
-
-            return true;
-        }
-    }
-    console.log("false");
-    console.log(json);
-         console.log(value);
-    return false;
-}
-		checkForValue(userdata, currentUser.name);
-					
 					//var html = ejs.render(filestring, seriesdata);
 				//	res.setHeader('content-type', 'text/html');
 					//res.writeHead(200);
@@ -339,7 +392,7 @@ app.get('/user/:id/watched', jsonParser, function(req, res){
 			var options = {
 				host: 'localhost',
 				port: 8888,
-				path: '/user/'+req.params.id,
+				path: '/user/'+req.params.id+'/watched',
 				method: 'GET',
 				headers: {
 					accept: 'application/json'
