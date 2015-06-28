@@ -217,7 +217,7 @@ app.get('/userpost', jsonParser, function(req, res){
 			var options = {
 				host: 'localhost',
 				port: 8888,
-				path: '/user/',
+				path: '/user',
 				method: 'GET',
 				headers: {
 					accept: 'application/json'
@@ -243,6 +243,66 @@ app.get('/userpost', jsonParser, function(req, res){
 		}
 	});
 });
+
+
+
+app.use('/userlogin', function(req, res){
+		var currentUser = req.body;
+		 console.log(req.body);
+			var options = {
+				host: 'localhost',
+				port: 8888,
+				path: '/user',
+				method: 'GET',
+				headers: {
+					accept: 'application/json'
+				}
+			}
+
+			var externalRequest = http.request(options, function(externalRequest) {
+				console.log('Connected');
+				console.log(options);
+				externalRequest.on('data', function(chunk) {
+
+					var userdata = JSON.parse(chunk);
+					console.log(userdata);
+					console.log(currentUser);
+					function checkForValue(json, value) {
+  				  	for (name in json) {
+     			    if (typeof (json[name]) === "object") {
+     			    	console.log(json[name]);
+     		        return checkForValue(json[name], value);
+
+        } else if (json[name] === value) {
+
+            return true;
+        }
+    }
+    console.log("false");
+    console.log(json);
+         console.log(value);
+    return false;
+}
+		checkForValue(userdata, currentUser.name);
+					
+					//var html = ejs.render(filestring, seriesdata);
+				//	res.setHeader('content-type', 'text/html');
+					//res.writeHead(200);
+					//res.write(html);
+					res.end();
+
+				});
+
+			});
+
+			externalRequest.end();
+		
+	
+});
+
+
+
+
 
 
 app.post('/postuser', function(req, res){

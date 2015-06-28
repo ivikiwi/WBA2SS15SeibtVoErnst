@@ -14,14 +14,13 @@
 			frm.on('submit', function(ev){
 				//var frmdata = {"name":"test"};
 				var frmdata = { "name": $('#userRegName').val() };
-				console.log(frmdata);
 				$.ajax({
 				type: 'POST',
 				url: '/postuser',
 				data: frmdata,
 				//contentType: 'application/json',
 				success: function(frmdata) {
-					console.log(frmdata);
+					
 				},
 				error: function(xhr, options, e) {
     			console.log(e);
@@ -32,11 +31,20 @@
 				
 				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
 				});
+				$(function () {
+			  	$('#userRegName').val("Du hast dich erfolgreich registriert.");
+			  	$('#userRegName').attr('readonly', true);
+			  	 $('#userRegBtn').hide();
+			  	 $('#userRegLabel').hide();
+				});
 				ev.preventDefault();
 			});
 
 			});
 		</script>
+
+		
+
 	</head>
 	<body>
 		<h1>User anlegen</h1>
@@ -46,13 +54,62 @@
 					
 					<div class="description">
 					
-					<form name="userReg" action="/test" method="post" id="userReg">
-						Username:     <input type="text" size="40" id="userRegName" name="name">
- 					<input type="submit" value="Anlegen">
+					<form name="userReg" action="/" method="post" id="userReg">
+						<span id="userRegLabel">Username:</span>     <input type="text" size="40" id="userRegName" name="n">
+ 					<input type="submit" id="userRegBtn" value="Anlegen">
 
 
 					</form>
 
+
+					</div></div>
+
+
+
+					<div class="seriesbox">
+					
+					<div class="description">
+					
+					<form name="userLogin" action="/" method="post" id="userLogin">
+						Username:     <input type="text" size="40" id="userLoginName" name="name">
+ 					<input type="submit" value="Login">
+
+
+					</form>
+
+					<script type="text/javascript">
+		$(function() {
+			var ufrm = $('#userLogin');
+			ufrm.on('submit', function(event){
+				//var frmdata = {"name":"test"};
+				var ufrmdata = { "name": $('#userLoginName').val() };
+				$.ajax({
+				type: 'POST',
+				url: '/userlogin',
+				data: ufrmdata,
+				success: function(frmdata) {
+					
+				},
+				error: function(xhr, options, e) {
+    			console.log(e);
+				}
+				}).done(function(){
+				alert(data.name+' wurde hinzugefuegt.');
+				}).fail(function(e){
+				
+				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+				});
+			
+				event.preventDefault();
+			});
+
+			});
+		</script>
+			<!--	<script type="text/javascript">
+				$("#userLogin").on('submit', function(event){
+   				 event.preventDefault();
+					});
+				</script>-->
 
 					</div></div>
 
