@@ -1,4 +1,4 @@
-function deleteUser(db) {
+function deleteUser(app, db) {
 	return function(req, res) {
 		db.del('user:'+req.params.id, function(err, rep){
 			if(rep==1){

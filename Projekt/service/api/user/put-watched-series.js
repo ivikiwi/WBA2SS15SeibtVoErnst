@@ -1,4 +1,4 @@
-function putWatchedSeries(db) {
+function putWatchedSeries(app, db) {
 	return function(req, res) {
 		db.get('uu:' + req.params.uid + ':watched:' + req.params.id, function (err, rep) {
 			var json = JSON.parse(rep);

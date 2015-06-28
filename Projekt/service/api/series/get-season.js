@@ -1,4 +1,4 @@
-function getSeason(db) {
+function getSeason(app, db) {
 	return function(req, res) {
 		db.get("ss:" + req.params.sid + ":season:" + req.params.id, function(err, rep) {
 			if (rep) {

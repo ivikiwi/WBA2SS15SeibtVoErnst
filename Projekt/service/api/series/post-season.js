@@ -1,4 +1,4 @@
-function postSeason(db) {
+function postSeason(app, db) {
 	return function(req, res){
 		var newSeason = req.body;
 		db.incr(req.params.sid + ":sssincr", function(err, rep) {

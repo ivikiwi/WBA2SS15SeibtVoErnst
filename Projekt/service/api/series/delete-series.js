@@ -1,4 +1,4 @@
-function deleteSeries(db) {
+function deleteSeries(app, db) {
 	return function(req, res) {
 		db.del("series:" + req.params.id, function(err, rep) {
 			if (rep == 1) {

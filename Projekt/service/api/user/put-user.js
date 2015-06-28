@@ -1,4 +1,4 @@
-function putUser(db) {
+function putUser(app, db) {
 	return function(req, res) {
 		db.get('user:' + req.params.id, function (err, rep) {
 		var json = JSON.parse(rep);

@@ -1,4 +1,4 @@
-function getAllWatchedSeries(db) {
+function getAllWatchedSeries(app, db) {
 	return function(req, res) {
 		db.keys('uu:'+req.params.uid+':watched:*', function(err, rep){
 			var watchedlist = [];

@@ -1,4 +1,4 @@
-function changeSeries(db) {
+function changeSeries(app, db) {
 	return function(req, res) {
 		db.get("series:" + req.params.id, function (err, rep) {
 			var json = JSON.parse(rep);

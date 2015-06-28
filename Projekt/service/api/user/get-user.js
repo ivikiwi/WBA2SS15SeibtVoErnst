@@ -1,4 +1,4 @@
-function getUser(db) {
+function getUser(app, db) {
 	return function(req, res) {
 		db.get('user:'+req.params.id, function(err, rep){
 			if(rep) {

@@ -1,4 +1,4 @@
-function deleteSeason(db) {
+function deleteSeason(app, db) {
 	return function(req,res) {
 		db.del("ss:" + req.params.sid + ":season:" + req.params.id, function(err, rep) {
 			if (rep == 1) {

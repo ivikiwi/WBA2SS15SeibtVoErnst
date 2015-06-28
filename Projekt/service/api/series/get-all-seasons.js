@@ -1,4 +1,4 @@
-function getAllSeasons(db) {
+function getAllSeasons(app, db) {
 	return function(req, res) {
 		db.keys("ss:" + req.params.sid + ":season:*", function(err, rep) {
 			var seasonList = [];

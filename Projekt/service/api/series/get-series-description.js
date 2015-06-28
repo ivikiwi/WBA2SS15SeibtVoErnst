@@ -1,4 +1,4 @@
-function getSeriesDescription(db) {
+function getSeriesDescription(app, db) {
 	return function(req, res) {
 		db.get("series:" + req.params.id, function(err, rep) {
 			var serie = [];

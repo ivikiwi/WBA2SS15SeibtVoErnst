@@ -1,4 +1,4 @@
-function getAllSeries(db) {
+function getAllSeries(app, db) {
 	return function(req, res){
 		db.keys("series:*", function(err, rep) {
 			var seriesList = [];

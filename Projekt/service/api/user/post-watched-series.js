@@ -1,4 +1,4 @@
-function postWatchedSeries(db) {
+function postWatchedSeries(app, db) {
 	return function(req, res) {
 		var newWatchedSeries = req.body;
 

@@ -1,4 +1,4 @@
-function getWatchedSeries(db) {
+function getWatchedSeries(app, db) {
 	return function(req, res) {
 		db.get('uu:'+req.params.uid+':watched:'+req.params.id, function(err, rep){
 			if(rep) {

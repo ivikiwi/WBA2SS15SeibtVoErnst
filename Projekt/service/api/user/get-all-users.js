@@ -1,4 +1,4 @@
-function getAllUsers(db) {
+function getAllUsers(app, db) {
 	return function(req, res) {
 		db.keys('user:*', function(err, rep){
 			var userlist = [];

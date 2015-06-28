@@ -1,4 +1,4 @@
-function postSeries(db) {
+function postSeries(app, db) {
 	return function(req, res) {
 		var newSeries = req.body;
 		db.incr("id:ss", function(err, rep) {

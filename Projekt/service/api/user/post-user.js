@@ -1,4 +1,4 @@
-function postUser(db) {
+function postUser(app, db) {
 	return function(req, res) {
 		var newSeries = req.body;
 

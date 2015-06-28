@@ -1,4 +1,4 @@
-function changeSeason(db) {
+function changeSeason(app, db) {
 	return function(req, res) {
 		db.get("ss:" + req.params.sid + ":season:" + req.params.id, function (err, rep) {
 			var json = JSON.parse(rep);
