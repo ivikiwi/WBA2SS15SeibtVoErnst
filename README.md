@@ -3,4 +3,4 @@
 Roman Seibt, Markus Ernst, Phuong Thuy Duong Vo
 
 
-[### Dokumentation](https://github.com/ivikiwi/WBA2SS15SeibtVoErnst/wiki/Projektdokumentation)
+[Dokumentation](https://github.com/ivikiwi/WBA2SS15SeibtVoErnst/wiki/Projektdokumentation)
