@@ -73,16 +73,16 @@
       </div>
     </nav>
 
-		<h1><%= name %></h1>
+		<h1><%= seriesdata.name %></h1>
 		<div>
 		
 					<div class="seriesbox">
-					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=id%>">
+					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
 					</div>
 					<div class="description">
-					<strong>Genre:</strong> <%= genre %><br />
-					<strong>Beschreibung:</strong> <%= description %><br /><br />
-					<strong>Bewertung: </strong><%= bewertung %><br /><br />
+					<strong>Genre:</strong> <%= seriesdata.genre %><br />
+					<strong>Beschreibung:</strong> <%= seriesdata.description %><br /><br />
+					<strong>Bewertung: </strong><%= seriesdata.bewertung %><br /><br />
 
             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
    
@@ -96,7 +96,7 @@
           </div>
           <div class="modal-body">
            <form id="addToWatch" action="/" method="post">
-           	<input type="hidden" name="Language" id="seriesID" value="<%= id %>">
+           	<input type="hidden" name="Language" id="seriesID" value="<%= seriesdata.id %>">
            		Status: <select class="form-control" id="status">
  				 <option>schaue ich gerade</option>
 				 <option>werde ich schauen</option>
