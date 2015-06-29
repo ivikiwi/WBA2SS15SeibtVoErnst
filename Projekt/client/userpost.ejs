@@ -71,7 +71,22 @@
 					<div class="description">
 					
 					<form name="userLogin" action="/" method="post" id="userLogin">
-						Username:     <input type="text" size="40" id="userLoginName" name="name">
+						Username:     
+						<!--<input type="text" size="40" id="userLoginName" name="name">-->
+
+						<select >
+							<%
+				for(var i=0; i < user.length; i++) {
+					%>
+								
+  						<option>	
+  							<span id="userid" style="visibility:hidden"><%= user[i].id %></span>
+  							<span id="userLoginName"><%=  user[i].name %></span></option>
+  						<%
+
+				}
+			%>
+						</select>
  					<input type="submit" value="Login">
 
 
@@ -82,7 +97,9 @@
 			var ufrm = $('#userLogin');
 			ufrm.on('submit', function(event){
 				//var frmdata = {"name":"test"};
-				var ufrmdata = { "name": $('#userLoginName').val() };
+				var ufrmdata = { 
+					"id": $('#userid').text(),
+					"name": $('#userLoginName').val() };
 				$.ajax({
 				type: 'POST',
 				url: '/userlogin',

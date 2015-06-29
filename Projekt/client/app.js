@@ -372,7 +372,6 @@ app.post('/postuser', function(req, res){
 	var externalRequest = http.request(options, function(res){
 		
 		externalRequest.on('data', function(chunk) {
-			console.log("blablabla");
 					console.log("body: " + chunk);
 					
 
@@ -383,6 +382,40 @@ app.post('/postuser', function(req, res){
 	externalRequest.end();
 	
 });
+
+
+
+
+app.post('/postwatchedseries/user/:id/allseries/:sid', function(req, res){
+	var data = JSON.stringify(req.body);
+	var options = {
+				host: 'localhost',
+				port: 8888,
+				path: '/user/'+req.params.id+'/watched',
+				method: 'POST',
+				headers: {
+				accept: 'application/json',
+				'Content-Type': 'application/json',
+       		    'Content-Length': Buffer.byteLength(data)
+				}
+			};
+
+	var externalRequest = http.request(options, function(res){
+		
+		externalRequest.on('data', function(chunk) {
+					console.log("body: " + chunk);
+					
+
+				});
+		
+	});
+	externalRequest.write(data);
+	externalRequest.end();
+	
+});
+
+
+
 
 app.get('/user/:id/watched', jsonParser, function(req, res){
 	fs.readFile('./watchedseries.ejs', {encoding: 'utf-8'}, function(err, filestring) {

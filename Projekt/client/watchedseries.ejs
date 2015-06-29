@@ -4,19 +4,49 @@
 
 		<title>Alle Serien</title>
 			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
+			   <link href="/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap-Theme -->
+    <link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/css/style.css">
+
 	</head>
 	<body>
-		<h1>Alle Serien</h1>
+	 <!-- Fixierte Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Navigation ein-/ausblenden</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><strong>viromark</strong></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="allseries">Alle Serien</a></li>
+            <li class="active"><a href="#">Meine Serienliste</a></li>
+            <li><a href="./">Mein Profil</a></li>
+          
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+		<h1>Meine persönliche Serienliste</h1>
 		<div>
 					<%
-				for(var i=0; i < watchedseries.length; i++) {
+				for(var i=0; i < watched.length; i++) {
 					%>
 					<div class="seriesbox">
 					
 					<div class="description">
-					<h3><a href="../../allseries/<%= watchedseries[i].seriesid %>">Bla</a></h3>
-					<p><%= series[0].name %></p>
+					<h3><a href="allseries/<%= replies[i].id %>"><%= replies[i].name %></a></h3>
+					<p>Mein Status: <%= watched[i].status %></p>
+					<p>Staffel: <%= watched[i].season %></p>
+					<p>Episode: <%= watched[i].episode %></p>
 					</div></div><%
 
 				}

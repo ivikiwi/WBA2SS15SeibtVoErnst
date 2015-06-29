@@ -2,6 +2,9 @@ body {
 		font-family: 'Raleway', sans-serif;
 		background-color: #e0eaf5;
 		font-size:15px;
+		margin-top:70px;
+		margin-right: 20px;
+		margin-left:20px;
 		}
 
 h3 {
@@ -31,3 +34,4 @@ a {
 strong {
 		font-weight:600;
 		}
+

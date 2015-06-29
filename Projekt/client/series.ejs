@@ -4,9 +4,75 @@
 
 		<title>Single-Series</title>
 			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
+			   <link href="/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap-Theme -->
+    <link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/css/style.css">
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript">
+		$(function() {
+			var frm = $('#addToWatch');
+			var pathname = window.location.pathname; 
+			frm.on('submit', function(ev){
+				//var frmdata = {"name":"test"};
+				var frmdata = { "seriesid": $('#seriesID').val(),
+								"status": $('#status').val(),
+								"season": $('#season').val(),
+								"episode": $('#episode').val(),
+
+								 };
+				$.ajax({
+				type: 'POST',
+				url: '/postwatchedseries'+pathname,
+				data: frmdata,
+				//contentType: 'application/json',
+				success: function(frmdata) {
+					
+				},
+				error: function(xhr, options, e) {
+    			console.log(e);
+				}
+				}).done(function(){
+				alert(data.name+' wurde hinzugefuegt.');
+				}).fail(function(e){
+				
+				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+				});
+				$(function () {
+			$('#basicModal').modal('hide')
+			});
+				ev.preventDefault();
+			});
+			
+			});
+		</script>
+	
 	</head>
 	<body>
+
+		 <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Navigation ein-/ausblenden</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><strong>viromark</strong></a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../allseries">Alle Serien</a></li>
+            <li><a href="../watched">Meine Serienliste</a></li>
+            <li><a href="../">Mein Profil</a></li>
+          
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
 		<h1><%= name %></h1>
 		<div>
 		
@@ -18,11 +84,61 @@
 					<strong>Beschreibung:</strong> <%= description %><br /><br />
 					<strong>Bewertung: </strong><%= bewertung %><br /><br />
 
+            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
+   
+
+         <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Zu meiner Liste hinzufügen</h4>
+          </div>
+          <div class="modal-body">
+           <form id="addToWatch" action="/" method="post">
+           	<input type="hidden" name="Language" id="seriesID" value="<%= id %>">
+           		Status: <select class="form-control" id="status">
+ 				 <option>schaue ich gerade</option>
+				 <option>werde ich schauen</option>
+				 <option>abgeschlossen</option>
+ 			 	 <option>pause</option>
+  				 <option>abgebrochen</option>
+				</select>
+				<br /><br />
+				Staffel: <select class="form-control" id="season">
+ 				 <option>1</option>
+				 <option>2</option>
+				 <option>3</option>
+ 			 	 <option>4</option>
+				</select>
+				<br /><br />
+				Episode:
+				<div class="row">
+					
+  					<div class="col-xs-2">
+   					 <input type="text" class="form-control" id="episode" placeholder="0"> 
+ 				 </div>
+ 				 <div class="col-xs-2">
+   					  / 16
+ 				 </div>
+			</div>
+           
+          </div>
+          <div class="modal-footer">
+          	<input type="submit" class="btn btn-primary" id="addTo" value="Speichern">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            </form>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 					</div></div>
 
 		</div>
 
-
+    <script src="/dist/js/bootstrap.min.js"></script>
 	</body>
 </html>
