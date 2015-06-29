@@ -16,5 +16,6 @@ function getSeries(app, db) {
 			});
 		});
 	}
+}
 			
 module.exports = getSeries;
