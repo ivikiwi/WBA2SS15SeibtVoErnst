@@ -106,10 +106,13 @@
 				</select>
 				<br /><br />
 				Staffel: <select class="form-control" id="season">
- 				 <option>1</option>
-				 <option>2</option>
-				 <option>3</option>
- 			 	 <option>4</option>
+				<%
+				for(var i=0; i <seasons;i++){
+					%>
+ 				 <option><%= i+1 %></option>
+				 <%
+				}
+				%>
 				</select>
 				<br /><br />
 				Episode:
