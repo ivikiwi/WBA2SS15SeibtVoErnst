@@ -5,33 +5,33 @@ var ejs = require("ejs");
 var fs = require("fs");
 var http = require("http");
 var app = express();
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-//first get-method
-app.get('/user/:uid/allseries', jsonParser, function(req, res){
-	fs.readFile('./allseries.ejs', {encoding: 'utf-8'}, function(err, filestring) {
-		if(err) {
+//	first get-method
+app.get("/user/:uid/allseries", jsonParser, function(req, res) {
+	fs.readFile("./allseries.ejs", {encoding: "utf-8"}, function(err, filestring) {
+		if (err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/series',
-				method: 'GET',
+				path: "/series",
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
-			}
+			};
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
+				console.log("Connected");
 				externalRequest.on('data', function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
 
 					var html = ejs.render(filestring, seriesdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
@@ -48,14 +48,14 @@ app.get('/user/:uid/allseries', jsonParser, function(req, res){
 
 
 
-app.get('/cover/:id', function (req, res, next) {
+app.get("/cover/:id", function (req, res, next) {
 
   var options = {
-    root: __dirname + '/img/series/cover/',
-    dotfiles: 'deny',
+    root: __dirname + "/img/series/cover/",
+    dotfiles: "deny",
     headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
+        "x-timestamp": Date.now(),
+        "x-sent": true
     }
   };
 
@@ -72,14 +72,14 @@ app.get('/cover/:id', function (req, res, next) {
 
 });
 
-app.get('/css/:stylesheetname', function (req, res, next) {
+app.get("/css/:stylesheetname", function (req, res, next) {
 
   var options = {
-    root: __dirname + '/css/',
-    dotfiles: 'deny',
+    root: __dirname + "/css/",
+    dotfiles: "deny",
     headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
+        "x-timestamp": Date.now(),
+        "x-sent": true
     }
   };
 
@@ -99,14 +99,14 @@ app.get('/css/:stylesheetname', function (req, res, next) {
 
 
 //Bootstrap CSS
-app.get('/dist/css/:stylesheetname', function (req, res, next) {
+app.get("/dist/css/:stylesheetname", function (req, res, next) {
 
   var options = {
-    root: __dirname + '/dist/css',
-    dotfiles: 'deny',
+    root: __dirname + "/dist/css",
+    dotfiles: "deny",
     headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
+        "x-timestamp": Date.now(),
+        "x-sent": true
     }
   };
 
@@ -124,14 +124,14 @@ app.get('/dist/css/:stylesheetname', function (req, res, next) {
 });
 
 //Bootstrap JS
-app.get('/dist/js/:jsname', function (req, res, next) {
+app.get("/dist/js/:jsname", function (req, res, next) {
 
   var options = {
-    root: __dirname + '/dist/js',
-    dotfiles: 'deny',
+    root: __dirname + "/dist/js",
+    dotfiles: "deny",
     headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
+        "x-timestamp": Date.now(),
+        "x-sent": true
     }
   };
 
@@ -149,14 +149,14 @@ app.get('/dist/js/:jsname', function (req, res, next) {
 });
 
 //Bootstrap JS
-app.get('/dist/fonts/:bfonts', function (req, res, next) {
+app.get("/dist/fonts/:bfonts", function (req, res, next) {
 
   var options = {
-    root: __dirname + '/dist/fonts',
-    dotfiles: 'deny',
+    root: __dirname + "/dist/fonts",
+    dotfiles: "deny",
     headers: {
-        'x-timestamp': Date.now(),
-        'x-sent': true
+        "x-timestamp": Date.now(),
+        "x-sent": true
     }
   };
 
@@ -174,27 +174,27 @@ app.get('/dist/fonts/:bfonts', function (req, res, next) {
 });
 
 
-app.get('/user/:uid/allseries/:id', jsonParser, function(req, res){
-	fs.readFile('./series.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
+	fs.readFile("./series.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/series/'+req.params.id,
-				method: 'GET',
+				path: "/series/"+req.params.id,
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				externalRequest.on('data', function(chunk) {
+				console.log("Connected");
+				externalRequest.on("data", function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
 					var html = ejs.render(filestring, seriesdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
@@ -209,18 +209,18 @@ app.get('/user/:uid/allseries/:id', jsonParser, function(req, res){
 });
 
 
-app.get('/user/:id', jsonParser, function(req, res){
-	fs.readFile('./user.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+app.get("/user/:id", jsonParser, function(req, res){
+	fs.readFile("./user.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user/'+req.params.id,
-				method: 'GET',
+				path: "/user/"+req.params.id,
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 			var externalRequest = http.request(options, function(externalRequest) {
@@ -230,7 +230,7 @@ app.get('/user/:id', jsonParser, function(req, res){
 					var userdata = JSON.parse(chunk);
 
 					var html = ejs.render(filestring, userdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
@@ -245,28 +245,28 @@ app.get('/user/:id', jsonParser, function(req, res){
 });
 
 
-app.get('/index', jsonParser, function(req, res){
-	fs.readFile('./index.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+app.get("/index", jsonParser, function(req, res){
+	fs.readFile("./index.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user/',
-				method: 'GET',
+				path: "/user/",
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				externalRequest.on('data', function(chunk) {
+				console.log("Connected");
+				externalRequest.on("data", function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
 
 					var html = ejs.render(filestring, seriesdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
@@ -283,28 +283,28 @@ app.get('/index', jsonParser, function(req, res){
 
 
 
-app.get('/userpost', jsonParser, function(req, res){
-	fs.readFile('./userpost.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+app.get("/userpost", jsonParser, function(req, res){
+	fs.readFile("./userpost.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user',
-				method: 'GET',
+				path: "/user",
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				externalRequest.on('data', function(chunk) {
+				console.log("Connected");
+				externalRequest.on("data", function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
 
 					var html = ejs.render(filestring, seriesdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
@@ -320,20 +320,20 @@ app.get('/userpost', jsonParser, function(req, res){
 
 
 
-app.use('/userlogin', function(req, res){
+app.use("/userlogin", function(req, res){
 		var currentUser = req.body;
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user',
-				method: 'GET',
+				path: "/user",
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 
 			var externalRequest = http.request(options, function(externalRequest) {
-				externalRequest.on('data', function(chunk) {
+				externalRequest.on("data", function(chunk) {
 
 					var userdata = JSON.parse(chunk);
 					console.log(currentUser);
@@ -353,25 +353,25 @@ app.use('/userlogin', function(req, res){
 	
 });
 
-app.post('/postuser', function(req, res){
+app.post("/postuser", function(req, res){
 	var data = JSON.stringify(req.body);
 	console.log(req.body);
 	console.log(data);
 	var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user',
-				method: 'POST',
+				path: "/user",
+				method: "POST",
 				headers: {
-				accept: 'application/json',
-				'Content-Type': 'application/json',
-       		    'Content-Length': Buffer.byteLength(data)
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
 				}
 			};
 
 	var externalRequest = http.request(options, function(res){
 		
-		externalRequest.on('data', function(chunk) {
+		externalRequest.on("data", function(chunk) {
 					console.log("body: " + chunk);
 					
 
@@ -386,23 +386,23 @@ app.post('/postuser', function(req, res){
 
 
 
-app.post('/postwatchedseries/user/:id/allseries/:sid', function(req, res){
+app.post("/postwatchedseries/user/:id/allseries/:sid", function(req, res){
 	var data = JSON.stringify(req.body);
 	var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user/'+req.params.id+'/watched',
+				path: "/user/"+req.params.id+"/watched",
 				method: 'POST',
 				headers: {
-				accept: 'application/json',
-				'Content-Type': 'application/json',
-       		    'Content-Length': Buffer.byteLength(data)
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
 				}
 			};
 
 	var externalRequest = http.request(options, function(res){
 		
-		externalRequest.on('data', function(chunk) {
+		externalRequest.on("data", function(chunk) {
 					console.log("body: " + chunk);
 					
 
@@ -417,28 +417,28 @@ app.post('/postwatchedseries/user/:id/allseries/:sid', function(req, res){
 
 
 
-app.get('/user/:id/watched', jsonParser, function(req, res){
-	fs.readFile('./watchedseries.ejs', {encoding: 'utf-8'}, function(err, filestring) {
+app.get("/user/:id/watched", jsonParser, function(req, res){
+	fs.readFile("./watchedseries.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
 			var options = {
-				host: 'localhost',
+				host: "localhost",
 				port: 8888,
-				path: '/user/'+req.params.id+'/watched',
-				method: 'GET',
+				path: "/user/"+req.params.id+"/watched",
+				method: "GET",
 				headers: {
-					accept: 'application/json'
+					accept: "application/json"
 				}
 			}
 			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				externalRequest.on('data', function(chunk) {
+				console.log("Connected");
+				externalRequest.on("data", function(chunk) {
 
 					var seriesdata = JSON.parse(chunk);
 
 					var html = ejs.render(filestring, seriesdata);
-					res.setHeader('content-type', 'text/html');
+					res.setHeader("content-type", "text/html");
 					res.writeHead(200);
 					res.write(html);
 					res.end();
