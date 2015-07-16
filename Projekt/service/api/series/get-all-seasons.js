@@ -16,7 +16,12 @@ function getAllSeasons(app, db) {
 						episodes: season.episodes
 					};
 				});
-				res.json(seasonList);
+				var currentReply = seasonList;
+				var reply = {
+    			seasons: currentReply
+				};
+
+				res.json(reply);
 			});
 		});
 	};
