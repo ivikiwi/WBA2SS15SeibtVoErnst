@@ -44,7 +44,11 @@
 					
 					<div class="description">
 					<h3><a href="allseries/<%= replies[i].id %>"><%= replies[i].name %></a></h3>
-					<p>Mein Status: <%= watched[i].status %></p>
+					<p>Mein Status: <% if (typeof(watched[i].status) !== 'undefined') { %>
+  									<span><%= watched[i].status %></span>
+								<% } else { %>
+								<span>Kein Status angegeben</span>
+								<% } %></p>
 					<p>Staffel: <%= watched[i].season %></p>
 					<p>Episode: <%= watched[i].episode %></p>
 					</div></div><%

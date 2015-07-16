@@ -48,6 +48,7 @@
 			});
 		</script>
 	
+	
 	</head>
 	<body>
 
@@ -73,16 +74,21 @@
       </div>
     </nav>
 
-		<h1><%= seriesdata.name %></h1>
+		<h1><%= name %></h1>
 		<div>
 		
 					<div class="seriesbox">
-					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
+					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=id%>">
 					</div>
 					<div class="description">
-					<strong>Genre:</strong> <%= seriesdata.genre %><br />
-					<strong>Beschreibung:</strong> <%= seriesdata.description %><br /><br />
-					<strong>Bewertung: </strong><%= seriesdata.bewertung %><br /><br />
+					<strong>Genre:</strong> <%= genre %><br />
+					<strong>Beschreibung:</strong> <%= description %><br /><br />
+					<strong>Bewertung: </strong><% if (typeof(bewertung) !== 'undefined') { %>
+  									<span><%= bewertung %></span>
+								<% } else { %>
+								<span>Noch keine Bewertung</span>
+								<% } %>
+					 	<br /><br />
 
             <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
    
@@ -96,7 +102,7 @@
           </div>
           <div class="modal-body">
            <form id="addToWatch" action="/" method="post">
-           	<input type="hidden" name="Language" id="seriesID" value="<%= seriesdata.id %>">
+           	<input type="hidden" name="Language" id="seriesID" value="<%= id %>">
            		Status: <select class="form-control" id="status">
  				 <option>Schaue ich gerade</option>
 				 <option>Werde ich schauen</option>
@@ -106,13 +112,8 @@
 				</select>
 				<br /><br />
 				Staffel: <select class="form-control" id="season">
-				<%
-				for(var i=0; i <seasons;i++){
-					%>
- 				 <option><%= i+1 %></option>
-				 <%
-				}
-				%>
+			
+				<option>1</option>
 				</select>
 				<br /><br />
 				Episode:
