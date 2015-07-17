@@ -179,7 +179,7 @@ app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
 		if(err) {
 			throw err;
 		} else {
-			var options = {
+			var seriesoptions = {
 				host: "localhost",
 				port: 8888,
 				path: "/series/"+req.params.id,
@@ -188,21 +188,50 @@ app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
 					accept: "application/json"
 				}
 			}
-			var externalRequest = http.request(options, function(externalRequest) {
-				console.log("Connected");
-				externalRequest.on("data", function(chunk) {
 
-					var seriesdata = JSON.parse(chunk);
-					var html = ejs.render(filestring, seriesdata);
-					res.setHeader("content-type", "text/html");
-					res.writeHead(200);
-					res.write(html);
-					res.end();
-
-				});
-
+			var seasonoptions = {
+				host: "localhost",
+				port: 8888,
+				path: "/series/"+req.params.id+"/season",
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
+			var requestCounter = 0;
+			var seriesdata;
+			var seasondata;
+			var externalRequest = http.request(seriesoptions, function(externalRequest) {
+				//	defined a requestCounter to assure that our res.write() only starts, 
+				//	after all our http-requests 
+				//	(after we get all our data from our service) are done!!
+				requestCounter++;
+				console.log("Connected1");
+				
+					console.log("test1");
+					externalRequest.on("data", function(chunk) {
+						//save our request-data in our variable seriesdata to build our final json-data later
+						seriesdata = JSON.parse(chunk);
+					});		
 			});
-
+			//	second Get-Request: we want to get data from our seasons-ressource too
+			var externalRequestTwo = http.request(seasonoptions, function(externalRequestTwo) {
+				requestCounter++;
+				console.log("Connected2");
+				if(requestCounter==2) {
+					console.log("test2");
+					externalRequestTwo.on("data", function(chunk) {
+						seasondata = JSON.parse(chunk);
+						var finaldata = {"seriesdata": seriesdata, "seasonsdata": seasondata};
+						var html = ejs.render(filestring, finaldata);
+						res.setHeader("content-type", "text/html");
+						res.writeHead(200);
+						res.write(html);
+						res.end();
+					});
+				}
+			});
+			externalRequestTwo.end();
 			externalRequest.end();
 		}
 	});

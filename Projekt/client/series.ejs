@@ -74,17 +74,18 @@
       </div>
     </nav>
 
-		<h1><%= name %></h1>
+		<h1><%= seriesdata.name %></h1>
 		<div>
 		
 					<div class="seriesbox">
-					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=id%>">
+					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
 					</div>
 					<div class="description">
-					<strong>Genre:</strong> <%= genre %><br />
-					<strong>Beschreibung:</strong> <%= description %><br /><br />
-					<strong>Bewertung: </strong><% if (typeof(bewertung) !== 'undefined') { %>
-  									<span><%= bewertung %></span>
+					<strong>Genre:</strong> <%= seriesdata.genre %><br />
+					<strong>Beschreibung:</strong> <%= seriesdata.description %><br />
+					<strong>Staffeln: </strong><%= seasonsdata.seasons.length %><br /><br />
+					<strong>Bewertung: </strong><% if (typeof(seriesdata.bewertung) !== 'undefined') { %>
+  									<span><%= seriesdata.bewertung %></span>
 								<% } else { %>
 								<span>Noch keine Bewertung</span>
 								<% } %>
@@ -102,7 +103,7 @@
           </div>
           <div class="modal-body">
            <form id="addToWatch" action="/" method="post">
-           	<input type="hidden" name="Language" id="seriesID" value="<%= id %>">
+           	<input type="hidden" name="Language" id="seriesID" value="<%= seriesdata.id %>">
            		Status: <select class="form-control" id="status">
  				 <option>Schaue ich gerade</option>
 				 <option>Werde ich schauen</option>
@@ -111,9 +112,15 @@
   				 <option>Abgebrochen</option>
 				</select>
 				<br /><br />
-				Staffel: <select class="form-control" id="season">
-			
-				<option>1</option>
+				Staffel: <select class="form-control" id="season" name="season">
+				<option>Bitte wähle deine Staffel aus</option>
+			<%
+				for(var i=0; i < seasonsdata.seasons.length; i++) { 
+					%>
+				<option value="<%= i+1%>"><%= i+1 %></option>
+				<%
+			}
+			%>
 				</select>
 				<br /><br />
 				Episode:
@@ -123,7 +130,22 @@
    					 <input type="text" class="form-control" id="episode" placeholder="0"> 
  				 </div>
  				 <div class="col-xs-2">
-   					  / 16
+   					  / 
+   					  <script>
+						$("#season").on("change", function() {
+   						 id = "related_" + $(this).val() + "_content";
+   						 $("#" + id).show().siblings().hide()
+						})
+					   </script>
+   					
+<% 
+for(var i=0; i < seasonsdata.seasons.length; i++) {
+	%>
+<p id="related_<%= i+1 %>_content" style="display:none;">
+    <%=seasonsdata.seasons[i].episodes%>
+</p>
+<% } %>
+   					 
  				 </div>
 			</div>
            
