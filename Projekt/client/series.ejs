@@ -14,38 +14,59 @@
 		$(function() {
 			var frm = $('#addToWatch');
 			var pathname = window.location.pathname; 
+
+			
 			frm.on('submit', function(ev){
 				//var frmdata = {"name":"test"};
-				var frmdata = { "seriesid": $('#seriesID').val(),
-								"status": $('#status').val(),
-								"season": $('#season').val(),
-								"episode": $('#episode').val(),
+				var maxSeasons = +($( 'p.maxSeasons:visible' ).text());
+				var selectedEpisodes = +($('#episode').val());
+				var currentStatus = $('#status').val();
+				var selectedSeason = $('#season').val();
 
-								 };
-				$.ajax({
-				type: 'POST',
-				url: '/postwatchedseries'+pathname,
-				data: frmdata,
-				//contentType: 'application/json',
-				success: function(frmdata) {
-					
-				},
-				error: function(xhr, options, e) {
-    			console.log(e);
-				}
-				}).done(function(){
-				alert(data.name+' wurde hinzugefuegt.');
-				}).fail(function(e){
+				if(selectedSeason == "Staffelauswahl" && currentStatus == "Watching") {
+					$( 'p.noSeasonAlert' ).show();
+					ev.preventDefault();
+				} else {
 				
-				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
-				});
-				$(function () {
-			$('#basicModal').modal('hide')
-			});
-				ev.preventDefault();
+						if(selectedEpisodes > maxSeasons || isNaN(selectedEpisodes) || selectedEpisodes == "0" && currentStatus == "Watching") {
+							$( 'p.noSeasonAlert' ).hide();
+							$( 'p.maxSeasonsAlert' ).fadeOut();
+							$( 'p.maxSeasonsAlert' ).fadeIn();
+							ev.preventDefault();
+						} else {
+
+							var frmdata = { "seriesid": $('#seriesID').val(),
+											"status": $('#status').val(),
+											"season": $('#season').val(),
+											"episode": $('#episode').val(),
+
+							};
+							$.ajax({
+							type: 'POST',
+							url: '/postwatchedseries'+pathname,
+							data: frmdata,
+							//contentType: 'application/json',
+							success: function(frmdata) {
+					
+							},
+							error: function(xhr, options, e) {
+    							console.log(e);
+							}
+							}).done(function(){
+								alert(data.name+' wurde hinzugefuegt.');
+							}).fail(function(e){
+				
+								alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+							});
+							$(function () {
+								$('#basicModal').modal('hide')
+							});
+						}
+				}
+			ev.preventDefault();
 			});
 			
-			});
+		});
 		</script>
 	
 	
@@ -77,26 +98,27 @@
 		<h1><%= seriesdata.name %></h1>
 		<div>
 		
-					<div class="seriesbox">
-					<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
-					</div>
-					<div class="description">
+			<div class="seriesbox">
+				<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
+				</div>
+				<div class="description">
 					<strong>Genre:</strong> <%= seriesdata.genre %><br />
 					<strong>Beschreibung:</strong> <%= seriesdata.description %><br />
 					<strong>Staffeln: </strong><%= seasonsdata.seasons.length %><br /><br />
-					<strong>Bewertung: </strong><% if (typeof(seriesdata.bewertung) !== 'undefined') { %>
-  									<span><%= seriesdata.bewertung %></span>
-								<% } else { %>
-								<span>Noch keine Bewertung</span>
-								<% } %>
-					 	<br /><br />
+					<strong>Bewertung: </strong>
+					<% if (typeof(seriesdata.bewertung) !== 'undefined') { %>
+  						<span><%= seriesdata.bewertung %></span>
+					<% } else { %>
+						<span>Noch keine Bewertung</span>
+					<% } %>
+				 	<br /><br />
 
-            <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
-   
+	       		    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
+   	
 
-         <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
+        			 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+   					   <div class="modal-dialog">
+   					     <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title" id="myModalLabel">Zu meiner Liste hinzufügen</h4>
@@ -104,53 +126,75 @@
           <div class="modal-body">
            <form id="addToWatch" action="/" method="post">
            	<input type="hidden" name="Language" id="seriesID" value="<%= seriesdata.id %>">
-           		Status: <select class="form-control" id="status">
- 				 <option>Schaue ich gerade</option>
-				 <option>Werde ich schauen</option>
-				 <option>Abgeschlossen</option>
- 			 	 <option>Pause</option>
-  				 <option>Abgebrochen</option>
-				</select>
+
+           		Status: 
+           			<select class="form-control" id="status">
+ 						 <option value="Watching">Schaue ich gerade</option>
+						 <option value="Werde ich schauen">Werde ich schauen</option>
+						 <option value="Abgeschlossen">Abgeschlossen</option>
+  				 		 <option value="Abgebrochen">Abgebrochen</option>
+					</select>
 				<br /><br />
-				Staffel: <select class="form-control" id="season" name="season">
-				<option>Bitte wähle deine Staffel aus</option>
-			<%
-				for(var i=0; i < seasonsdata.seasons.length; i++) { 
-					%>
-				<option value="<%= i+1%>"><%= i+1 %></option>
-				<%
-			}
-			%>
-				</select>
-				<br /><br />
-				Episode:
-				<div class="row">
-					
-  					<div class="col-xs-2">
-   					 <input type="text" class="form-control" id="episode" placeholder="0"> 
- 				 </div>
- 				 <div class="col-xs-2">
-   					  / 
-   					  <script>
-						$("#season").on("change", function() {
-   						 id = "related_" + $(this).val() + "_content";
-   						 $("#" + id).show().siblings().hide()
-						})
-					   </script>
+				<script>
+					$("#status").on("change", function() {
+					//	if( (this).val() == "notWatching" ) {
+					//		$( '#watchingSeasonOptions' ).hide();
+					//	}
+						var toHideContent;
+   						id = $(this).val() + "_content";
+   						if($(this).val() == "Watching") {
+   							toHideContent = $("#notWatching_content");
+   							$("#Watching_content").show();
+   						} else {
+   							toHideContent = $("#Watching_content");
+   							$("#notWatching_content").show();
+   						}
+   						//$("#" + id).show();
+   						toHideContent.hide();
+					})
+				</script>
+				<div id="notWatching_content"></div>
+				<div id="Watching_content">
+					Staffel: 
+						<select class="form-control" id="season" name="season">
+							<option value="Staffelauswahl">Bitte wähle deine Staffel aus</option>
+							<%
+							for(var i=0; i < seasonsdata.seasons.length; i++) { 
+							%>
+							<option value="<%= seasonsdata.seasons[i].id %>"><%= seasonsdata.seasons[i].id %></option>
+							<%
+							}
+							%>
+						</select>
+					<br /><br />
+					Episode:
+						<div class="row">				
+  							<div class="col-xs-2">
+   								<input type="text" class="form-control" id="episode" placeholder="0"> 
+ 							</div>
+ 							<div class="col-xs-2">
+   				 		/ 
+   					  			<script>
+									$("#season").on("change", function() {
+   										id = "related_" + $(this).val() + "_content";
+   									 	$("#" + id).show().siblings().hide()
+									})
+								</script>
    					
-<% 
-for(var i=0; i < seasonsdata.seasons.length; i++) {
-	%>
-<p id="related_<%= i+1 %>_content" style="display:none;">
-    <%=seasonsdata.seasons[i].episodes%>
-</p>
-<% } %>
-   					 
- 				 </div>
-			</div>
-           
-          </div>
-          <div class="modal-footer">
+								<% 
+								for(var i=0; i < seasonsdata.seasons.length; i++) {
+								%>
+									<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons" style="display:none;">
+								    <%=seasonsdata.seasons[i].episodes%>
+									</p>
+								<% } %>
+ 							</div>
+						</div>
+           			<p class="maxSeasonsAlert" style="display:none;">Bitte gib eine korrekte Episodenzahl ein.</p>
+           			<p class="noSeasonAlert" style="display:none;">Bitte wähle eine Staffel aus.</p>
+          		</div>
+          	</div>
+          	<div class="modal-footer">
           	<input type="submit" class="btn btn-primary" id="addTo" value="Speichern">
             <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
             </form>
@@ -158,6 +202,7 @@ for(var i=0; i < seasonsdata.seasons.length; i++) {
           </div>
         </div>
       </div>
+       <!-- Modal Ende -->
     </div>
 
 
