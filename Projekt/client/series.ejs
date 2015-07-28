@@ -80,6 +80,8 @@
 								var frmdataWatching = { 
 											"watchedid": $('#watchedId').val(),
 											"status": currentStatus,
+											"season": selectedSeason,
+											"episode": selectedEpisodes,
 
 								};
 								
@@ -160,7 +162,7 @@
 				 	<%
 				 		var notwatchedyet = true;
 				 		var currentWatchingSeriesID = 0;
-				 		if(typeof(seriesdata.watched) !== 'undefined') {
+				 		if(typeof(watchedseriesdata.watched) !== 'undefined') {
 
 				 			
 				 		for( var i=0; i  < watchedseriesdata.watched.length; i++) {
@@ -168,7 +170,7 @@
 				 				currentWatchingSeriesID = watchedseriesdata.watched[i];
 
 				 	%>
-				 	<input id="watchedId" value="<%= watchedseriesdata.watched[i].id %>">
+				 	<input type="hidden" id="watchedId" value="<%= watchedseriesdata.watched[i].id %>">
 				 	<input type="hidden" name="watchStatus" id="watchStatus" value="Watching">
 				 	<button type="button" data-toggle="modal" data-target="#basicModal">Bearbeiten</button>
 				 	<%		
@@ -208,10 +210,55 @@
 
            		Status: 
            			<select class="form-control" id="status">
- 						 <option value="Watching">Schaue ich gerade</option>
-						 <option value="Werde ich schauen">Werde ich schauen</option>
-						 <option value="Abgeschlossen">Abgeschlossen</option>
-  				 		 <option value="Abgebrochen">Abgebrochen</option>
+           				<% 
+           				if(notwatchedyet==false) {
+           				%>
+           				<option value="<%=currentWatchingSeriesID.status%>"><%=currentWatchingSeriesID.status%></option>
+           				<%
+           				}
+           				%>
+
+
+           				<%
+           				if(currentWatchingSeriesID.status == "Werde ich schauen") {
+           				} else {
+           					%>
+           					<option value="Werde ich schauen">Werde ich schauen</option>
+           					<%
+           				}
+           				%>
+
+
+           				<%
+           				if(currentWatchingSeriesID.status == "Schaue ich gerade" || currentWatchingSeriesID.status == "Watching") {
+           				} else {
+           					%>
+           					<option value="Watching">Schaue ich gerade</option>
+           					<%
+           				}
+           				%>
+
+
+
+           				 <%
+           				if(currentWatchingSeriesID.status == "Abgeschlossen") {
+           				} else {
+           				%>
+           				<option value="Abgeschlossen">Abgeschlossen</option>
+           				<%
+           				}
+           				%>	
+ 						 
+ 						 <%
+           				if(currentWatchingSeriesID.status == "Abgebrochen") {
+           				} else {
+           				%>
+           				<option value="Abgebrochen">Abgebrochen</option>
+           				<%
+           				}
+           				%>	
+						
+  				 		
 					</select>
 				<br /><br />
 				<script>
@@ -259,11 +306,37 @@
 					Episode:
 						<div class="row">				
   							<div class="col-xs-2">
+  								<%
+  								if(notwatchedyet==false) {
+  									%>
+  										<input type="text" class="form-control" id="episode" placeholder="<%=currentWatchingSeriesID.episode%>">
+  								<%
+  								} else {
+  								%>
+  								
    								<input type="text" class="form-control" id="episode" placeholder="0"> 
+   								<%
+   								}
+   							%>
+   								
  							</div>
  							<div class="col-xs-2">
    				 		/ 
+   				 		<%
+   				 		if(notwatchedyet==false) {
+   				 			%>
+   				 			<% 
+								for(var i=0; i < seasonsdata.seasons.length; i++) {
+								%>
+									<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons">
+								    <%=seasonsdata.seasons[i].episodes%>
+									</p>
+								<% } %>
+   				 			<%
+   				 		}
+   				 		%>
    					  			<script>
+   					  		
 									$("#season").on("change", function() {
    										id = "related_" + $(this).val() + "_content";
    									 	$("#" + id).show().siblings().hide()
