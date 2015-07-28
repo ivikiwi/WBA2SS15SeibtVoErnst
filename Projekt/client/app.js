@@ -198,41 +198,67 @@ app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
 					accept: "application/json"
 				}
 			}
+
+			var watchedseriesoptions = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.uid+"/watched",
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
 			var requestCounter = 0;
 			var seriesdata;
 			var seasondata;
+			var watchedseriesdata;
+			//	we have to loop our requests to make sure, that all requests are done, 
+			//	so our last request can write a positive respone heaser
+			requestloop = function() {
+				requestCounter=0;
 			var externalRequest = http.request(seriesoptions, function(externalRequest) {
 				//	defined a requestCounter to assure that our res.write() only starts, 
 				//	after all our http-requests 
 				//	(after we get all our data from our service) are done!!
 				requestCounter++;
-				console.log("Connected1");
-				
-					console.log("test1");
 					externalRequest.on("data", function(chunk) {
 						//save our request-data in our variable seriesdata to build our final json-data later
 						seriesdata = JSON.parse(chunk);
 					});		
 			});
-			//	second Get-Request: we want to get data from our seasons-ressource too
-			var externalRequestTwo = http.request(seasonoptions, function(externalRequestTwo) {
+			
+			//	second Get-Request: we want to get the data for watched series of a user too
+			var externalRequestTwo = http.request(watchedseriesoptions, function(externalRequestTwo) {
 				requestCounter++;
-				console.log("Connected2");
-				if(requestCounter==2) {
-					console.log("test2");
 					externalRequestTwo.on("data", function(chunk) {
+						//save our request-data in our variable seriesdata to build our final json-data later
+						watchedseriesdata = JSON.parse(chunk);
+					});		
+			});
+			//	third Get-Request: we want to get data from our seasons-ressource too
+			var externalRequestThree = http.request(seasonoptions, function(externalRequestThree) {
+				requestCounter++;
+				if(requestCounter==3) {
+					externalRequestThree.on("data", function(chunk) {
 						seasondata = JSON.parse(chunk);
-						var finaldata = {"seriesdata": seriesdata, "seasonsdata": seasondata};
+						var finaldata = {"seriesdata": seriesdata, "seasonsdata": seasondata, "watchedseriesdata": watchedseriesdata};
 						var html = ejs.render(filestring, finaldata);
 						res.setHeader("content-type", "text/html");
 						res.writeHead(200);
 						res.write(html);
 						res.end();
 					});
+				} else {
+					requestloop();
 				}
+
 			});
+			externalRequestThree.end();
 			externalRequestTwo.end();
 			externalRequest.end();
+		}
+			requestloop();
+			
 		}
 	});
 });
@@ -417,11 +443,42 @@ app.post("/postuser", function(req, res){
 
 app.post("/postwatchedseries/user/:id/allseries/:sid", function(req, res){
 	var data = JSON.stringify(req.body);
+	console.log(data);
 	var options = {
 				host: "localhost",
 				port: 8888,
 				path: "/user/"+req.params.id+"/watched",
 				method: 'POST',
+				headers: {
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
+				}
+			};
+
+	var externalRequest = http.request(options, function(res){
+		
+		externalRequest.on("data", function(chunk) {
+					console.log("body: " + chunk);
+					
+
+				});
+		
+	});
+	externalRequest.write(data);
+	externalRequest.end();
+	
+});
+
+
+app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
+	var data = JSON.stringify(req.body);
+	console.log("req.body.watchedid: " + req.body.watchedid);
+	var options = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.id+"/watched/"+req.body.watchedid,
+				method: 'PUT',
 				headers: {
 				accept: "application/json",
 				"Content-Type": "application/json",

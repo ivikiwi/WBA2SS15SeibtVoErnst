@@ -22,12 +22,13 @@
 				var selectedEpisodes = +($('#episode').val());
 				var currentStatus = $('#status').val();
 				var selectedSeason = $('#season').val();
+				var watchStatus = $('#watchStatus').val();
 
 				if(selectedSeason == "Staffelauswahl" && currentStatus == "Watching") {
 					$( 'p.noSeasonAlert' ).show();
 					ev.preventDefault();
 				} else {
-				
+						//	check if inserted episode is a number, if it is not or it is 0, then preventDefault
 						if(selectedEpisodes > maxSeasons || isNaN(selectedEpisodes) || selectedEpisodes == "0" && currentStatus == "Watching") {
 							$( 'p.noSeasonAlert' ).hide();
 							$( 'p.maxSeasonsAlert' ).fadeOut();
@@ -35,10 +36,21 @@
 							ev.preventDefault();
 						} else {
 
+							if (currentStatus == "Watching") {
+								currentStatus = "Schaue ich gerade";
+							}
+
+							if (currentStatus == "Werde ich schauen") {
+								selectedSeason = "0";
+								selectedEpisodes = "0";
+							}
+
+							if(watchStatus == "notWatching" ) {
+							
 							var frmdata = { "seriesid": $('#seriesID').val(),
-											"status": $('#status').val(),
-											"season": $('#season').val(),
-											"episode": $('#episode').val(),
+											"status": currentStatus,
+											"season": selectedSeason,
+											"episode": selectedEpisodes,
 
 							};
 							$.ajax({
@@ -62,6 +74,38 @@
 								$('#basicModal').modal('hide')
 							});
 						}
+
+						if(watchStatus == "Watching") {
+								
+								var frmdataWatching = { 
+											"watchedid": $('#watchedId').val(),
+											"status": currentStatus,
+
+								};
+								
+								$.ajax({
+								type: 'PUT',
+								url: '/putwatchedseries'+pathname,
+								data: frmdataWatching,
+								//contentType: 'application/json',
+								success: function(frmdata) {
+						
+								},
+								error: function(xhr, options, e) {
+    							console.log(e);
+								}
+								}).done(function(){
+									alert(data.name+' wurde hinzugefuegt.');
+								}).fail(function(e){
+					
+									alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+								});
+								$(function () {
+									$('#basicModal').modal('hide')
+								});
+
+							} 
+					}
 				}
 			ev.preventDefault();
 			});
@@ -113,8 +157,43 @@
 					<% } %>
 				 	<br /><br />
 
-	       		    <a href="#" class="btn btn-default" data-toggle="modal" data-target="#basicModal">Hinzufügen</a>
-   	
+				 	<%
+				 		var notwatchedyet = true;
+				 		var currentWatchingSeriesID = 0;
+				 		if(typeof(seriesdata.watched) !== 'undefined') {
+
+				 			
+				 		for( var i=0; i  < watchedseriesdata.watched.length; i++) {
+				 			if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
+				 				currentWatchingSeriesID = watchedseriesdata.watched[i];
+
+				 	%>
+				 	<input id="watchedId" value="<%= watchedseriesdata.watched[i].id %>">
+				 	<input type="hidden" name="watchStatus" id="watchStatus" value="Watching">
+				 	<button type="button" data-toggle="modal" data-target="#basicModal">Bearbeiten</button>
+				 	<%		
+				 			notwatchedyet = false;	
+				 			}
+
+				 		}
+
+				 			
+
+				 	%>
+				 	
+				 	<%
+				 			
+
+				 		}
+
+				 		if(notwatchedyet==true) {
+				 	%>
+				 	<input type="hidden" name="watchStatus" id="watchStatus" value="notWatching">
+				 	<button type="button" data-toggle="modal" data-target="#basicModal">Hinzufügen</button>
+	       		    
+   					<%
+   					}
+   					%>
 
         			 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
    					   <div class="modal-dialog">
@@ -125,7 +204,7 @@
           </div>
           <div class="modal-body">
            <form id="addToWatch" action="/" method="post">
-           	<input type="hidden" name="Language" id="seriesID" value="<%= seriesdata.id %>">
+           	<input type="hidden" name="seriesID" id="seriesID" value="<%= seriesdata.id %>">
 
            		Status: 
            			<select class="form-control" id="status">
@@ -157,12 +236,22 @@
 				<div id="Watching_content">
 					Staffel: 
 						<select class="form-control" id="season" name="season">
+							<%
+							if(notwatchedyet==false) {
+							%>
+							<option value="<%= currentWatchingSeriesID.season %>"><%= currentWatchingSeriesID.season %></option>
+							<%
+							} else {
+							%>
 							<option value="Staffelauswahl">Bitte wähle deine Staffel aus</option>
 							<%
+							}
 							for(var i=0; i < seasonsdata.seasons.length; i++) { 
+								if(seasonsdata.seasons[i].id != currentWatchingSeriesID.season) {
 							%>
 							<option value="<%= seasonsdata.seasons[i].id %>"><%= seasonsdata.seasons[i].id %></option>
 							<%
+								}
 							}
 							%>
 						</select>
