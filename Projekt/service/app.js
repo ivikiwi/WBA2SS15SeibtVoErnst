@@ -13,8 +13,5 @@ app.use(jsonParser);
 require("./api/series/import").register(app, db);
 /*Register User API */
 require("./api/user/import").register(app, db);
-//	//////////////////////////////////////////
-/*Register Flush API*/
-require("./api/flushpostall/import").register(app, db);
 //	Server Port
 app.listen(8888);
