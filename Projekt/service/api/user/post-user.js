@@ -1,12 +1,12 @@
 function postUser(app, db) {
 	return function(req, res) {
-		var newSeries = req.body;
+		var newUser = req.body;
 
 		db.incr('id:u', function(err, rep){
-			newSeries.id = rep;
+			newUser.id = rep;
 
-			db.set('user:'+newSeries.id, JSON.stringify(newSeries), function(err, rep){
-			res.json(newSeries);
+			db.set('user:'+newUser.id, JSON.stringify(newUser), function(err, rep){
+			res.json(newUser);
 			});
 		});
 	};
