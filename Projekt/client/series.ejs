@@ -10,6 +10,11 @@
 		<link rel="stylesheet" href="/css/style.css">
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<!-- Script für die Bewertung -->
+		<script type="text/javascript">
+			<!-- Muss noch geschrieben werden -->
+		</script>
+		<!-- Script für das Add-To-Watched-List-Formular -->
 		<script type="text/javascript">
 		$(function() {
 			var frm = $('#addToWatch');
@@ -150,18 +155,62 @@
 				<div class="description">
 					<strong>Genre:</strong> <%= seriesdata.genre %><br />
 					<strong>Beschreibung:</strong> <%= seriesdata.description %><br />
+					<% 
+					if(typeof(seasonsdata.seasons) !== 'undefined') {
+						%>
 					<strong>Staffeln: </strong><%= seasonsdata.seasons.length %><br /><br />
+					<%
+					}
+					%>
 					<strong>Bewertung: </strong>
 					<% if (typeof(seriesdata.bewertung) !== 'undefined') { %>
   						<span><%= seriesdata.bewertung %></span>
 					<% } else { %>
-						<span>Noch keine Bewertung</span>
+						<span>Noch keine Bewertung</span><br />
 					<% } %>
+					<!-- Ist die Serie in der persönlichen Watched-Liste drin? -->
+					<%
+					var notwatchedyet = true;
+					var currentWatchingSeriesID = 0;
+
+					if(typeof(watchedseriesdata.watched) !== 'undefined') {
+						for( var i=0; i  < watchedseriesdata.watched.length; i++) {
+				 			if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
+				 				currentWatchingSeriesID = watchedseriesdata.watched[i];
+				 				notwatchedyet = false;	
+				 			}
+				 		}
+				 	}
+				 	%>
+				 	<!-- Es wird in die user/:uid:/watched reingeguckt, ob die Serie bereits bewertet wurde -->
+				 	<%
+					 if(typeof(currentWatchingSeriesID.bewertet) !== 'undefined') {
+				 	%>
+				 		<p>Meine Bewertung: <%= currentWatchingSeriesID.bewertet %></p>
+					 <%
+					 } else {
+					 %>
+					 
+					 <form id="ratingForm" action="/" method="post">
+						<strong>Jetzt bewerten: </strong><select id="bewertung">
+							<%
+							for(var i=1; i<=10; i++) {
+							%>
+								<option value="<%=i%>"><%=i%></option>
+							<%
+							}
+							%>
+
+						</select>
+						<a href="#" onclick="this.form.submit()">Los!</a> 
+					</form>
+					<%
+					}
+					%>
 				 	<br /><br />
 
 				 	<%
-				 		var notwatchedyet = true;
-				 		var currentWatchingSeriesID = 0;
+				 						 		
 				 		if(typeof(watchedseriesdata.watched) !== 'undefined') {
 
 				 			
@@ -285,9 +334,13 @@
 						<select class="form-control" id="season" name="season">
 							<%
 							if(notwatchedyet==false) {
+								if(currentWatchingSeriesID.season == "0") {
+
+									} else {
 							%>
 							<option value="<%= currentWatchingSeriesID.season %>"><%= currentWatchingSeriesID.season %></option>
 							<%
+									}
 							} else {
 							%>
 							<option value="Staffelauswahl">Bitte wähle deine Staffel aus</option>

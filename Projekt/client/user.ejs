@@ -39,7 +39,17 @@
 		<div>
 					<div class="seriesbox">
 					<div class="description"> 
+            <%
+            if (typeof(name) !== 'undefined') {
+            %>
 						<strong> User: </strong> <%= name %> 
+            <%
+          } else {
+          %>
+          <p> ERROR: Der User existiert nicht, oder es wurde kein Name angegeben. </p>
+          <%
+          }
+          %>
 					</div></div>
 
 			
