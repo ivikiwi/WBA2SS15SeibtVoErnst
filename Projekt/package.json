@@ -4,8 +4,10 @@
   "description": "A WBA-2 project",
   "main": "gulpfile.js",
   "dependencies": {
+    "body-parser": "^1.13.3",
     "gulp": "^3.9.0",
-    "gulp-eslint": "^0.14.0"
+    "gulp-eslint": "^0.14.0",
+    "redis": "^0.12.1"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
