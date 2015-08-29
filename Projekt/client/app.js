@@ -96,6 +96,31 @@ app.get("/css/:stylesheetname", function (req, res, next) {
 
 });
 
+//Allgemeine Images laden
+app.get("/img/:imgname", function (req, res, next) {
+
+  var options = {
+    root: __dirname + "/img/",
+    dotfiles: "deny",
+    headers: {
+        "x-timestamp": Date.now(),
+        "x-sent": true
+    }
+  };
+
+  var fileName = req.params.imgname;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
 
 
 //Bootstrap CSS
@@ -528,9 +553,16 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	var oldAllRate = seriesrating.bewertung;
 	var newRate;
 	var ratingAnzahl;
+	var bewertungssumme;
 
 	if(seriesrating.bewertung == null) {
 		oldAllRate = 0;
+	}
+
+	if(seriesrating.bewertungssumme == null) {
+		bewertungssumme = 0;
+	} else {
+		bewertungssumme = seriesrating.bewertungssumme;
 	}
 
 	//if (typeof(seriesrating.bewertungsanzahl) !== 'undefined' || seriesrating.bewertungsanzahl == 0) {
@@ -547,11 +579,12 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 		ratingAnzahl = seriesrating.bewertungsanzahl + 1;
 	}
 	
+	bewertungssumme = parseInt(bewertungssumme) + parseInt(newSingleRate);
 
-	newRate = ((parseInt(oldAllRate) * parseInt(ratingAnzahl)) + parseInt(newSingleRate)) / parseInt(ratingAnzahl);
+	newRate = parseInt(bewertungssumme) / parseInt(ratingAnzahl);
 
-	if(newRate > 10) {
-		newRate = 10;
+	if(newRate > 5) {
+		newRate = 5;
 	}
 
 	if(newRate < 0) {
@@ -561,7 +594,8 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	var ratingData = {
 		"bewertung": newRate,
 		"bewertungsanzahl": ratingAnzahl,
-		"genre": "Musik"
+		"genre": "Musik",
+		"bewertungssumme": bewertungssumme
 	};
 
 	console.log("RatingAnzahl: " + ratingAnzahl);
@@ -589,7 +623,6 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 
 
 	var externalRequest1 = http.request(putInSeries, function(res) {
-			console.log("request1");
 				externalRequest1.on("newRatingData", function(chunk) {
 						console.log("body: " + chunk);
 				});
@@ -597,7 +630,6 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 
 
 		var externalRequest2 = http.request(watchedseries, function(res){
-				console.log("request2");
 			externalRequest2.on("data", function(chunk) {
 						console.log("body: " + chunk);
 					});
