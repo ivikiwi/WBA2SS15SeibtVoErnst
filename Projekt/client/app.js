@@ -173,6 +173,8 @@ app.get("/dist/fonts/:bfonts", function (req, res, next) {
 
 });
 
+// Variable, um in der get-methode die seriendaten zu speichern und später nochmal zu verwenden.
+var seriesrating;
 
 app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
 	fs.readFile("./series.ejs", {encoding: "utf-8"}, function(err, filestring) {
@@ -224,6 +226,8 @@ app.get("/user/:uid/allseries/:id", jsonParser, function(req, res){
 					externalRequest.on("data", function(chunk) {
 						//save our request-data in our variable seriesdata to build our final json-data later
 						seriesdata = JSON.parse(chunk);
+						// speichert die seriendaten in der Variable seriesrating, die von außen kommt, damit diese Daten noch für die Put-Methode für die Bewertungen benutzt werden können.
+						seriesrating = seriesdata;
 					});		
 			});
 			
@@ -499,6 +503,116 @@ app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
 	externalRequest.end();
 	
 });
+
+// Serie Bewerten!
+app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
+	var data = JSON.stringify(req.body);
+	console.log(seriesrating.bewertung);
+	console.log("req.body.bewertung: " + req.body.bewertung);
+	var watchedseries = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.id+"/watched/"+req.body.watchedid,
+				method: 'PUT',
+				headers: {
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
+				}
+	};
+
+
+
+	// Bewertungsalgorithmus
+	var newSingleRate = req.body.bewertung;
+	var oldAllRate = seriesrating.bewertung;
+	var newRate;
+	var ratingAnzahl;
+
+	if(seriesrating.bewertung == null) {
+		oldAllRate = 0;
+	}
+
+	//if (typeof(seriesrating.bewertungsanzahl) !== 'undefined' || seriesrating.bewertungsanzahl == 0) {
+	//	ratingAnzahl = 1;
+	//} else {
+	//	ratingAnzahl = seriesrating.bewertungsanzahl + 1;
+	//}
+
+	console.log(seriesrating.bewertungsanzahl);
+
+	if(seriesrating.bewertungsanzahl == null) {
+		ratingAnzahl = 1;
+	} else {
+		ratingAnzahl = seriesrating.bewertungsanzahl + 1;
+	}
+	
+
+	newRate = ((parseInt(oldAllRate) * parseInt(ratingAnzahl)) + parseInt(newSingleRate)) / parseInt(ratingAnzahl);
+
+	if(newRate > 10) {
+		newRate = 10;
+	}
+
+	if(newRate < 0) {
+		newRate = 0;
+	}
+
+	var ratingData = {
+		"bewertung": newRate,
+		"bewertungsanzahl": ratingAnzahl,
+		"genre": "Musik"
+	};
+
+	console.log("RatingAnzahl: " + ratingAnzahl);
+
+	var newRatingData = JSON.stringify(ratingData);
+
+	var putInSeries = {
+				host: "localhost",
+				port: 8888,
+				path: "/series/" + req.params.sid,
+				method: 'PUT',
+				headers: {
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(newRatingData)
+				}
+	};
+
+	console.log("newRate" + newRate);
+	console.log("oldAllRate" + oldAllRate);
+	console.log("ratingAnzahl" + ratingAnzahl);
+	console.log(newRatingData);
+
+	
+
+
+	var externalRequest1 = http.request(putInSeries, function(res) {
+			console.log("request1");
+				externalRequest1.on("newRatingData", function(chunk) {
+						console.log("body: " + chunk);
+				});
+	});
+
+
+		var externalRequest2 = http.request(watchedseries, function(res){
+				console.log("request2");
+			externalRequest2.on("data", function(chunk) {
+						console.log("body: " + chunk);
+					});
+		
+		});
+
+	//externalRequest1.write(JSON.stringify(newRatingData));
+	externalRequest1.write(newRatingData);
+	externalRequest2.write(data);
+	externalRequest1.end();
+	externalRequest2.end();
+	
+	
+});
+
 
 
 

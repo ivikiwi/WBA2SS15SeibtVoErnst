@@ -119,6 +119,43 @@
 			
 		});
 		</script>
+
+	<!-- Die Ajax-Put-Methode, zum Hinzufügen der Bewertung -->
+	<script type="text/javascript">
+		$(function() {
+			var frm = $('#ratingForm');
+			var pathname = window.location.pathname; 
+
+			
+			frm.on('submit', function(ev){
+			
+				var frmdataWatching = { 
+					"watchedid": $('#watchedId2').val(),
+					"bewertung": $('#bewertung').val(),
+				};
+								
+				$.ajax({
+				type: 'PUT',
+				url: '/ratewatchedseries'+pathname,
+				data: frmdataWatching,
+				//contentType: 'application/json',
+				success: function(frmdata) {
+						
+				},
+				error: function(xhr, options, e) {
+    			console.log(e);
+				}
+			}).done(function(){
+				alert(data.name+' wurde hinzugefuegt.');
+			}).fail(function(e){	
+				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+			});
+
+			ev.preventDefault();
+			});
+			
+		});
+</script>
 	
 	
 	</head>
@@ -202,7 +239,9 @@
 							%>
 
 						</select>
-						<a href="#" onclick="this.form.submit()">Los!</a> 
+						<input type="hidden" id="watchedId2" value="<%= currentWatchingSeriesID.id %>">
+						<input type="submit" class="btn btn-primary" id="addTo" value="Los!">
+					
 					</form>
 					<%
 					}
