@@ -66,41 +66,53 @@ gulp.task("db-dummy", function() {
 	db.set("series:5", JSON.stringify(newSeries5));
 	// Episode Dummies
 	var episodes1 = {
+	"id": "1",
 	"episodes": "24"
 	}
 	var episodes2 = {
+	"id": "2",
 	"episodes": "16"
+	}
+	var episodes3 = {
+	"id": "3",
+	"episodes": "21"
 	}
 	db.set("ss:1:season:1", JSON.stringify(episodes1));
 	db.set("ss:1:season:2", JSON.stringify(episodes2));
-	db.set("ss:2:season:1", JSON.stringify(episodes2));
-	db.set("ss:2:season:2", JSON.stringify(episodes1));
-	db.set("ss:2:season:3", JSON.stringify(episodes2));
+	db.set("ss:2:season:1", JSON.stringify(episodes1));
+	db.set("ss:2:season:2", JSON.stringify(episodes2));
+	db.set("ss:2:season:3", JSON.stringify(episodes3));
 	db.set("ss:3:season:1", JSON.stringify(episodes1));
 	db.set("ss:3:season:2", JSON.stringify(episodes2));
-	db.set("ss:4:season:1", JSON.stringify(episodes2));
+	db.set("ss:4:season:1", JSON.stringify(episodes1));
 	db.set("ss:4:season:2", JSON.stringify(episodes2));
-	db.set("ss:4:season:3", JSON.stringify(episodes1));
+	db.set("ss:4:season:3", JSON.stringify(episodes3));
 	db.set("ss:5:season:1", JSON.stringify(episodes1));
 	db.set("ss:5:season:2", JSON.stringify(episodes2));
 
 	// User Dummies
 	var user1 = {
+	"id": "1",
 	"name": "Ivanka"
 	}
 	var user2 = {
+	"id": "2",
 	"name": "Roman"
 	}
 	var user3 = {
+	"id": "3",
 	"name": "Markus"
 	}
 	var user4 = {
+	"id": "4",
 	"name": "Lisa"
 	}
 	var user5 = {
+	"id": "5",
 	"name": "Sabine"
 	}
 	var user6 = {
+	"id": "6",
 	"name": "Lukas"
 	}
 	db.set('user:1', JSON.stringify(user1));
