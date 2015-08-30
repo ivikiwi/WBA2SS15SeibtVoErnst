@@ -123,387 +123,350 @@
 	
 	</head>
 	<body>
-
-		 <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Navigation ein-/ausblenden</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#"><strong>viromark</strong></a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="../allseries">Alle Serien</a></li>
-            <li><a href="../watched">Meine Serienliste</a></li>
-            <li><a href="../">Mein Profil</a></li>
-          
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
+		<!-- //////// NAVIGATION ///////// -->
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+      		<div class="container">
+       		 	<div class="navbar-header">
+          			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+           				<span class="sr-only">Navigation ein-/ausblenden</span>
+           				<span class="icon-bar"></span>
+            			<span class="icon-bar"></span>
+           				<span class="icon-bar"></span>
+          			</button>
+          			<a class="navbar-brand" href="#"><strong>viromark</strong></a>
+        		</div>
+       	 		<div id="navbar" class="collapse navbar-collapse">
+          			<ul class="nav navbar-nav">
+            			<li><a href="../allseries">Alle Serien</a></li>
+            			<li><a href="../watched">Meine Serienliste</a></li>
+           				<li><a href="../">Mein Profil</a></li>
+          			</ul>
+       			</div><!--/.nav-collapse -->
+      		</div>
+   		</nav>
+   		<!-- ///////// SEITENANFANG /////// -->
 		<h1><%= seriesdata.name %></h1>
 		<div>
-		
+		<!-- ///////// SERIENBOX MIT INFOS /////// -->
 			<div class="seriesbox">
+				<!-- //// BILDERBOX //// -->
 				<div class="seriesimage"><img width="148" height="208" src="/cover/<%=seriesdata.id%>">
 				</div>
+				<!-- //// BESCHREIBUNGSBOX //// -->
 				<div class="description">
 					<strong>Genre:</strong> <%= seriesdata.genre %><br />
 					<strong>Beschreibung:</strong> <%= seriesdata.description %><br />
 					<% 
-					if(typeof(seasonsdata.seasons) !== 'undefined') {
-						%>
-					<strong>Staffeln: </strong><%= seasonsdata.seasons.length %><br /><br />
+						if(typeof(seasonsdata.seasons) !== 'undefined') {
+					%>
+						<strong>Staffeln: </strong><%= seasonsdata.seasons.length %><br /><br />
 					<%
-					}
+						}
 					%>
 					<strong>Bewertung: </strong>
 					<% 
-					var ratinganzahl;
-					if (typeof(seriesdata.bewertung) !== 'undefined') { 
-						if (typeof(seriesdata.bewertungsanzahl) !== 'undefined') {
-							ratinganzahl = seriesdata.bewertungsanzahl;
-						} else {
-							ratinganzahl = 0;
-						}
+						var ratinganzahl;
+						if (typeof(seriesdata.bewertung) !== 'undefined') { 
+							if (typeof(seriesdata.bewertungsanzahl) !== 'undefined') {
+								ratinganzahl = seriesdata.bewertungsanzahl;
+							} else {
+								ratinganzahl = 0;
+							}
 					%>
-  						<span><%= Math.round(seriesdata.bewertung * 10)/10 %> / <%= ratinganzahl %></span>
-					<% } else { %>
-						<span>Noch keine Bewertung</span><br />
-					<% } %>
+  							<span><%= Math.round(seriesdata.bewertung * 10)/10 %> / <%= ratinganzahl %></span>
+					<%
+					 	} else { 
+					%>
+							<span>Noch keine Bewertung</span><br />
+					<% 
+					} 
+					%>
 					<!-- Ist die Serie in der persönlichen Watched-Liste drin? -->
 					<%
-					var notwatchedyet = true;
-					var currentWatchingSeriesID = 0;
-
-					if(typeof(watchedseriesdata.watched) !== 'undefined') {
-						for( var i=0; i  < watchedseriesdata.watched.length; i++) {
-				 			if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
-				 				currentWatchingSeriesID = watchedseriesdata.watched[i];
-				 				notwatchedyet = false;	
+						var notwatchedyet = true;
+						var currentWatchingSeriesID = 0;
+						if(typeof(watchedseriesdata.watched) !== 'undefined') {
+							for( var i=0; i  < watchedseriesdata.watched.length; i++) {
+				 				if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
+				 					currentWatchingSeriesID = watchedseriesdata.watched[i];
+				 					notwatchedyet = false;	
+				 				}
 				 			}
 				 		}
-				 	}
 				 	%>
 				 	<!-- Es wird in die user/:uid:/watched reingeguckt, ob die Serie bereits bewertet wurde -->
 				 	<%
-					 if(typeof(currentWatchingSeriesID.bewertet) !== 'undefined') {
-				 	%>
-				 		<p>Meine Bewertung: <%= currentWatchingSeriesID.bewertet %></p>
-					 <%
-					 } else {
-					 %>
-					 <% 
-					 var oldRate;
-					 if (typeof(seriesdata.bewertung) !== 'undefined') { 
-  						oldRate = seriesdata.bewertung;
-  						if(oldRate > 5) {
-  							oldRate = 5;
-  						} 
-  						if(oldRate >= 4 && oldRate < 5) {
-  							oldRate = 4;
-  						}
+						var oldRate;
+					 		if (typeof(seriesdata.bewertung) !== 'undefined') { 
+  								oldRate = seriesdata.bewertung;
+  								if(oldRate > 5) {
+  									oldRate = 5;
+  								} 
+  								if(oldRate >= 4 && oldRate < 5) {
+  									oldRate = 4;
+  								}
+	  							if(oldRate >= 3 && oldRate < 4) {
+	  								oldRate = 3;
+	  							}
+	  							if(oldRate >= 2 && oldRate < 3) {
+	  								oldRate = 2;
+	  							}
+	  							if(oldRate >= 1 && oldRate < 2) {
+	  								oldRate = 1;
+	  							}
+	  							if(oldRate > 0 && oldRate < 1) {
+	  								oldRate = 1;
+  								}
+	  							if(oldRate  <= 0) {
+	  								oldRate = 0;
+	  							}
+							} else { 
+								oldRate = 0;
+							} 
 
-  						if(oldRate >= 3 && oldRate < 4) {
-  							oldRate = 3;
-  						}
-
-  						if(oldRate >= 2 && oldRate < 3) {
-  							oldRate = 2;
-  						}
-
-  						if(oldRate >= 1 && oldRate < 2) {
-  							oldRate = 1;
-  						}
-
-  						if(oldRate > 0 && oldRate < 1) {
-  							oldRate = 1;
-  						}
-
-  						if(oldRate  <= 0) {
-  							oldRate = 0;
-  						}
-
-					} else { 
-						oldRate = 0;
-					 } %>
-					 <form id="ratingForm" action="/" method="post">
-						<strong>Jetzt bewerten: </strong>
-						<input id="bewertung" type="number" class="rating" value="<%= oldRate %>" min=1 max=10 step=2 data-size="xs" data-rtl="false">
-						<input type="hidden" id="watchedId2" value="<%= currentWatchingSeriesID.id %>">
-					
-					</form>
-					<%
-					}
+						if(typeof(currentWatchingSeriesID.bewertung) !== 'undefined') {
+							if(notwatchedyet == true) {
+					%>			
+								<p>Du musst die Serie hinzufügen, damit du sie bewerten kannst.</p>
+					<%	
+							} else {
 					%>
-				 	<br /><br />
-
-				 	<%
-				 						 		
-				 		if(typeof(watchedseriesdata.watched) !== 'undefined') {
-
-				 			
-				 		for( var i=0; i  < watchedseriesdata.watched.length; i++) {
-				 			if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
-				 				currentWatchingSeriesID = watchedseriesdata.watched[i];
+								<p><strong>Deine Bewertung:</strong> <%= currentWatchingSeriesID.bewertung %></p>
+					<%
+							}
+				 	%>
+				 			<form id="ratingForm" action="/" method="post">
+							<input id="bewertung" type="number" class="rating" value="<%= oldRate %>" min=1 max=10 step=2 data-size="xs" data-rtl="false" data-readonly="true">
+							</form>
+					<%
+					 	} else {
+					 		if(notwatchedyet == true) {
+					%>
+								<p>Du musst die Serie hinzufügen, damit du sie bewerten kannst.</p>
+								<form id="ratingForm" action="/" method="post">
+								<input id="bewertung" type="number" class="rating" value="<%= oldRate %>" min=1 max=10 step=2 data-size="xs" data-rtl="false" data-readonly="true">
+								</form>
+					<%			
+					 		} else {
+					%>
+								<form id="ratingForm" action="/" method="post">
+									<input id="bewertung" type="number" class="rating" value="<%= oldRate %>" min=1 max=10 step=2 data-size="xs" data-rtl="false">
+									<input type="hidden" id="watchedId2" value="<%= currentWatchingSeriesID.id %>">
+								</form>	
+					<% 		
+							}
+						}
+				 		
+				 		if(typeof(watchedseriesdata.watched) !== 'undefined') {				 			
+				 			for( var i=0; i  < watchedseriesdata.watched.length; i++) {
+				 				if(seriesdata.id == watchedseriesdata.watched[i].seriesid) {
+				 					currentWatchingSeriesID = watchedseriesdata.watched[i];
 
 				 	%>
-				 	<input type="hidden" id="watchedId" value="<%= watchedseriesdata.watched[i].id %>">
-				 	<input type="hidden" name="watchStatus" id="watchStatus" value="Watching">
-				 	<button type="button" data-toggle="modal" data-target="#basicModal">Bearbeiten</button>
+				 					<input type="hidden" id="watchedId" value="<%= watchedseriesdata.watched[i].id %>">
+				 					<input type="hidden" name="watchStatus" id="watchStatus" value="Watching">
+				 					<button type="button" data-toggle="modal" data-target="#basicModal">Bearbeiten</button>
 				 	<%		
-				 			notwatchedyet = false;	
+				 					notwatchedyet = false;	
+				 				}
 				 			}
-
-				 		}
-
-				 			
-
-				 	%>
-				 	
-				 	<%
-				 			
-
 				 		}
 
 				 		if(notwatchedyet==true) {
 				 	%>
-				 	<input type="hidden" name="watchStatus" id="watchStatus" value="notWatching">
-				 	<button type="button" data-toggle="modal" data-target="#basicModal">Hinzufügen</button>
+				 			<input type="hidden" name="watchStatus" id="watchStatus" value="notWatching">
+				 			<button type="button" data-toggle="modal" data-target="#basicModal">Hinzufügen</button>
 	       		    
    					<%
-   					}
+   						}
    					%>
-
-        			 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+   					<!-- ////// BEGINN DES HINZUFÜGEN/BEARBEITEN - MODAL-POPUP-FENSTERS ////// -->
+        			<div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
    					   <div class="modal-dialog">
    					     <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title" id="myModalLabel">Zu meiner Liste hinzufügen</h4>
-          </div>
-          <div class="modal-body">
-           <form id="addToWatch" action="/" method="post">
-           	<input type="hidden" name="seriesID" id="seriesID" value="<%= seriesdata.id %>">
+          					<div class="modal-header">
+            					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+           						<h4 class="modal-title" id="myModalLabel">Zu meiner Liste hinzufügen</h4>
+          					</div>
+         					<div class="modal-body">
+           						<form id="addToWatch" action="/" method="post">
+           							<input type="hidden" name="seriesID" id="seriesID" value="<%= seriesdata.id %>">
+           							Status: 
+           							<select class="form-control" id="status">
+           							<% 
+           								if(notwatchedyet==false) {
+           							%>
+           									<option value="<%=currentWatchingSeriesID.status%>"><%=currentWatchingSeriesID.status%></option>
+           							<%
+           								}
 
-           		Status: 
-           			<select class="form-control" id="status">
-           				<% 
-           				if(notwatchedyet==false) {
-           				%>
-           				<option value="<%=currentWatchingSeriesID.status%>"><%=currentWatchingSeriesID.status%></option>
-           				<%
-           				}
-           				%>
+           								if(currentWatchingSeriesID.status == "Werde ich schauen") {
+           								} else {
+           							%>
+           									<option value="Werde ich schauen">Werde ich schauen</option>
+           							<%
+           								}
 
+           								if(currentWatchingSeriesID.status == "Schaue ich gerade" || currentWatchingSeriesID.status == "Watching") {
+           								} else {
+           							%>
+           									<option value="Watching">Schaue ich gerade</option>
+           							<%
+           								}
 
-           				<%
-           				if(currentWatchingSeriesID.status == "Werde ich schauen") {
-           				} else {
-           					%>
-           					<option value="Werde ich schauen">Werde ich schauen</option>
-           					<%
-           				}
-           				%>
-
-
-           				<%
-           				if(currentWatchingSeriesID.status == "Schaue ich gerade" || currentWatchingSeriesID.status == "Watching") {
-           				} else {
-           					%>
-           					<option value="Watching">Schaue ich gerade</option>
-           					<%
-           				}
-           				%>
-
-
-
-           				 <%
-           				if(currentWatchingSeriesID.status == "Abgeschlossen") {
-           				} else {
-           				%>
-           				<option value="Abgeschlossen">Abgeschlossen</option>
-           				<%
-           				}
-           				%>	
- 						 
- 						 <%
-           				if(currentWatchingSeriesID.status == "Abgebrochen") {
-           				} else {
-           				%>
-           				<option value="Abgebrochen">Abgebrochen</option>
-           				<%
-           				}
-           				%>	
-						
-  				 		
-					</select>
-				<br /><br />
-				<script>
-					$("#status").on("change", function() {
-					//	if( (this).val() == "notWatching" ) {
-					//		$( '#watchingSeasonOptions' ).hide();
-					//	}
-						var toHideContent;
-   						id = $(this).val() + "_content";
-   						if($(this).val() == "Watching") {
-   							toHideContent = $("#notWatching_content");
-   							$("#Watching_content").show();
-   						} else {
-   							toHideContent = $("#Watching_content");
-   							$("#notWatching_content").show();
-   						}
-   						//$("#" + id).show();
-   						toHideContent.hide();
-					})
-				</script>
-				<div id="notWatching_content"></div>
-				<div id="Watching_content">
-					Staffel: 
-						<select class="form-control" id="season" name="season">
-							<%
-							if(notwatchedyet==false) {
-								if(currentWatchingSeriesID.season == "0") {
-
-									} else {
-							%>
-							<option value="<%= currentWatchingSeriesID.season %>"><%= currentWatchingSeriesID.season %></option>
-							<%
-									}
-							} else {
-							%>
-							<option value="Staffelauswahl">Bitte wähle deine Staffel aus</option>
-							<%
-							}
-							for(var i=0; i < seasonsdata.seasons.length; i++) { 
-								if(seasonsdata.seasons[i].id != currentWatchingSeriesID.season) {
-							%>
-							<option value="<%= seasonsdata.seasons[i].id %>"><%= seasonsdata.seasons[i].id %></option>
-							<%
-								}
-							}
-							%>
-						</select>
-					<br /><br />
-					Episode:
-						<div class="row">				
-  							<div class="col-xs-2">
-  								<%
-  								if(notwatchedyet==false) {
-  									%>
-  										<input type="text" class="form-control" id="episode" placeholder="<%=currentWatchingSeriesID.episode%>">
-  								<%
-  								} else {
-  								%>
-  								
-   								<input type="text" class="form-control" id="episode" placeholder="0"> 
-   								<%
-   								}
-   							%>
+           								if(currentWatchingSeriesID.status == "Abgeschlossen") {
+           								} else {
+           							%>
+           									<option value="Abgeschlossen">Abgeschlossen</option>
+           							<%
+           								}
+           							
+           								if(currentWatchingSeriesID.status == "Abgebrochen") {
+           								} else {
+           							%>
+           									<option value="Abgebrochen">Abgebrochen</option>
+           							<%
+           								}
+           							%>		
+									</select>
+									<br /><br />
+									<script>
+										$("#status").on("change", function() {
+											//	if( (this).val() == "notWatching" ) {
+											//		$( '#watchingSeasonOptions' ).hide();
+											//	}
+											var toHideContent;
+   											id = $(this).val() + "_content";
+   											if($(this).val() == "Watching") {
+   												toHideContent = $("#notWatching_content");
+   												$("#Watching_content").show();
+   											} else {
+   												toHideContent = $("#Watching_content");
+   												$("#notWatching_content").show();
+   											}
+   											//$("#" + id).show();
+   											toHideContent.hide();
+										})
+									</script>
+									<div id="notWatching_content">
+									</div>
+									<div id="Watching_content">
+										Staffel: 
+										<select class="form-control" id="season" name="season">
+										<%
+										if(notwatchedyet==false) {
+											if(currentWatchingSeriesID.season == "0") {
+											} else {
+										%>
+												<option value="<%= currentWatchingSeriesID.season %>"><%= currentWatchingSeriesID.season %></option>
+										<%
+											}
+										} else {
+										%>
+											<option value="Staffelauswahl">Bitte wähle deine Staffel aus</option>
+										<%
+										}
+										for(var i=0; i < seasonsdata.seasons.length; i++) { 
+											if(seasonsdata.seasons[i].id != currentWatchingSeriesID.season) {
+										%>
+												<option value="<%= seasonsdata.seasons[i].id %>"><%= seasonsdata.seasons[i].id %></option>
+										<%
+											}
+										}
+										%>
+										</select>
+										<br /><br />
+										Episode:
+										<div class="row">				
+  											<div class="col-xs-2">
+  											<%
+  												if(notwatchedyet==false) {
+  											%>
+  												<input type="text" class="form-control" id="episode" placeholder="<%=currentWatchingSeriesID.episode%>">
+  											<%
+  												} else {
+  											%>	
+   													<input type="text" class="form-control" id="episode" placeholder="0"> 
+   											<%
+   												}
+   											%>
    								
- 							</div>
- 							<div class="col-xs-2">
-   				 		/ 
-   				 		<%
-   				 		if(notwatchedyet==false) {
-   				 			%>
-   				 			<% 
-								for(var i=0; i < seasonsdata.seasons.length; i++) {
-								%>
-									<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons">
-								    <%=seasonsdata.seasons[i].episodes%>
-									</p>
-								<% } %>
-   				 			<%
-   				 		}
-   				 		%>
-   					  			<script>
-   					  		
-									$("#season").on("change", function() {
-   										id = "related_" + $(this).val() + "_content";
-   									 	$("#" + id).show().siblings().hide()
-									})
-								</script>
-   					
-								<% 
-								for(var i=0; i < seasonsdata.seasons.length; i++) {
-								%>
-									<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons" style="display:none;">
-								    <%=seasonsdata.seasons[i].episodes%>
-									</p>
-								<% } %>
- 							</div>
-						</div>
-           			<p class="maxSeasonsAlert" style="display:none;">Bitte gib eine korrekte Episodenzahl ein.</p>
-           			<p class="noSeasonAlert" style="display:none;">Bitte wähle eine Staffel aus.</p>
-          		</div>
-          	</div>
-          	<div class="modal-footer">
-          	<input type="submit" class="btn btn-primary" id="addTo" value="Speichern">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-            </form>
+ 											</div>
+ 											<div class="col-xs-2">
+   				 								/ 
+   				 							<%
+   				 								if(notwatchedyet==false) {
+													for(var i=0; i < seasonsdata.seasons.length; i++) {
+											%>
+														<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons">
+								   							<%=seasonsdata.seasons[i].episodes%>
+														</p>
+											<%
+											 		} 
+   				 								}
+   				 							%>
+   					  							<script>
+													$("#season").on("change", function() {
+   														id = "related_" + $(this).val() + "_content";
+   									 					$("#" + id).show().siblings().hide()
+													})
+												</script>
+   											<% 
+												for(var i=0; i < seasonsdata.seasons.length; i++) {
+											%>
+													<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons" style="display:none;">
+								    					<%=seasonsdata.seasons[i].episodes%>
+													</p>
+											<% 
+												} 
+											%>
+ 										</div>
+									</div>
+           							<p class="maxSeasonsAlert" style="display:none;">Bitte gib eine korrekte Episodenzahl ein.</p>
+           							<p class="noSeasonAlert" style="display:none;">Bitte wähle eine Staffel aus.</p>
+          						</div>
+          					</div>
+          					<div class="modal-footer">
+          						<input type="submit" class="btn btn-primary" id="addTo" value="Speichern">
+            					<button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+            			</form>
             
-          </div>
-        </div>
-      </div>
-       <!-- Modal Ende -->
-    </div>
-
-
-					</div></div>
-
+          					</div>
+        				</div>
+      				</div>
+       				<!-- Modal Ende -->
+    			</div>
+			</div>
 		</div>
-<script>
-	$('#bewertung').rating({'showCaption':true, 'stars':'5', 'min':'0', 'max':'5', 'step':'1', 'size':'xs', 'starCaptions': {0:'Noch keine Bewertung', 1:'Grottenschlecht', 2:'Naja', 3:'Kann man gucken', 4: 'Gut', 5: 'Meisterwerk'}});
-	$("#bewertung").on("rating.change", function(event, value, caption) {
-
-			var frm = $('#ratingForm');
-			var pathname = window.location.pathname; 
-
-			
-			
-			
+		</div>
+		<!-- BEWERTUNGSSTERNESCRIPT -->
+		<script>
+			$('#bewertung').rating({'showCaption':true, 'stars':'5', 'min':'0', 'max':'5', 'step':'1', 'size':'xs', 'starCaptions': {0:'Noch keine Bewertung', 1:'Grottenschlecht', 2:'Naja', 3:'Kann man gucken', 4: 'Gut', 5: 'Meisterwerk'}});
+			$("#bewertung").on("rating.change", function(event, value, caption) {
+				var frm = $('#ratingForm');
+				var pathname = window.location.pathname; 
 				var frmdataWatching = { 
 					"watchedid": $('#watchedId2').val(),
 					"bewertung": $('#bewertung').val(),
-				};
-								
+				};				
 				$.ajax({
-				type: 'PUT',
-				url: '/ratewatchedseries'+pathname,
-				data: frmdataWatching,
-				//contentType: 'application/json',
-				success: function(frmdata) {
-						
-				},
-				error: function(xhr, options, e) {
-    			console.log(e);
-				}
-			}).done(function(){
-				alert(data.name+' wurde hinzugefuegt.');
-			}).fail(function(e){	
-				alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+					type: 'PUT',
+					url: '/ratewatchedseries'+pathname,
+					data: frmdataWatching,
+					//contentType: 'application/json',
+					success: function(frmdata) {		
+					},
+					error: function(xhr, options, e) {
+    				console.log(e);
+					}
+				}).done(function(){
+					alert(data.name+' wurde hinzugefuegt.');
+				}).fail(function(e){	
+					alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+				});
+   				$("#bewertung").rating("refresh", {disabled: true, showClear: false});
 			});
-
-
-    $("#bewertung").rating("refresh", {disabled: true, showClear: false});
-	});
-	</script>
-
-<!-- Die Ajax-Put-Methode, zum Hinzufügen der Bewertung 
-	<script type="text/javascript">
-		$(function() {
-			
-			
-		});
-</script>-->
-
-
-    <script src="/dist/js/bootstrap.min.js"></script>
+		</script>
+	    <script src="/dist/js/bootstrap.min.js"></script>
 	</body>
 </html>

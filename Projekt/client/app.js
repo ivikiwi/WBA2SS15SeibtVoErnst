@@ -546,6 +546,17 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 				}
 	};
 
+	var ratedByUser = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.id,
+				method: 'PUT',
+				headers: {
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
+				}
+	};
 
 
 	// Bewertungsalgorithmus
@@ -618,9 +629,6 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	console.log("oldAllRate" + oldAllRate);
 	console.log("ratingAnzahl" + ratingAnzahl);
 	console.log(newRatingData);
-
-	
-
 
 	var externalRequest1 = http.request(putInSeries, function(res) {
 				externalRequest1.on("newRatingData", function(chunk) {
