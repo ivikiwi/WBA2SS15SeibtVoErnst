@@ -11,6 +11,7 @@ function register(app, db) {
 	app.put("/series/:sid/season/:id", require("./change-season")(app, db));
 	app.delete("/series/:sid/season/:id", require("./delete-season")(app, db));
 	app.get("/series/:sid/season", require("./get-all-seasons")(app, db));
+	app.get("/allseasons", require("./get-all-series-seasons")(app, db));
 }
 module.exports = {
 	register: register

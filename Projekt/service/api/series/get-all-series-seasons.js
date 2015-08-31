@@ -1,13 +1,15 @@
-function getAllSeasons(app, db) {
+function getAllSeriesSeasons(app, db) {
 	return function(req, res) {
-		db.keys("ss:" + req.params.sid + ":season:*", function(err, rep) {
+		db.keys("ss:*:season:*", function(err, rep) {
 			var seasonList = [];
 			if (rep.length == 0) {
 				res.json(seasonList);
 				return;
 			}
+			console.log(rep);
 			db.mget(rep, function(err, rep) {
 				rep.forEach(function(val) {
+					console.log(val);
 					seasonList.push(JSON.parse(val));
 				});
 				seasonList = seasonList.map(function(season) {
@@ -27,4 +29,4 @@ function getAllSeasons(app, db) {
 		});
 	};
 }
-module.exports = getAllSeasons;
+module.exports = getAllSeriesSeasons;
