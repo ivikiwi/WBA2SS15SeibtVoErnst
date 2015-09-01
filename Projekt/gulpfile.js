@@ -65,30 +65,78 @@ gulp.task("db-dummy", function() {
 	db.set("series:4", JSON.stringify(newSeries4));
 	db.set("series:5", JSON.stringify(newSeries5));
 	// Episode Dummies
-	var episodes1 = {
+	var ss1season1 = {
 	"id": "1",
-	"episodes": "24"
+	"episodes": "24",
+	"seriesid": "1"
 	}
-	var episodes2 = {
+	var ss1season2 = {
 	"id": "2",
-	"episodes": "16"
+	"episodes": "16",
+	"seriesid": "1"
 	}
-	var episodes3 = {
+	var ss2season1 = {
+	"id": "1",
+	"episodes": "21",
+	"seriesid": "2"
+	}
+	var ss2season2 = {
+	"id": "2",
+	"episodes": "12",
+	"seriesid": "2"
+	}
+	var ss2season3 = {
 	"id": "3",
-	"episodes": "21"
+	"episodes": "16",
+	"seriesid": "2"
 	}
-	db.set("ss:1:season:1", JSON.stringify(episodes1));
-	db.set("ss:1:season:2", JSON.stringify(episodes2));
-	db.set("ss:2:season:1", JSON.stringify(episodes1));
-	db.set("ss:2:season:2", JSON.stringify(episodes2));
-	db.set("ss:2:season:3", JSON.stringify(episodes3));
-	db.set("ss:3:season:1", JSON.stringify(episodes1));
-	db.set("ss:3:season:2", JSON.stringify(episodes2));
-	db.set("ss:4:season:1", JSON.stringify(episodes1));
-	db.set("ss:4:season:2", JSON.stringify(episodes2));
-	db.set("ss:4:season:3", JSON.stringify(episodes3));
-	db.set("ss:5:season:1", JSON.stringify(episodes1));
-	db.set("ss:5:season:2", JSON.stringify(episodes2));
+	var ss3season1 = {
+	"id": "1",
+	"episodes": "21",
+	"seriesid": "3"
+	}
+	var ss3season2 = {
+	"id": "2",
+	"episodes": "26",
+	"seriesid": "3"
+	}
+	var ss4season1 = {
+	"id": "1",
+	"episodes": "32",
+	"seriesid": "4"
+	}
+	var ss4season2 = {
+	"id": "2",
+	"episodes": "15",
+	"seriesid": "4"
+	}
+	var ss4season3 = {
+	"id": "3",
+	"episodes": "11",
+	"seriesid": "4"
+	}
+	var ss5season1 = {
+	"id": "1",
+	"episodes": "16",
+	"seriesid": "5"
+	}
+	var ss5season2 = {
+	"id": "2",
+	"episodes": "21",
+	"seriesid": "5"
+	}
+	db.set("ss:1:season:1", JSON.stringify(ss1season1));
+	db.set("ss:1:season:2", JSON.stringify(ss1season2));
+	db.set("ss:2:season:1", JSON.stringify(ss2season1));
+	db.set("ss:2:season:2", JSON.stringify(ss2season2));
+	db.set("ss:2:season:3", JSON.stringify(ss2season3));
+	db.set("ss:3:season:1", JSON.stringify(ss3season1));
+	db.set("ss:3:season:2", JSON.stringify(ss3season2));
+	db.set("ss:4:season:1", JSON.stringify(ss4season1));
+	db.set("ss:4:season:2", JSON.stringify(ss4season2));
+	db.set("ss:4:season:3", JSON.stringify(ss4season3));
+	db.set("ss:5:season:1", JSON.stringify(ss5season1));
+	db.set("ss:5:season:2", JSON.stringify(ss5season2));
 
 	// User Dummies
 	var user1 = {

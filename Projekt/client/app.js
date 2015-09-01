@@ -656,13 +656,12 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 
 
 
-
 app.get("/user/:id/watched", jsonParser, function(req, res){
 	fs.readFile("./watchedseries.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;
 		} else {
-			var options = {
+			var watchedSeriesOptions = {
 				host: "localhost",
 				port: 8888,
 				path: "/user/"+req.params.id+"/watched",
@@ -671,24 +670,60 @@ app.get("/user/:id/watched", jsonParser, function(req, res){
 					accept: "application/json"
 				}
 			}
-			var externalRequest = http.request(options, function(externalRequest) {
-				console.log("Connected");
-				externalRequest.on("data", function(chunk) {
 
-					var seriesdata = JSON.parse(chunk);
+			var seasonOptions = {
+				host: "localhost",
+				port: 8888,
+				path: "/allseasons",
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
 
-					var html = ejs.render(filestring, seriesdata);
-					res.setHeader("content-type", "text/html");
-					res.writeHead(200);
-					res.write(html);
-					res.end();
+			var seriesdata;
+			var seasondata;
+			var requestCounter = 0;
 
+			requestloop = function() {
+				requestCounter = 0;
+				var externalRequestOne = http.request(watchedSeriesOptions, function(externalRequestOne) {
+					requestCounter++;
+					externalRequestOne.on("data", function(chunk) {
+						console.log("erster request fertig");
+						seriesdata = JSON.parse(chunk);
+					});
 				});
+				console.log("rcounter " + requestCounter);
+				
+				
+				var externalRequestTwo = http.request(seasonOptions, function(externalRequestTwo) {
+					requestCounter++;
+					if(requestCounter==2) {
+						externalRequestTwo.on("data", function(chunk) {
+							console.log("zweiter request fertig");
+							seasondata = JSON.parse(chunk);
+							var finaldata = {"seriesdata":seriesdata, "seasondata":seasondata}
+							console.log("finaldata " + JSON.stringify(finaldata));
+							var html = ejs.render(filestring, finaldata);
+							res.setHeader("content-type", "text/html");
+							res.writeHead(200);
+							res.write(html);
+							res.end();
+						});
+					} else {
+						requestloop();
+					}
+				});
+				externalRequestTwo.end();
+				externalRequestOne.end();
+				
+			}
 
-			});
-
-			externalRequest.end();
+			requestloop();
 		}
+
+
 	});
 });
 
