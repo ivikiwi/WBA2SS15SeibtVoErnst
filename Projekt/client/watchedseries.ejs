@@ -33,52 +33,275 @@
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-
-
-		<h1>Meine persönliche Serienliste</h1>
-		<div>
-			<% if(typeof(watched) !== 'undefined'){
-			%>
-			%>
-					<%
-				for(var i=0; i < watched.length; i++) {
-					%>
-					<div class="seriesbox">
-					
-					<div class="description">
-					<h3><a href="allseries/<%= replies[i].id %>"><%= replies[i].name %></a></h3>
-					<p>Mein Status: <% if (typeof(watched[i].status) !== 'undefined') { %>
-  									<span><%= watched[i].status %></span>
-								
-					
-						<%
-						if( watched[i].status == "Schaue ich gerade" || watched[i].status == "Watching") {
+    <!-- Erstmal prüfen, ob der User überhaupt eine Serie in der Watched-Liste hat -->
+	<%	
+		if(typeof(seriesdata.watched) !== 'undefined') {
+	%>
+			<h2>Schaue ich gerade</h2>
+			<div class="seriesbox">
+				<table class="table table-striped">
+					<tr>
+							<td><strong>Titel</strong></td>
+							<td><strong>Meine Bewertung</strong></td>
+							<td><strong>Gesamtbewertung</strong></td>
+							<td><strong>Aktuelle Staffel</strong></td>
+							<td><strong>Prozess</strong></td>
+					</tr>
+				<%
+					for(var i=0; i < seriesdata.watched.length; i++) {
+						if(seriesdata.watched[i].status == "Schaue ich gerade" || seriesdata.watched[i].status == "Watching"){
 						%>
-							<p>Staffel: <%= watched[i].season %></p>
-							<p>Episode: <%= watched[i].episode %></p>
+							<tr>
+								<td>
+									<a href="allseries/<%= seriesdata.replies[i].id %>"><%= seriesdata.replies[i].name %></a>
+								</td>
+								<td>
+									<%
+										if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+									%>
+											<%= seriesdata.watched[i].bewertung %>
+									<%	
+										} else {
+									%>
+											<span>
+												<a href="allseries/<%= seriesdata.replies[i].id %>">Jetzt bewerten</a>
+											</span>
+									<%		
+										}
+									%>
+									</td>
+								<td>
+									<%
+										if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+									%>
+											<%= seriesdata.replies[i].bewertung %>
+									<%	
+										} else {
+									%>
+											<span>
+												Noch nicht bewertet
+											</span>
+									<%		
+										}
+									%>
+								</td>
+								<td><%= seriesdata.watched[i].season %></td>
+								<td><%= seriesdata.watched[i].episode %> / 
+								<!-- Jetzt suchen wir mal nach der richtigen Staffelinformation -->
+								<%
+									for(var n=0; n < seasondata.seasons.length; n++) {
+										if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid && seasondata.seasons[n].id == seriesdata.watched[i].season) {
+								%>
+											<span> <%= seasondata.seasons[n].episodes %></span>
+								<%
+										}
+									}
+								%>
+
+								</td>
+							</tr>
 						<%
 						}
-						%>
-						<% } else { %>
-								<span>Kein Status angegeben</span>
-								<% } %></p>
-					</div></div><%
-
-				}
-			} else {
-			%>
+					}
+				%>
+				</table>
+			</div>
+		<!-- Abgeschlossene Serien -->
+			<h2>Abgeschlossene Serien</h2>
 			<div class="seriesbox">
-					
+				<table class="table table-striped">
+					<tr>
+						<td><strong>Titel</strong></td>
+						<td><strong>Meine Bewertung</strong></td>
+						<td><strong>Gesamtbewertung</strong></td>
+						<td><strong>Staffeln insgesamt</strong></td>
+					</tr>
+				<%
+					var esGibtAbgeschlossene = false;
+					for(var i=0; i < seriesdata.watched.length; i++) {
+						if(seriesdata.watched[i].status == "Abgeschlossen") {
+							esGibtAbgeschlossene = true;
+				%>
+							<tr>
+								<td>
+									<a href="allseries/<%= seriesdata.replies[i].id %>"><%= seriesdata.replies[i].	name %></a>
+								</td>
+								<td>
+								<%
+									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+								%>
+										<%= seriesdata.watched[i].bewertung %>
+								<%	
+									} else {
+								%>
+										<span>
+											<a href="allseries/<%= seriesdata.replies[i].id %>">Jetzt bewerten</a>
+										</span>
+								<%		
+									}
+								%>
+								</td>
+								<td>
+								<%
+									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+								%>
+										<%= seriesdata.replies[i].bewertung %>
+								<%	
+									} else {
+								%>
+										<span>
+											Noch nicht bewertet
+										</span>
+								<%		
+									}
+								%>
+								</td>
+								<td>
+									<!-- Jetzt suchen wir mal nach der richtigen Staffelinformation -->
+									<%
+										var seasonCounter=0;
+										for(var n=0; n < seasondata.seasons.length; n++) {
+											if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid) {
+												seasonCounter++;
+											}
+										}
+									%>
+									<span> <%= seasonCounter %></span>
+									</td>
+							</tr>
+				<%			
+						}
+					}
+					if(esGibtAbgeschlossene == false) {
+				%>	
+						<p>Du hast noch keine Serie abgeschlossen.</p>
+				<%			
+					}
+				%>
+				</table> 
+			</div>
+		<!-- Werde ich schauen -->
+			<h2>Werde ich schauen</h2>
+			<div class="seriesbox">
+				<table class="table table-striped">
+					<tr>
+						<td><strong>Titel</strong></td>
+						<td><strong>Genre</strong></td>
+						<td><strong>Beschreibung</strong></td>
+						<td><strong>Gesamtbewertung</strong></td>
+					</tr>
+				<%
+					var esGibtWerdeIchSchauen = false;
+					for(var i=0; i < seriesdata.watched.length; i++) {
+						if(seriesdata.watched[i].status == "Werde ich schauen") {
+							esGibtWerdeIchSchauen = true;
+				%>
+							<tr>
+								<td>
+									<a href="allseries/<%= seriesdata.replies[i].id %>"><%= seriesdata.replies[i].	name %></a>
+								</td>
+								<td>
+										<%= seriesdata.replies[i].genre %>
+								</td>
+								<td>
+										<%= seriesdata.replies[i].description %>
+								</td>
+								<td>
+								<%
+									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+								%>
+										<%= seriesdata.replies[i].bewertung %>
+								<%	
+									} else {
+								%>
+										<span>
+											Noch nicht bewertet
+										</span>
+								<%		
+									}
+								%>
+								</td>
+								
+							</tr>
+				<%			
+						}
+					}
+					if(esGibtWerdeIchSchauen == false) {
+				%>	
+						<p>Du hast keine Serie abgebrochen.</p>
+				<%			
+					}
+				%>
+				</table> 
+			</div>
+		<!-- Abgebrochen -->
+			<h2>Abgebrochen</h2>
+			<div class="seriesbox">
+				<table class="table table-striped">
+					<tr>
+						<td><strong>Titel</strong></td>
+						<td><strong>Genre</strong></td>
+						<td><strong>Beschreibung</strong></td>
+						<td><strong>Gesamtbewertung</strong></td>
+					</tr>
+				<%
+					var esGibtAbgebrochene = false;
+					for(var i=0; i < seriesdata.watched.length; i++) {
+						if(seriesdata.watched[i].status == "Abgebrochen") {
+							esGibtAbgebrochene = true;
+				%>
+							<tr>
+								<td>
+									<a href="allseries/<%= seriesdata.replies[i].id %>"><%= seriesdata.replies[i].	name %></a>
+								</td>
+								<td>
+										<%= seriesdata.replies[i].genre %>
+								</td>
+								<td>
+										<%= seriesdata.replies[i].description %>
+								</td>
+								<td>
+								<%
+									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+								%>
+										<%= seriesdata.replies[i].bewertung %>
+								<%	
+									} else {
+								%>
+										<span>
+											Noch nicht bewertet
+										</span>
+								<%		
+									}
+								%>
+								</td>
+								
+							</tr>
+				<%			
+						}
+					}
+				%>
+				</table>
+				<%
+				if(esGibtAbgebrochene == false) {
+				%>	
+						<p>Du hast keine Serie abgebrochen.</p>
+				<%			
+					}
+				%>
+			</div>
+		<!-- Folgendes wird angezeigt, wenn der User keine Serie in der Watched-Liste drin hat -->
+		<%
+			} else {
+		%>
+				<div class="seriesbox">	
 					<div class="description">
 						<p>Sie haben noch keine Serie in ihrer persönlichen Liste. <br /><br />
 						<a href="allseries">Stöbern</a> Sie doch mal in unseren angelegten Serien.</p>
 					</div>
-			</div>
-			<%
-		}
+				</div>
+		<%		
+			}
 		%>
-		</div>
-
-
 	</body>
 </html>
