@@ -529,6 +529,36 @@ app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
 	
 });
 
+app.put("/putwatchinglist/user/:id/watched/", function(req, res){
+	var data = JSON.stringify(req.body);
+	console.log("req.body.watchedid: " + req.body.watchedid);
+	console.log("episode: " + req.body.episode);
+	var options = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.id+"/watched/"+req.body.watchedid,
+				method: 'PUT',
+				headers: {
+				accept: "application/json",
+				"Content-Type": "application/json",
+       		    "Content-Length": Buffer.byteLength(data)
+				}
+			};
+
+	var externalRequest = http.request(options, function(res){
+		
+		externalRequest.on("data", function(chunk) {
+					console.log("body: " + chunk);
+					
+
+				});
+		
+	});
+	externalRequest.write(data);
+	externalRequest.end();
+	
+});
+
 // Serie Bewerten!
 app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	var data = JSON.stringify(req.body);

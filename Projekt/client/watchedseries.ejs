@@ -1,14 +1,67 @@
 <html>
 	<head>
-	<meta charset="utf-8" /> 
+		<meta charset="utf-8" /> 
 
 		<title>Alle Serien</title>
-			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
-			   <link href="/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap-Theme -->
-    <link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
+		<link href="/dist/css/bootstrap.min.css" rel="stylesheet">
+    	<!-- Bootstrap-Theme -->
+    	<link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="/css/style.css">
 
+		<script src="/dist/js/jquery-1.11.3.min.js"></script>
+
+		<script>
+			$(function() {
+					var frm = $('#addEpisode');
+					var pathname = window.location.pathname; 
+
+					frm.on('submit', function(ev){
+						var maxEpisodes = $('#maxEpisodes').val();
+						var currentSeason = $('#currentSeason').val();
+						var currentEpisode = $('#currentEpisode').val();
+						var currentSeriesId = $('#seriesID').val();
+						var currentStatus = $('#currentStatus').val();
+						var maxSeasons = $('#maxseasons').val();
+
+						var newEpisode = parseInt(currentEpisode) + 1;
+
+						if(newEpisode > maxEpisodes) {
+							newEpisode = 1;
+							if(currentSeason >= maxSeasons) {
+								currentStatus = "Abgeschlossen";
+							}
+							currentSeason = parseInt(currentSeason) + 1;
+						}
+						var frmdataWatching = { 
+							"watchedid": $('#watchedId').val(),
+							"episode": newEpisode,
+							"status": currentStatus,
+							"season": currentSeason,
+						};
+						$.ajax({
+							type: 'PUT',
+							url: '/putwatchinglist'+pathname,
+							data: frmdataWatching,
+							//contentType: 'application/json',
+							success: function(frmdata) {
+					
+							},
+							error: function(xhr, options, e) {
+    						console.log(e);
+							}
+						}).done(function(){
+							alert(data.name+' wurde hinzugefuegt.');
+						}).fail(function(e){
+							alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
+						});
+						$(function () {
+						});
+						ev.preventDefault();
+					});
+					ev.preventDefault();	
+			});
+		</script>
 	</head>
 	<body>
 	 <!-- Fixierte Navbar -->
@@ -85,14 +138,37 @@
 										}
 									%>
 								</td>
-								<td><%= seriesdata.watched[i].season %></td>
+								<td>
+									<%
+										var maxStaffeln=0;
+										for(var e=0; e < seasondata.seasons.length; e++) {
+											if(seasondata.seasons[e].seriesid == seriesdata.watched[i].seriesid) {
+											maxStaffeln++;
+											}
+										}
+									%>
+									<%= seriesdata.watched[i].season %> / <%= maxStaffeln %></td>
 								<td><%= seriesdata.watched[i].episode %> / 
 								<!-- Jetzt suchen wir mal nach der richtigen Staffelinformation -->
 								<%
+									var maxSeasons=0;
 									for(var n=0; n < seasondata.seasons.length; n++) {
+										if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid) {
+											maxSeasons++;
+										}
 										if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid && seasondata.seasons[n].id == seriesdata.watched[i].season) {
 								%>
-											<span> <%= seasondata.seasons[n].episodes %></span>
+											<span> <%= seasondata.seasons[n].episodes %></span> 
+											<form id="addEpisode" action="/" method="post">
+											<input type="hidden" id="watchedId" value="<%= seriesdata.watched[i].id %>">
+											<input type="hidden" id="currentEpisode" value="<%= seriesdata.watched[i].episode %>">
+											<input type="hidden" id="maxEpisodes" value="<%= seasondata.seasons[n].episodes %>">
+											<input type="hidden" id="currentSeason" value="<%= seriesdata.watched[i].season %>">
+											<input type="hidden" id="seriesID" value="<%= seriesdata.watched[i].seriesid %>">
+											<input type="hidden" id="currentStatus" value="<%= seriesdata.watched[i].status %>">
+											<input type="hidden" id="maxseasons" value="<%= maxSeasons %>">
+											<input type="submit" class="btn btn-primary" id="addTo" value="+">
+											</form>
 								<%
 										}
 									}
@@ -172,13 +248,15 @@
 				<%			
 						}
 					}
-					if(esGibtAbgeschlossene == false) {
+				%>
+				</table> 
+				<%
+						if(esGibtAbgeschlossene == false) {
 				%>	
 						<p>Du hast noch keine Serie abgeschlossen.</p>
 				<%			
 					}
 				%>
-				</table> 
 			</div>
 		<!-- Werde ich schauen -->
 			<h2>Werde ich schauen</h2>
@@ -226,13 +304,15 @@
 				<%			
 						}
 					}
+				%>
+				</table>
+				<%
 					if(esGibtWerdeIchSchauen == false) {
 				%>	
-						<p>Du hast keine Serie abgebrochen.</p>
+						<p>Es gibt keine Serie, die du noch schauen möchtest.</p>
 				<%			
 					}
-				%>
-				</table> 
+				%> 
 			</div>
 		<!-- Abgebrochen -->
 			<h2>Abgebrochen</h2>

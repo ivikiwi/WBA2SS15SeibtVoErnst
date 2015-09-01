@@ -77,7 +77,8 @@
 								alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
 							});
 							$(function () {
-								$('#basicModal').modal('hide')
+								$('#basicModal').modal('hide');
+								$('#hinzufuegenButton').hide();
 							});
 						}
 
@@ -105,7 +106,6 @@
 								}).done(function(){
 									alert(data.name+' wurde hinzugefuegt.');
 								}).fail(function(e){
-					
 									alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
 								});
 								$(function () {
@@ -275,7 +275,7 @@
 				 		if(notwatchedyet==true) {
 				 	%>
 				 			<input type="hidden" name="watchStatus" id="watchStatus" value="notWatching">
-				 			<button type="button" data-toggle="modal" data-target="#basicModal">Hinzufügen</button>
+				 			<button id="hinzufuegenButton" type="button" data-toggle="modal" data-target="#basicModal">Hinzufügen</button>
 	       		    
    					<%
    						}
