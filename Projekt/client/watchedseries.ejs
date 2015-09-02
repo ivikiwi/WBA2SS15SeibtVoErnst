@@ -39,6 +39,7 @@
 							"status": currentStatus,
 							"season": currentSeason,
 						};
+      					 	
 						$.ajax({
 							type: 'PUT',
 							url: '/putwatchinglist'+pathname,
@@ -55,9 +56,7 @@
 						}).fail(function(e){
 							alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
 						});
-						$(function () {
-							location.reload(true);
-						});
+						location.reload();
 						ev.preventDefault();
 					});
 					ev.preventDefault();	
@@ -75,7 +74,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/index"><strong>viromark</strong></a>
+          <a class="navbar-brand" href="./index"><strong>viromark</strong></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -99,7 +98,7 @@
 							<td><strong>Meine Bewertung</strong></td>
 							<td><strong>Gesamtbewertung</strong></td>
 							<td><strong>Aktuelle Staffel</strong></td>
-							<td><strong>Prozess</strong></td>
+							<td class="prozessSpalte"><strong>Prozess</strong></td>
 							<td></td>
 					</tr>
 				<%
@@ -127,7 +126,7 @@
 									</td>
 								<td>
 									<%
-										if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+										if(typeof(seriesdata.replies[i].bewertung) !== 'undefined') {
 									%>
 											<%= seriesdata.replies[i].bewertung %>
 									<%	
@@ -167,7 +166,7 @@
 											<input type="hidden" id="seriesID" value="<%= seriesdata.watched[i].seriesid %>">
 											<input type="hidden" id="currentStatus" value="<%= seriesdata.watched[i].status %>">
 											<input type="hidden" id="maxseasons" value="<%= maxStaffeln %>">
-											<input type="submit" class="btn btn-primary" id="addTo" value="+">
+											<input type="submit" class="btn btn-primary plusSign" id="addTo" value="+">
 											</form>
 								<%
 										}
@@ -219,7 +218,7 @@
 								</td>
 								<td>
 								<%
-									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+									if(typeof(seriesdata.replies[i].bewertung) !== 'undefined') {
 								%>
 										<%= seriesdata.replies[i].bewertung %>
 								<%	
@@ -286,7 +285,7 @@
 								</td>
 								<td>
 								<%
-									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+									if(typeof(seriesdata.replies[i].bewertung) !== 'undefined') {
 								%>
 										<%= seriesdata.replies[i].bewertung %>
 								<%	
@@ -342,7 +341,7 @@
 								</td>
 								<td>
 								<%
-									if(typeof(seriesdata.watched[i].bewertung) !== 'undefined') {
+									if(typeof(seriesdata.replies[i].bewertung) !== 'undefined') {
 								%>
 										<%= seriesdata.replies[i].bewertung %>
 								<%	

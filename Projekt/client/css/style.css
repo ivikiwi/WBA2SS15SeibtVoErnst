@@ -11,6 +11,15 @@ h3 {
 		font-weight:700;
 		}
 
+h2 a {
+		color:#fff;
+		text-transform: uppercase;
+}
+
+h2 a:hover {
+		color:#fff;
+}
+
 a {
 		color:#468dc4;
 		text-decoration:none;
@@ -35,3 +44,14 @@ strong {
 		font-weight:600;
 		}
 
+/* ////////// WATCHINGLISTE (persoenliche Serienliste) //////////// */
+.plusSign {
+	font-size: xx-large;
+    padding: 5;
+    line-height: 0.5;
+}
+
+/* --- Schaue-ich-gerade-Tabelle ---- */
+.prozessSpalte {
+	width: 50px;
+}
