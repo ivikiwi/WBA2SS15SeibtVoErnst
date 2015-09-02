@@ -13,16 +13,16 @@
 
 		<script>
 			$(function() {
-					var frm = $('#addEpisode');
+					var frm = $('.addEpisode');
 					var pathname = window.location.pathname; 
 
 					frm.on('submit', function(ev){
-						var maxEpisodes = $('#maxEpisodes').val();
-						var currentSeason = $('#currentSeason').val();
-						var currentEpisode = $('#currentEpisode').val();
-						var currentSeriesId = $('#seriesID').val();
-						var currentStatus = $('#currentStatus').val();
-						var maxSeasons = $('#maxseasons').val();
+						var maxEpisodes = $(this).find('#maxEpisodes').val();
+						var currentSeason = $(this).find('#currentSeason').val();
+						var currentEpisode = $(this).find('#currentEpisode').val();
+						var currentSeriesId = $(this).find('#seriesID').val();
+						var currentStatus = $(this).find('#currentStatus').val();
+						var maxSeasons = $(this).find('#maxseasons').val();
 
 						var newEpisode = parseInt(currentEpisode) + 1;
 
@@ -34,7 +34,7 @@
 							currentSeason = parseInt(currentSeason) + 1;
 						}
 						var frmdataWatching = { 
-							"watchedid": $('#watchedId').val(),
+							"watchedid": $(this).find('#watchedId').val(),
 							"episode": newEpisode,
 							"status": currentStatus,
 							"season": currentSeason,
@@ -56,6 +56,7 @@
 							alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
 						});
 						$(function () {
+							location.reload(true);
 						});
 						ev.preventDefault();
 					});
@@ -99,6 +100,7 @@
 							<td><strong>Gesamtbewertung</strong></td>
 							<td><strong>Aktuelle Staffel</strong></td>
 							<td><strong>Prozess</strong></td>
+							<td></td>
 					</tr>
 				<%
 					for(var i=0; i < seriesdata.watched.length; i++) {
@@ -151,22 +153,20 @@
 								<td><%= seriesdata.watched[i].episode %> / 
 								<!-- Jetzt suchen wir mal nach der richtigen Staffelinformation -->
 								<%
-									var maxSeasons=0;
 									for(var n=0; n < seasondata.seasons.length; n++) {
-										if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid) {
-											maxSeasons++;
-										}
 										if(seasondata.seasons[n].seriesid == seriesdata.watched[i].seriesid && seasondata.seasons[n].id == seriesdata.watched[i].season) {
 								%>
 											<span> <%= seasondata.seasons[n].episodes %></span> 
-											<form id="addEpisode" action="/" method="post">
+								</td>
+								<td>
+											<form class="addEpisode" action="/" method="post">
 											<input type="hidden" id="watchedId" value="<%= seriesdata.watched[i].id %>">
 											<input type="hidden" id="currentEpisode" value="<%= seriesdata.watched[i].episode %>">
 											<input type="hidden" id="maxEpisodes" value="<%= seasondata.seasons[n].episodes %>">
 											<input type="hidden" id="currentSeason" value="<%= seriesdata.watched[i].season %>">
 											<input type="hidden" id="seriesID" value="<%= seriesdata.watched[i].seriesid %>">
 											<input type="hidden" id="currentStatus" value="<%= seriesdata.watched[i].status %>">
-											<input type="hidden" id="maxseasons" value="<%= maxSeasons %>">
+											<input type="hidden" id="maxseasons" value="<%= maxStaffeln %>">
 											<input type="submit" class="btn btn-primary" id="addTo" value="+">
 											</form>
 								<%
