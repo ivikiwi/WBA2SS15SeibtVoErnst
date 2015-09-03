@@ -9,6 +9,7 @@
     <!-- Bootstrap-Theme -->
     <link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/legend.js"></script>
     <!-- Tortendiagramm zeichnen -->
     <% if(typeof(seriesdata.watched) !== 'undefined') {
     %>	
@@ -121,6 +122,8 @@
     <%
     	}
     %>
+
+
 	</head>
 	<body>
 
@@ -169,17 +172,19 @@
                             <h3 class="panel-title">Welche Genres gucke ich am meisten?</h3>
                         </div>
                         <div class="panel-body">
-                            <canvas id='piechart1' width='200px' height='200px'></canvas>
-                            <table id='legend'></table>
-                            <form method="post" name="piechartdata">
-                                <input type=hidden id="musikdata" value="<%= genrestatistik.Musik %>">
-                                <input type=hidden id="dramadata" value="<%= genrestatistik.Drama %>">
-                                <input type=hidden id="actiondata" value="<%= genrestatistik.Action %>">
-                                <input type=hidden id="fantasydata" value="<%= genrestatistik.Fantasy %>">
-                                <input type=hidden id="comedydata" value="<%= genrestatistik.Comedy %>">
-                                <input type=hidden id="anwaltdata" value="<%= genrestatistik.Anwaltserie %>">
-                                <input type=hidden id="romancedata" value="<%= genrestatistik.Romance %>">
-                            </form>
+                            <div style="width:300px; height:300px;">
+                                <canvas id="genreStatistikArea" width="250px" height="250px"></canvas>
+                                <div id="doughnutLegend"></div>
+                                <form method="post" name="piechartdata">
+                                    <input type=hidden id="musikdata" value="<%= genrestatistik.Musik %>">
+                                    <input type=hidden id="dramadata" value="<%= genrestatistik.Drama %>">
+                                    <input type=hidden id="actiondata" value="<%= genrestatistik.Action %>">
+                                    <input type=hidden id="fantasydata" value="<%= genrestatistik.Fantasy %>">
+                                    <input type=hidden id="comedydata" value="<%= genrestatistik.Comedy %>">
+                                    <input type=hidden id="anwaltdata" value="<%= genrestatistik.Anwaltserie %>">
+                                    <input type=hidden id="romancedata" value="<%= genrestatistik.Romance %>">
+                                </form>
+                            </div>   
                     	</div>
                     </div>
               </div>
@@ -189,7 +194,7 @@
                    <h3 class="panel-title">Serienstatistik</h3>
                   </div>
                   <div class="panel-body">
-                    qwer
+                    <canvas id="myChart" width="250px" height="250px"></canvas>
                   </div>
                 </div>
               </div>
@@ -215,7 +220,99 @@
 
 			
 		</div>
+<!-- Chart.js reinladen -->
+    <script src="/bower_components/Chartjs/Chart.js"></script>
+<script>
+    var musikData = document.getElementById("musikdata").value;
+    var dramaData = document.getElementById("dramadata").value;
+    var actionData = document.getElementById("actiondata").value;
+    var fantasyData = document.getElementById("fantasydata").value;
+    var comedyData = document.getElementById("comedydata").value;
+    var anwaltData = document.getElementById("anwaltdata").value;
+    var romanceData = document.getElementById("romancedata").value;
+    // Donut Chart
+    var doughnutData = [
+                {
+                    value: musikData,
+                    color:"#4ccdc4",
+                    highlight: "#8cebe4",
+                    label: "Musik"
+                },
+                {
+                    value: dramaData,
+                    color: "#2e8e87",
+                    highlight: "#45a8a1",
+                    label: "Drama"
+                },
+                {
+                    value: actionData,
+                    color: "#8c9cab",
+                    highlight: "#abb8c5",
+                    label: "Action"
+                },
+                {
+                    value: fantasyData,
+                    color: "#c6f866",
+                    highlight: "#dbfa9f",
+                    label: "Fantasy"
+                },
+                {
+                    value: comedyData,
+                    color: "#c44b56",
+                    highlight: "#d77a83",
+                    label: "Komödie"
+                },
+                {
+                    value: anwaltData,
+                    color: "#54626f",
+                    highlight: "#6f7b86",
+                    label: "Anwaltserie"
+                },
+                {
+                    value: romanceData,
+                    color: "#fd6a69",
+                    highlight: "#fe9291",
+                    label: "Romantik"
+                }
 
+            ];
 
+            window.onload = function(){
+                
+            };
+    // Bar Chart
+    var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+
+    var barChartData = {
+        labels : ["January","February","March","April","May","June","July"],
+        datasets : [
+            {
+                fillColor : "rgba(220,220,220,0.5)",
+                strokeColor : "rgba(220,220,220,0.8)",
+                highlightFill: "rgba(220,220,220,0.75)",
+                highlightStroke: "rgba(220,220,220,1)",
+                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            },
+            {
+                fillColor : "rgba(151,187,205,0.5)",
+                strokeColor : "rgba(151,187,205,0.8)",
+                highlightFill : "rgba(151,187,205,0.75)",
+                highlightStroke : "rgba(151,187,205,1)",
+                data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+            }
+        ]
+
+    }
+    window.onload = function(){
+        var ctx = document.getElementById("myChart").getContext("2d");
+        window.myBar = new Chart(ctx).Bar(barChartData, {
+            responsive : true
+        });
+        var ctx_donut = document.getElementById("genreStatistikArea").getContext("2d");
+        window.myDoughnut = new Chart(ctx_donut).Doughnut(doughnutData, {responsive : true});
+        legend(document.getElementById("doughnutLegend"), doughnutData, myDoughnut);
+    }
+
+    </script>
 	</body>
 </html>

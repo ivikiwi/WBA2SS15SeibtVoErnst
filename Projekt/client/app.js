@@ -134,7 +134,6 @@ app.get("/bower_components/jquery/dist/:jsname", function (req, res, next) {
     }
   };
 
-console.log(root);
 
   var fileName = req.params.jsname;
   res.sendFile(fileName, options, function (err) {
@@ -187,7 +186,6 @@ app.get("/bower_components/bootstrap/dist/css/:stylesheetname", function (req, r
         "x-sent": true
     }
   };
-  console.log(root);
   var fileName = req.params.stylesheetname;
   res.sendFile(fileName, options, function (err) {
     if (err) {
@@ -195,7 +193,7 @@ app.get("/bower_components/bootstrap/dist/css/:stylesheetname", function (req, r
       res.status(err.status).end();
     }
     else {
-      //console.log('Sent:', fileName);
+      console.log('Sent:', options.root + "" +fileName);
     }
   });
 
@@ -246,6 +244,32 @@ app.get("/bower_components/bootstrap/dist/fonts/:bfonts", function (req, res, ne
     }
     else {
       //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
+//Chart.js
+app.get("/bower_components/Chartjs/:fileName", function (req, res, next) {
+
+  var options = {
+    root: __dirname + "../../bower_components/Chart.js",
+    dotfiles: "deny",
+    headers: {
+        "x-timestamp": Date.now(),
+        "x-sent": true
+    }
+  };
+
+
+  var fileName = req.params.fileName;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      console.log('Sent:', options.root + "" +fileName);
     }
   });
 
