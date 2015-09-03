@@ -298,7 +298,7 @@ app.get("/user/:id", jsonParser, function(req, res){
 		if(err) {
 			throw err;
 		} else {
-			var options = {
+			var UserOptions = {
 				host: "localhost",
 				port: 8888,
 				path: "/user/"+req.params.id,
@@ -307,23 +307,113 @@ app.get("/user/:id", jsonParser, function(req, res){
 					accept: "application/json"
 				}
 			}
-			var externalRequest = http.request(options, function(externalRequest) {
-				console.log('Connected');
-				externalRequest.on('data', function(chunk) {
 
-					var userdata = JSON.parse(chunk);
+			var watchedSeriesOptions = {
+				host: "localhost",
+				port: 8888,
+				path: "/user/"+req.params.id+"/watched",
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
 
-					var html = ejs.render(filestring, userdata);
-					res.setHeader("content-type", "text/html");
-					res.writeHead(200);
-					res.write(html);
-					res.end();
+			var userdata;
+			var seriesdata;
+			var requestCounter = 0;
 
+			requestloop = function() {
+				requestCounter = 0;
+				var externalRequestOne = http.request(watchedSeriesOptions, function(externalRequestOne) {
+					requestCounter++;
+					externalRequestOne.on("data", function(chunk) {
+						console.log("erster request fertig");
+						seriesdata = JSON.parse(chunk);
+					});
 				});
+				console.log("rcounter " + requestCounter);
+				
+				
+				var externalRequestTwo = http.request(UserOptions, function(externalRequestTwo) {
+					requestCounter++;
+					if(requestCounter==2) {
+						externalRequestTwo.on("data", function(chunk) {
+							console.log("zweiter request fertig");
+							userdata = JSON.parse(chunk);
+							// Genre-Statistik
+							var musikGenre = 0;
+							var dramaGenre = 0;
+							var actionGenre = 0;
+							var fantasyGenre = 0;
+							var comedyGenre = 0;
+							var anwaltGenre = 0;
+							var romanceGenre = 0;
+							console.log(seriesdata.watched.length);
 
-			});
+							for(var i=0; i < seriesdata.watched.length; i++) {
+								var watchedGenre = seriesdata.replies[i].genre;
+								if(watchedGenre.toLowerCase().indexOf("musik") > -1) {
+									musikGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("drama") > -1) {
+									dramaGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("action") > -1) {
+									actionGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("fantasy") > -1) {
+									fantasyGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("comedy") > -1) {
+									comedyGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("anwalt") > -1) {
+									anwaltGenre++;
+								}
+								if(watchedGenre.toLowerCase().indexOf("romance") > -1) {
+									romanceGenre++;
+								}
+							}
 
-			externalRequest.end();
+							var summe = musikGenre + dramaGenre + actionGenre + fantasyGenre + comedyGenre + anwaltGenre + romanceGenre;
+							prozentRechnen = function(genre, summe) {
+								return (genre / summe) * 100;
+							}
+							var musikProzent = prozentRechnen(musikGenre, summe);
+							var dramaProzent = prozentRechnen(dramaGenre, summe);
+							var actionProzent = prozentRechnen(actionGenre, summe);
+							var fantasyProzent = prozentRechnen(fantasyGenre, summe);
+							var comedyProzent = prozentRechnen(comedyGenre, summe);
+							var anwaltProzent = prozentRechnen(anwaltGenre, summe);
+							var romanceProzent = prozentRechnen(romanceGenre, summe);
+ 
+							var genreStatistik = { "musik": musikProzent,
+													"drama": dramaProzent,
+													"action": actionProzent,
+													"fantasy": fantasyProzent,
+													"comedy": comedyProzent,
+													"anwalt": anwaltProzent,
+													"romance": romanceProzent
+												};
+
+
+							var finaldata = {"userdata":userdata, "seriesdata":seriesdata, "genrestatistik":genreStatistik};
+							console.log(JSON.stringify(finaldata));
+							var html = ejs.render(filestring, finaldata);
+							res.setHeader("content-type", "text/html");
+							res.writeHead(200);
+							res.write(html);
+							res.end();
+						});
+					} else {
+						requestloop();
+					}
+				});
+				externalRequestTwo.end();
+				externalRequestOne.end();
+				
+			}
+			requestloop();
 		}
 	});
 });
@@ -635,7 +725,6 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	var ratingData = {
 		"bewertung": newRate,
 		"bewertungsanzahl": ratingAnzahl,
-		"genre": "Musik",
 		"bewertungssumme": bewertungssumme
 	};
 

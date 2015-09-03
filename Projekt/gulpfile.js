@@ -44,7 +44,7 @@ gulp.task("db-dummy", function() {
 	var newSeries3 = {
 	"id": "3",
 	"name": "Better Call Saul",
-	"genre": "Action, Drama",
+	"genre": "Action, Drama, Anwaltserie",
 	"description": "Serie über einen Anwalt"
 	}
 	var newSeries4 = {
@@ -59,11 +59,25 @@ gulp.task("db-dummy", function() {
 	"genre": "Musik, Drama, Romance",
 	"description": "Serie über Countrymusik"
 	}
+	var newSeries6 = {
+	"id": "6",
+	"name": "Suits",
+	"genre": "Anwaltserie",
+	"description": "Junger Drogendealer mit fotografischem Gedächtnis wird Anwalt"
+	}
+	var newSeries7 = {
+	"id": "7",
+	"name": "Game of Thrones",
+	"genre": "Fantasy, Action, Drama",
+	"description": "Der Kampf auf den Thron"
+	}
    	db.set("series:1", JSON.stringify(newSeries1));
 	db.set("series:2", JSON.stringify(newSeries2));
 	db.set("series:3", JSON.stringify(newSeries3));
 	db.set("series:4", JSON.stringify(newSeries4));
 	db.set("series:5", JSON.stringify(newSeries5));
+	db.set("series:6", JSON.stringify(newSeries6));
+	db.set("series:7", JSON.stringify(newSeries7));
 	// Episode Dummies
 	var ss1season1 = {
 	"id": "1",
@@ -125,6 +139,46 @@ gulp.task("db-dummy", function() {
 	"episodes": "21",
 	"seriesid": "5"
 	}
+	var ss6season1 = {
+	"id": "1",
+	"episodes": "12",
+	"seriesid": "6"
+	}
+	var ss6season2 = {
+	"id": "2",
+	"episodes": "18",
+	"seriesid": "6"
+	}
+	var ss6season3 = {
+	"id": "3",
+	"episodes": "12",
+	"seriesid": "6"
+	}
+	var ss6season4 = {
+	"id": "4",
+	"episodes": "16",
+	"seriesid": "6"
+	}
+	var ss7season1 = {
+	"id": "1",
+	"episodes": "21",
+	"seriesid": "7"
+	}
+	var ss7season2 = {
+	"id": "2",
+	"episodes": "16",
+	"seriesid": "7"
+	}
+	var ss7season3 = {
+	"id": "3",
+	"episodes": "12",
+	"seriesid": "7"
+	}
+	var ss7season4 = {
+	"id": "4",
+	"episodes": "21",
+	"seriesid": "7"
+	}
 	db.set("ss:1:season:1", JSON.stringify(ss1season1));
 	db.set("ss:1:season:2", JSON.stringify(ss1season2));
 	db.set("ss:2:season:1", JSON.stringify(ss2season1));
@@ -137,6 +191,14 @@ gulp.task("db-dummy", function() {
 	db.set("ss:4:season:3", JSON.stringify(ss4season3));
 	db.set("ss:5:season:1", JSON.stringify(ss5season1));
 	db.set("ss:5:season:2", JSON.stringify(ss5season2));
+	db.set("ss:6:season:1", JSON.stringify(ss6season1));
+	db.set("ss:6:season:2", JSON.stringify(ss6season2));
+	db.set("ss:6:season:3", JSON.stringify(ss6season3));
+	db.set("ss:6:season:4", JSON.stringify(ss6season4));
+	db.set("ss:7:season:1", JSON.stringify(ss7season1));
+	db.set("ss:7:season:2", JSON.stringify(ss7season2));
+	db.set("ss:7:season:3", JSON.stringify(ss7season3));
+	db.set("ss:7:season:4", JSON.stringify(ss7season4));
 
 	// User Dummies
 	var user1 = {
