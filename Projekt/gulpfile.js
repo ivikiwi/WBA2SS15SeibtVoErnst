@@ -32,19 +32,19 @@ gulp.task("db-dummy", function() {
 	var newSeries1 = {
 	"id": "1",
 	"name": "Once upon a time",
-	"genre": "Fantasy, Drama",
+	"genre": "Fantasy",
 	"description": "Serie über Märchen"
 	}
 	var newSeries2 = {
 	"id": "2",
 	"name": "Breaking Bad",
-	"genre": "Action, Drama",
+	"genre": "Action",
 	"description": "Serie über Drogen"
 	}
 	var newSeries3 = {
 	"id": "3",
 	"name": "Better Call Saul",
-	"genre": "Action, Drama, Anwaltserie",
+	"genre": "Action",
 	"description": "Serie über einen Anwalt"
 	}
 	var newSeries4 = {
@@ -56,7 +56,7 @@ gulp.task("db-dummy", function() {
 	var newSeries5 = {
 	"id": "5",
 	"name": "Nashville",
-	"genre": "Musik, Drama, Romance",
+	"genre": "Musik",
 	"description": "Serie über Countrymusik"
 	}
 	var newSeries6 = {
@@ -68,7 +68,7 @@ gulp.task("db-dummy", function() {
 	var newSeries7 = {
 	"id": "7",
 	"name": "Game of Thrones",
-	"genre": "Fantasy, Action, Drama",
+	"genre": "Fantasy",
 	"description": "Der Kampf auf den Thron"
 	}
    	db.set("series:1", JSON.stringify(newSeries1));

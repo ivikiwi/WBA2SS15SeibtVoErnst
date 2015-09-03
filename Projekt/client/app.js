@@ -96,6 +96,59 @@ app.get("/css/:stylesheetname", function (req, res, next) {
 
 });
 
+
+//JS
+app.get("/js/:jsname", function (req, res, next) {
+
+  var options = {
+    root: __dirname + "/js/",
+    dotfiles: "deny",
+    headers: {
+        "x-timestamp": Date.now(),
+        "x-sent": true
+    }
+  };
+
+  var fileName = req.params.jsname;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
+//Jquery Library
+app.get("/bower_components/jquery/dist/:jsname", function (req, res, next) {
+
+  var options = {
+    root: __dirname + "../../bower_components/jquery/dist/",
+    dotfiles: "deny",
+    headers: {
+        "x-timestamp": Date.now(),
+        "x-sent": true
+    }
+  };
+
+console.log(root);
+
+  var fileName = req.params.jsname;
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      console.log(err);
+      res.status(err.status).end();
+    }
+    else {
+      //console.log('Sent:', fileName);
+    }
+  });
+
+});
+
 //Allgemeine Images laden
 app.get("/img/:imgname", function (req, res, next) {
 
@@ -124,17 +177,17 @@ app.get("/img/:imgname", function (req, res, next) {
 
 
 //Bootstrap CSS
-app.get("/dist/css/:stylesheetname", function (req, res, next) {
+app.get("/bower_components/bootstrap/dist/css/:stylesheetname", function (req, res, next) {
 
   var options = {
-    root: __dirname + "/dist/css",
+    root: __dirname + "../../bower_components/bootstrap/dist/css",
     dotfiles: "deny",
     headers: {
         "x-timestamp": Date.now(),
         "x-sent": true
     }
   };
-
+  console.log(root);
   var fileName = req.params.stylesheetname;
   res.sendFile(fileName, options, function (err) {
     if (err) {
@@ -149,10 +202,10 @@ app.get("/dist/css/:stylesheetname", function (req, res, next) {
 });
 
 //Bootstrap JS
-app.get("/dist/js/:jsname", function (req, res, next) {
+app.get("/bower_components/bootstrap/dist/js/:jsname", function (req, res, next) {
 
   var options = {
-    root: __dirname + "/dist/js",
+    root: __dirname + "../../bower_components/bootstrap/dist/js",
     dotfiles: "deny",
     headers: {
         "x-timestamp": Date.now(),
@@ -173,11 +226,11 @@ app.get("/dist/js/:jsname", function (req, res, next) {
 
 });
 
-//Bootstrap JS
-app.get("/dist/fonts/:bfonts", function (req, res, next) {
+//Bootstrap fonts
+app.get("/bower_components/bootstrap/dist/fonts/:bfonts", function (req, res, next) {
 
   var options = {
-    root: __dirname + "/dist/fonts",
+    root: __dirname + "../../bower_components/bootstrap/dist/fonts",
     dotfiles: "deny",
     headers: {
         "x-timestamp": Date.now(),
@@ -321,6 +374,8 @@ app.get("/user/:id", jsonParser, function(req, res){
 			var userdata;
 			var seriesdata;
 			var requestCounter = 0;
+			var genreStatistik = {};
+			var statusStatistik = {};
 
 			requestloop = function() {
 				requestCounter = 0;
@@ -329,6 +384,25 @@ app.get("/user/:id", jsonParser, function(req, res){
 					externalRequestOne.on("data", function(chunk) {
 						console.log("erster request fertig");
 						seriesdata = JSON.parse(chunk);
+						if(typeof(seriesdata.watched) !== 'undefined') {
+							var getPercentage = function(array, property, value) {
+								return 100 * array.map(function(s) {
+								return s[property];
+								}).filter(function(x) {
+								return x === value;
+								}).length / array.length;
+							};
+
+
+							["Action", "Anwaltserie", "Comedy", "Drama", "Fantasy", "Musik", "Romance"].forEach(function(word) {
+     							genreStatistik[word] = getPercentage(seriesdata.replies, "genre", word);
+							});
+
+							["Schaue ich gerade", "Werde ich schauen", "Abgebrochen", "Abgeschlossen"].forEach(function(word) {
+     							statusStatistik[word] = getPercentage(seriesdata.watched, "status", word);
+							});
+
+						}
 					});
 				});
 				console.log("rcounter " + requestCounter);
@@ -340,64 +414,7 @@ app.get("/user/:id", jsonParser, function(req, res){
 						externalRequestTwo.on("data", function(chunk) {
 							console.log("zweiter request fertig");
 							userdata = JSON.parse(chunk);
-							// Genre-Statistik
-							var musikGenre = 0;
-							var dramaGenre = 0;
-							var actionGenre = 0;
-							var fantasyGenre = 0;
-							var comedyGenre = 0;
-							var anwaltGenre = 0;
-							var romanceGenre = 0;
-							console.log(seriesdata.watched.length);
-
-							for(var i=0; i < seriesdata.watched.length; i++) {
-								var watchedGenre = seriesdata.replies[i].genre;
-								if(watchedGenre.toLowerCase().indexOf("musik") > -1) {
-									musikGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("drama") > -1) {
-									dramaGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("action") > -1) {
-									actionGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("fantasy") > -1) {
-									fantasyGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("comedy") > -1) {
-									comedyGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("anwalt") > -1) {
-									anwaltGenre++;
-								}
-								if(watchedGenre.toLowerCase().indexOf("romance") > -1) {
-									romanceGenre++;
-								}
-							}
-
-							var summe = musikGenre + dramaGenre + actionGenre + fantasyGenre + comedyGenre + anwaltGenre + romanceGenre;
-							prozentRechnen = function(genre, summe) {
-								return (genre / summe) * 100;
-							}
-							var musikProzent = prozentRechnen(musikGenre, summe);
-							var dramaProzent = prozentRechnen(dramaGenre, summe);
-							var actionProzent = prozentRechnen(actionGenre, summe);
-							var fantasyProzent = prozentRechnen(fantasyGenre, summe);
-							var comedyProzent = prozentRechnen(comedyGenre, summe);
-							var anwaltProzent = prozentRechnen(anwaltGenre, summe);
-							var romanceProzent = prozentRechnen(romanceGenre, summe);
- 
-							var genreStatistik = { "musik": musikProzent,
-													"drama": dramaProzent,
-													"actiongenre": actionProzent,
-													"fantasy": fantasyProzent,
-													"comedy": comedyProzent,
-													"anwalt": anwaltProzent,
-													"romance": romanceProzent
-												};
-
-
-							var finaldata = {"userdata":userdata, "seriesdata":seriesdata, "genrestatistik":genreStatistik};
+							var finaldata = {"userdata":userdata, "seriesdata":seriesdata, "genrestatistik":genreStatistik, "statusStatistik":statusStatistik};
 							console.log(JSON.stringify(finaldata));
 							var html = ejs.render(filestring, finaldata);
 							res.setHeader("content-type", "text/html");

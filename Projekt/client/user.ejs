@@ -5,12 +5,13 @@
 		<title>User</title>
 			<link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'>
 		
-		    <link href="/dist/css/bootstrap.min.css" rel="stylesheet">
+		    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap-Theme -->
-    <link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <!-- Tortendiagramm zeichnen -->
-
+    <% if(typeof(seriesdata.watched) !== 'undefined') {
+    %>	
     <script>
         window.onload = function() {
 
@@ -81,9 +82,9 @@
             }
  
             var slices = {
-                "percentages": [musikData,dramaData,actionData,fantasyData,comedyData,anwaltData,romanceData],
+                "percentages": [musikData,dramaData,fantasyData,romanceData,comedyData,anwaltData,actionData],
                 "colors": ['#4ccdc4', '#2e8e87', '#c6f866', '#fd6a69', '#c44b56', '#8c9cab', '#54626f'],
-                "elements": ['Musik: '+parseInt(musikData)+' %', 'Drama: '+parseInt(dramaData)+' %', 'Action: '+parseInt(actionData)+' %', 'Fantasy: '+parseInt(fantasyData)+' %', 'Komödie: '+parseInt(comedyData)+' %', 'Anwaltserie: '+parseInt(anwaltData)+' %', 'Romantik: '+parseInt(romanceData)+' %']
+                "elements": ['Musik: '+parseInt(musikData)+' %', 'Drama: '+parseInt(dramaData)+' %', 'Fantasy: '+parseInt(fantasyData)+' %', 'Romantik: '+parseInt(romanceData)+' %', 'Komödie: '+parseInt(comedyData)+' %', 'Anwaltserie: '+parseInt(anwaltData)+' %', 'Action: '+parseInt(actionData)+' %']
             }
  
             var piechart  = Object.create(PieChart);
@@ -117,6 +118,9 @@
             }
         }
     </script>
+    <%
+    	}
+    %>
 	</head>
 	<body>
 
@@ -151,28 +155,53 @@
             if (typeof(userdata.name) !== 'undefined') {
             %>
             <div class="userinfo">
-              <h3>Wer bin ich?</h3>
-					 	  <strong> User: </strong> <%= userdata.name %>
+                <h3>Wer bin ich?</h3>
+				<strong> User: </strong> <%= userdata.name %>
             </div>
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Welche Genres gucke ich am meisten?</h3>
+            <%
+              if (typeof(seriesdata.watched) !== 'undefined') {
+
+            %>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Welche Genres gucke ich am meisten?</h3>
+                        </div>
+                        <div class="panel-body">
+                            <canvas id='piechart1' width='200px' height='200px'></canvas>
+                            <table id='legend'></table>
+                            <form method="post" name="piechartdata">
+                                <input type=hidden id="musikdata" value="<%= genrestatistik.Musik %>">
+                                <input type=hidden id="dramadata" value="<%= genrestatistik.Drama %>">
+                                <input type=hidden id="actiondata" value="<%= genrestatistik.Action %>">
+                                <input type=hidden id="fantasydata" value="<%= genrestatistik.Fantasy %>">
+                                <input type=hidden id="comedydata" value="<%= genrestatistik.Comedy %>">
+                                <input type=hidden id="anwaltdata" value="<%= genrestatistik.Anwaltserie %>">
+                                <input type=hidden id="romancedata" value="<%= genrestatistik.Romance %>">
+                            </form>
+                    	</div>
+                    </div>
               </div>
-              <div class="panel-body">
-                <canvas id='piechart1' width='200px' height='200px'></canvas>
-                <table id='legend'></table>
-                <form method="post" name="piechartdata">
-                  <input type=hidden id="musikdata" value="<%= genrestatistik.musik %>">
-                  <input type=hidden id="dramadata" value="<%= genrestatistik.drama %>">
-                  <input type=hidden id="actiondata" value="<%= genrestatistik.actiongenre %>">
-                  <input type=hidden id="fantasydata" value="<%= genrestatistik.fantasy %>">
-                  <input type=hidden id="comedydata" value="<%= genrestatistik.comedy %>">
-                  <input type=hidden id="anwaltdata" value="<%= genrestatistik.anwalt %>">
-                  <input type=hidden id="romancedata" value="<%= genrestatistik.romance %>">
-                 </form>
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                   <h3 class="panel-title">Serienstatistik</h3>
+                  </div>
+                  <div class="panel-body">
+                    qwer
+                  </div>
+                </div>
               </div>
             </div>
-              
+            <%    
+             	} else {
+            %>
+            		<p>Du hast noch keine Serie in deine Liste hinzugefügt.</p>
+            <%
+	            }
+            %>
+            
 
 
             <%

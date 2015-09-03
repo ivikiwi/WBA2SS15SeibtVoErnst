@@ -1,0 +1,24 @@
+{
+  "name": "Viromark",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ivikiwi/WBA2SS15SeibtVoErnst",
+  "description": "Serienliste",
+  "authors": [
+    "Roman Seibt",
+    "Markus Ernst",
+    "Phuong Thuy Duong Vo"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "Chart.js": "~1.0.2",
+    "jquery": "~2.1.4"
+  }
+}
