@@ -389,7 +389,7 @@ app.get("/user/:id", jsonParser, function(req, res){
  
 							var genreStatistik = { "musik": musikProzent,
 													"drama": dramaProzent,
-													"action": actionProzent,
+													"actiongenre": actionProzent,
 													"fantasy": fantasyProzent,
 													"comedy": comedyProzent,
 													"anwalt": anwaltProzent,

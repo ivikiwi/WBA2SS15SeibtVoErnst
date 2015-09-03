@@ -9,6 +9,114 @@
     <!-- Bootstrap-Theme -->
     <link href="/dist/css/bootstrap-theme.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
+    <!-- Tortendiagramm zeichnen -->
+
+    <script>
+        window.onload = function() {
+
+              var musikData = document.getElementById("musikdata").value;
+              var dramaData = document.getElementById("dramadata").value;
+              var actionData = document.getElementById("actiondata").value;
+              var fantasyData = document.getElementById("fantasydata").value;
+              var comedyData = document.getElementById("comedydata").value;
+              var anwaltData = document.getElementById("anwaltdata").value;
+              var romanceData = document.getElementById("romancedata").value;
+
+            var PieChart = {
+ 
+                drawPieChart: function (slices, id) {
+ 
+                    var percentElements = slices.percentages;
+                    var colorElements = slices.colors;
+ 
+                    var canvas = document.getElementById(id);
+                    var context = canvas.getContext("2d");
+ 
+                    var centerX = canvas.width / 2;
+                    var centerY = canvas.height / 2;
+                    var radius = 80;
+ 
+                    context.beginPath();
+                    var endAngle = 2 * Math.PI
+ 
+                    var lastAngle = 0;
+ 
+                    for (var i = 0; i < percentElements.length; i++) {
+                        var percent = percentElements[i];
+                        var color = colorElements[i];
+ 
+                        var currentSegment = endAngle * (percent / 100);
+                        var currentAngle = currentSegment + lastAngle;
+ 
+                        context.beginPath();
+                        context.moveTo(centerX, centerY)
+                        context.arc(centerX, centerY, radius, lastAngle, currentAngle, false);
+                        context.closePath();
+ 
+                        lastAngle = lastAngle + currentSegment;
+ 
+                        context.fillStyle = color;
+                        context.fill();
+ 
+                        if (this.segmentMode) {
+                            context.lineWidth = 2;
+                            context.strokeStyle = 'white';
+ 
+                        }else {
+                            context.lineWidth = 1;
+                            context.strokeStyle = 'black';
+ 
+                        }
+                        context.stroke();
+                        context.fill();
+                    }
+                    if (this.segmentMode) {
+ 
+                        context.beginPath();
+                        context.fillStyle = 'white';
+                        context.arc(centerX, centerY, radius - 20, 0, 2 * Math.PI, false);
+                        context.fill();
+                    }
+                }
+            }
+ 
+            var slices = {
+                "percentages": [musikData,dramaData,actionData,fantasyData,comedyData,anwaltData,romanceData],
+                "colors": ['#4ccdc4', '#2e8e87', '#c6f866', '#fd6a69', '#c44b56', '#8c9cab', '#54626f'],
+                "elements": ['Musik: '+parseInt(musikData)+' %', 'Drama: '+parseInt(dramaData)+' %', 'Action: '+parseInt(actionData)+' %', 'Fantasy: '+parseInt(fantasyData)+' %', 'Komödie: '+parseInt(comedyData)+' %', 'Anwaltserie: '+parseInt(anwaltData)+' %', 'Romantik: '+parseInt(romanceData)+' %']
+            }
+ 
+            var piechart  = Object.create(PieChart);
+            piechart.segmentMode = true;
+            piechart.drawPieChart(slices, 'piechart1');
+ 
+            var legend = document.getElementById('legend');
+ 
+            for (var i = 0; i < slices.percentages.length; i++) {
+ 
+                var tr = document.createElement('tr');
+                tr.className = "legendenZeile";
+ 
+                legend.appendChild(tr);
+  
+                var c = slices.colors[i];
+                var p = slices.elements[i];
+                
+ 
+                var td1 = document.createElement('td');
+                var td2 = document.createElement('td');
+ 
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+ 
+                td1.style.background = slices.colors[i];
+                td1.style.width = '40px';
+                td2.innerHTML = slices.elements[i];
+                td2.className = "legendenSpalteSchrift";
+               
+            }
+        }
+    </script>
 	</head>
 	<body>
 
@@ -35,14 +143,38 @@
       </div>
     </nav>
 
-		<h1>Wer bin ich?</h1>
+		<h1>Userprofil</h1>
 		<div>
 					<div class="seriesbox">
 					<div class="description"> 
             <%
             if (typeof(userdata.name) !== 'undefined') {
             %>
-						<strong> User: </strong> <%= userdata.name %> 
+            <div class="userinfo">
+              <h3>Wer bin ich?</h3>
+					 	  <strong> User: </strong> <%= userdata.name %>
+            </div>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Welche Genres gucke ich am meisten?</h3>
+              </div>
+              <div class="panel-body">
+                <canvas id='piechart1' width='200px' height='200px'></canvas>
+                <table id='legend'></table>
+                <form method="post" name="piechartdata">
+                  <input type=hidden id="musikdata" value="<%= genrestatistik.musik %>">
+                  <input type=hidden id="dramadata" value="<%= genrestatistik.drama %>">
+                  <input type=hidden id="actiondata" value="<%= genrestatistik.actiongenre %>">
+                  <input type=hidden id="fantasydata" value="<%= genrestatistik.fantasy %>">
+                  <input type=hidden id="comedydata" value="<%= genrestatistik.comedy %>">
+                  <input type=hidden id="anwaltdata" value="<%= genrestatistik.anwalt %>">
+                  <input type=hidden id="romancedata" value="<%= genrestatistik.romance %>">
+                 </form>
+              </div>
+            </div>
+              
+
+
             <%
           } else {
           %>

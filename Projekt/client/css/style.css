@@ -55,3 +55,19 @@ strong {
 .prozessSpalte {
 	width: 50px;
 }
+
+/* ////////// USERPROFIL ///////////// */
+
+.userinfo {
+	margin-bottom:20px;
+}
+
+/* --- Legende GenreStatistik --- */
+.legendenSpalteSchrift {
+	padding-left:15px;
+}
+
+.legendenZeile {
+	border-top: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+}
