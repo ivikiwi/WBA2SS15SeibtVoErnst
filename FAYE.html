@@ -1,0 +1,163 @@
+//faye
+//npm install befehl fall der noch nicht da ist
+//npm install faye [--save]
+
+//in die require einfügen wir brauchen faye http und express
+var faye = require('faye');
+
+//danach ist ja 
+var = app usw
+var server = http.createServer(app);
+
+//dann EINFÜGEN
+//(root) Adapter konfigurieren ist die stelle mit der clients kommunizieren
+
+var bayeux = new faye.NodeAdapter({ //bayeux ist das protocoll
+		mount: '/faye', //gibt den pfad an wo der faye auf der server verfügbar ist
+		timeout: 45  //maximale Zeit der offenen verbindung in (s) weitere optionen in der Doku ende der youtube präsi
+});
+
+//Adapter zum Server hinzufügen
+bayeux.attach(server);
+
+//wenn serverseitiger client (?) var client = new faye.Client("http://localhost:8000/faye")
+// und var subscription = client.subscribe('/news', function (message) {
+	console.log("blabla")
+});
+
+//serrver starten
+server.listen(8000, function () {
+	console.log("Server listens on Port 8000.");
+});
+
+
+//serverseitiges einrichten zu browserclients oder ähnlich
+
+//man muss datei in den html code einbinden und der server muss berreits gestartet sein
+<script type="text/javascript" src="http://localhost:8000/faye/client.js"></script> //Datei ist durch Faye vorhanden
+ 
+
+
+//pub-sub client erzeugen
+var client = new faye.Client('http://localhost:8000/faye'); //erzeugen+welcher host
+
+//Nachrichten an Topic 'news' publishen
+var publication = client.publish('/news', { //publish ist methode mit 2 parametern 1.topic 2. nachricht
+	'author': 'Bob',
+	'content': 'Alice is back',
+});//analog dazu das subscriben (im video ca. 7:00) hab das nicht zu 100% verstanden sorry
+
+//jedes publish un dsubscribe gibt ein promise object zurück; repräsentiert das ergebnis der operation
+//
+
+
+publication.then(//diesem object kann man über then eine handlermethode zuweisen etweder um das ergebnmis zu erhalten oder den grund warum fehler
+
+
+	//promise-handler wenn publishen erfolgreich  
+	function (){
+		res.writeHead(200, "OK");
+		res.write("Nachricht wurde gesendet.");
+		res.end();
+	},
+
+	//priomisehandler wenn Publishen fehgeschlagen 
+	function(error) {
+		res.write("Nachricht wurde nicht gesendet.");
+		next(error)
+	}
+);
+
+
+//Topics sind absolute Pfandangaben
+//2 besonderheiten: Topics können verschachtelt werden (Wie ein Baum); beim abonnieren gehen auch * und ** 
+//* aboniiert alle Topics eine ebene tiefer; ** Alle Topics unterhalb
+//dadurch kann man topics wohl kopieren
+
+
+
+// live coding 
+
+//zuerst die module installieren + body parser
+
+//server.js anlegen 
+//code reinkopieren
+//geht im notfall auch ohne express
+
+
+//programmiert adapter s.O.
+//sie macht einen publisher und einen ?
+
+//publisher
+<html>
+
+<body>
+	<script type="text/javascript" src="http://localhost:8000/faye/client.js"></script>
+
+	<h1> News Publisher </h1>  /Testtext
+	<label for="author">Name:</label> 
+	<input id="author" type="text">
+	<br>
+
+	<label for="content">Content:</label>
+	<input id="content" type="text">
+	<br>
+
+	<button id="sendBtn" type="Button" onclick="publishMsg()">Send</button> //onlcikeventlistener macht den publish am ende
+
+	<script>
+		var client =new faye.Client("http://localhost:8000/faye");
+
+		function publishMsg(){
+
+			var publication = client.publish('/news' , {
+				"author": document.getElementById('author'),
+				"content": document.getElementById('content') 
+			});
+
+			publication.then(
+
+				function(){
+					console.log("Nachricht wurde versendet.");
+				}
+
+				,
+
+				function(){
+					console.log("Nachricht wurde nicht versendet.");
+				}
+
+			);
+
+	};
+
+	</script>
+
+</body>
+</html>
+
+//subscriber also empfänger
+
+<html>
+
+<body>
+		<h1> >News Reader< </h1>
+
+		<div id="messages"></div> //hier werden die empfangenen nachrichten reiongescdhrieben
+
+		<script type="text/javascript" src="http://localhost:8000/faye.client.js"></script>
+		<script>
+			var client = new Faye.Client('http://localhost:8000/faye');
+
+			var subscription = client.subscribe('/news', function (message) {
+				var dic = document.getElementById('messages');
+				div.innerHTML += "<p> Autor:" + ´message.author + "<br> Content: " + message.content + "</p>";
+			});
+		</script>
+
+</body>
+</html>
+
+//um zu testen ob alles läuft server starten dann werden nachrichten von pub zu sub geschickt (hoffentlich xD)
+
+
