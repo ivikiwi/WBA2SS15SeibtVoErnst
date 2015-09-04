@@ -73,7 +73,7 @@ strong {
 }
 
 .legend {
-    width: 10em;
+    padding-top:20px;
 }
 
 .legend .title {
@@ -91,4 +91,9 @@ strong {
     border: 2px solid; /* Comment out if you don't want to show the fillColor */
     border-radius: 0.5em; /* Comment out if you prefer squarish samples */
     margin-right: 0.5em;
+}
+
+/* //////////// INDEX ////////// */
+.listInPanel {
+	padding: 10px 0;
 }

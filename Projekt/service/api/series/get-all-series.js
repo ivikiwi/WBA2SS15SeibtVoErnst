@@ -18,7 +18,8 @@ function getAllSeries(app, db) {
 						description: series.description,
 						genre: series.genre,
 						bewertung: series.bewertung,
-						bewertungz: series.bewertungz
+						bewertungssumme: series.bewertungssumme,
+						bewertungsanzahl: series.bewertungsanzahl
 					};
 				});
 

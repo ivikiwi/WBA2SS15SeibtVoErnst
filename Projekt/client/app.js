@@ -193,7 +193,7 @@ app.get("/bower_components/bootstrap/dist/css/:stylesheetname", function (req, r
       res.status(err.status).end();
     }
     else {
-      console.log('Sent:', options.root + "" +fileName);
+      //console.log('Sent:', options.root + "" +fileName);
     }
   });
 
@@ -269,7 +269,7 @@ app.get("/bower_components/Chartjs/:fileName", function (req, res, next) {
       res.status(err.status).end();
     }
     else {
-      console.log('Sent:', options.root + "" +fileName);
+      //console.log('Sent:', options.root + "" +fileName);
     }
   });
 
@@ -400,6 +400,7 @@ app.get("/user/:id", jsonParser, function(req, res){
 			var requestCounter = 0;
 			var genreStatistik = {};
 			var statusStatistik = {};
+			var statusCountStatistik = {};
 
 			requestloop = function() {
 				requestCounter = 0;
@@ -409,12 +410,22 @@ app.get("/user/:id", jsonParser, function(req, res){
 						console.log("erster request fertig");
 						seriesdata = JSON.parse(chunk);
 						if(typeof(seriesdata.watched) !== 'undefined') {
+							// Funktion zum Zählen eines bestimmten Attributs in Prozenten
 							var getPercentage = function(array, property, value) {
 								return 100 * array.map(function(s) {
-								return s[property];
+									return s[property];
 								}).filter(function(x) {
-								return x === value;
+									return x === value;
 								}).length / array.length;
+							};
+
+							// Funktion zum Zählen der einzelnen Werte
+							var countValue = function(array, property, value) {
+								return array.map(function(s){
+									return s[property];
+								}).filter(function(x) {
+									return x === value;
+								}).length;
 							};
 
 
@@ -424,6 +435,10 @@ app.get("/user/:id", jsonParser, function(req, res){
 
 							["Schaue ich gerade", "Werde ich schauen", "Abgebrochen", "Abgeschlossen"].forEach(function(word) {
      							statusStatistik[word] = getPercentage(seriesdata.watched, "status", word);
+							});
+
+							["Schaue ich gerade", "Werde ich schauen", "Abgebrochen", "Abgeschlossen"].forEach(function(word) {
+								statusCountStatistik[word] = countValue(seriesdata.watched, "status", word);
 							});
 
 						}
@@ -438,7 +453,7 @@ app.get("/user/:id", jsonParser, function(req, res){
 						externalRequestTwo.on("data", function(chunk) {
 							console.log("zweiter request fertig");
 							userdata = JSON.parse(chunk);
-							var finaldata = {"userdata":userdata, "seriesdata":seriesdata, "genrestatistik":genreStatistik, "statusStatistik":statusStatistik};
+							var finaldata = {"userdata":userdata, "seriesdata":seriesdata, "genrestatistik":genreStatistik, "statusStatistik":statusStatistik, "statusCountStatistik":statusCountStatistik};
 							console.log(JSON.stringify(finaldata));
 							var html = ejs.render(filestring, finaldata);
 							res.setHeader("content-type", "text/html");
@@ -474,23 +489,93 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 					accept: "application/json"
 				}
 			}
-			var externalRequest = http.request(userOptions, function(externalRequest) {
-				console.log("Connected");
-				externalRequest.on("data", function(chunk) {
+			var allSeriesOptions = {
+				host: "localhost",
+				port: 8888,
+				path: "/series",
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
 
-					var userdata = JSON.parse(chunk);
-					var finaldata = {"userdata": userdata}
-					var html = ejs.render(filestring, finaldata);
-					res.setHeader("content-type", "text/html");
-					res.writeHead(200);
-					res.write(html);
-					res.end();
+			var userData;
+			var allSeriesData;
+			var popularityData = [];
+			var requestCounter = 0;
 
+			requestloop = function() {
+				requestCounter = 0;
+				var externalRequestOne = http.request(allSeriesOptions, function(externalRequestOne) {
+					requestCounter++;
+					console.log("Connected");
+					externalRequestOne.on("data", function(chunk) {
+						allSeriesData = JSON.parse(chunk);
+						var getAverageRating = function() {
+							var bewertungsSumme = 0;
+							var bewertungsCounter = 0;
+							for(var i = 0; i < allSeriesData.series.length; i++) {
+								if(typeof(allSeriesData.series[i].bewertung) !== 'undefined') {
+									bewertungsSumme += allSeriesData.series[i].bewertung;
+									bewertungsCounter++;
+								}
+							}
+							console.log("bewertungssumme" + bewertungsSumme);
+							return bewertungsSumme / bewertungsCounter
+						};					
+						var getMostPopularSeries = function() {
+							for(var i = 0; i < allSeriesData.series.length; i++) {
+								if(typeof(allSeriesData.series[i].bewertung) !== 'undefined') {
+									var ratingNumber = allSeriesData.series[i].bewertungsanzahl;
+									var minimumRating = 3; // minimale Anzahl Votes, um überhaupt gelistet zu werden
+
+									// Bayesian Rating Formel, um einen Beliebtheitswert für unsere Serien zu berechnen
+									var popularityValue = (parseInt(ratingNumber) * parseInt(allSeriesData.series[i].bewertung) + minimumRating * parseInt(averageRating)) / (parseInt(ratingNumber) + minimumRating);
+									popularityData[i] = {
+														"seriesid": allSeriesData.series[i].id,
+														"popularityValue": Math.round(popularityValue * 100)/100
+									}
+								}
+							}
+							// Hier wird unser PopularSeries-Array nach popularityValue sortiert
+							popularityData.sort(function (a,b) {
+								return b.popularityValue > a.popularityValue ? 1
+									: b.popularityValue < a.popularityValue ? -1
+									:0; 
+							});
+						};
+
+
+						var averageRating = getAverageRating();
+						getMostPopularSeries();
+
+					});
 				});
 
-			});
 
-			externalRequest.end();
+			
+				var externalRequestTwo = http.request(userOptions, function(externalRequestTwo) {
+					requestCounter++;
+					if(requestCounter==2) {
+						externalRequestTwo.on("data", function(chunk) {
+							userData = JSON.parse(chunk);
+							var finaldata = {"userdata": userData, "allSeriesData": allSeriesData, "popularityData": popularityData}
+							console.log(JSON.stringify(finaldata));
+							var html = ejs.render(filestring, finaldata);
+							res.setHeader("content-type", "text/html");
+							res.writeHead(200);
+							res.write(html);
+							res.end();
+						});
+					} else {
+						requestloop();
+					}
+					
+				});
+				externalRequestOne.end();
+				externalRequestTwo.end();
+			}
+			requestloop();		
 		}
 	});
 });
@@ -764,7 +849,7 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	}
 
 	var ratingData = {
-		"bewertung": newRate,
+		"bewertung": Math.round(newRate * 10)/10,
 		"bewertungsanzahl": ratingAnzahl,
 		"bewertungssumme": bewertungssumme
 	};
@@ -804,7 +889,6 @@ app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 		
 		});
 
-	//externalRequest1.write(JSON.stringify(newRatingData));
 	externalRequest1.write(newRatingData);
 	externalRequest2.write(data);
 	externalRequest1.end();

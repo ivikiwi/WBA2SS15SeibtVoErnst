@@ -173,7 +173,7 @@
 								ratinganzahl = 0;
 							}
 					%>
-  							<span><%= Math.round(seriesdata.bewertung * 10)/10 %> / <%= ratinganzahl %></span>
+  							<span><%= seriesdata.bewertung %> / <%= ratinganzahl %></span>
 					<%
 					 	} else { 
 					%>
@@ -401,12 +401,14 @@
 														<p id="related_<%= seasonsdata.seasons[i].id %>_content" class="maxSeasons">
 								   							<%=seasonsdata.seasons[i].episodes%>
 														</p>
+														<p id="related_Staffelauswahl_content" class="maxSeasons">
+														</p>
 											<%
 											 		} 
    				 								}
    				 							%>
    					  							<script>
-													$("#season").on("change", function() {
+													$("#season").change(function() {
    														id = "related_" + $(this).val() + "_content";
    									 					$("#" + id).show().siblings().hide()
 													})

@@ -1,0 +1,6 @@
+NOTIZEN
+
+
+Bewertungen werden in eine Text-Datei beim Dienstnutzer gespeichert:
+
+Userid + " = " flag(bewertet: ja/nein);
