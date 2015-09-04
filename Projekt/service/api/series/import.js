@@ -4,6 +4,7 @@ function register(app, db) {
 	app.put("/series/:id", require("./change-series")(app, db));
 	app.delete("/series/:id", require("./delete-series")(app, db));
 	app.get("/series", require("./get-all-series")(app, db));
+	app.get("/search/:term", require("./get-series-search")(app, db));
 	app.get("/series/name/:id", require("./get-series-name")(app, db));
 	app.get("/series/description/:id", require("./get-series-description")(app, db));
 	app.post("/series/:sid/season", require("./post-season")(app, db));

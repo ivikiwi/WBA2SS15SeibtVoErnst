@@ -620,6 +620,44 @@ app.get("/userpost", jsonParser, function(req, res){
 
 
 
+
+app.get("/search/:term", jsonParser, function(req, res){
+	fs.readFile("./results.ejs", {encoding: "utf-8"}, function(err, filestring) {
+		if(err) {
+			throw err;
+		} else {
+			var options = {
+				host: "localhost",
+				port: 8888,
+				path: "/search/"+req.params.term,
+				method: "GET",
+				headers: {
+					accept: "application/json"
+				}
+			}
+			var externalRequest = http.request(options, function(externalRequest) {
+				console.log("Connected");
+				externalRequest.on("data", function(chunk) {
+
+					var searchresults = JSON.parse(chunk);
+					var finaldata = {"searchresults": searchresults};
+					var html = ejs.render(filestring, finaldata);
+					res.setHeader("content-type", "text/html");
+					res.writeHead(200);
+					res.write(html);
+					res.end();
+
+				});
+
+			});
+
+			externalRequest.end();
+		}
+	});
+});
+
+
+
 app.use("/userlogin", function(req, res){
 		var currentUser = req.body;
 			var options = {
