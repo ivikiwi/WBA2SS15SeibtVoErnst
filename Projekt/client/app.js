@@ -621,7 +621,7 @@ app.get("/userpost", jsonParser, function(req, res){
 
 
 
-app.get("/search/:term", jsonParser, function(req, res){
+app.get("/user/:uid/search/:term", jsonParser, function(req, res){
 	fs.readFile("./results.ejs", {encoding: "utf-8"}, function(err, filestring) {
 		if(err) {
 			throw err;

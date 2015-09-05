@@ -28,27 +28,15 @@
 
             frm.on('submit', function(ev) {
                 var term = $('#termInput').val();
-                $.ajax({
-                            type: 'GET',
-                            url: '/search/'+term,
-                            //data: frmdataWatching,
-                            //contentType: 'application/json',
-                            success: function(frmdata) {
-                    
-                            },
-                            error: function(xhr, options, e) {
-                            console.log(e);
-                            }
-                        }).done(function(){
-                            alert(data.name+' wurde hinzugefuegt.');
-                        }).fail(function(e){
-                            alert(data.name+' konnte nicht hinzugefuegt werden. ('+JSON.stringify(e)+')');
-                        });
-                    alert(url);
+                term = term.replace(/\s/g, '')
+                var url = "search/"+term;
 
+                window.location = url;
+                    
+                 ev.preventDefault();
             });
 
-            
+         
         });
     </script>
 
@@ -76,7 +64,7 @@
             <li><a href="./">Mein Profil</a></li>
           
           </ul>
-          <form class="navbar-form navbar-left" id="searchbar" role="search">
+          <form class="navbar-form navbar-left" id="searchbar" role="search" method="post">
         <div class="form-group">
           <input type="text" class="form-control" id="termInput" placeholder="Suchen">
         </div>

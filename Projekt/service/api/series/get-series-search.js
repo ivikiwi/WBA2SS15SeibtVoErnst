@@ -18,17 +18,13 @@ function getSeriesSearch(app, db) {
 
 
 				seriesList = seriesList.map(function(series) {
-					if( series.name.indexOf(req.params.term) > -1) {
+					var seriesname = series.name;
+					seriesname = seriesname.replace(/\s/g, '');
+					if( seriesname.toLowerCase().indexOf(req.params.term.toLowerCase()) > -1) {
 						seriesListResults.push(series);
 					}
 				});
 				console.log(seriesListResults);
-
-				seriesListResults.sort(function (a,b) {
-								return b.name > a.name ? 1
-									: b.name < a.name ? -1
-									:0; 
-							});
 
 
 				/*return {
