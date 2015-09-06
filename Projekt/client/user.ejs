@@ -7,6 +7,8 @@
         <!-- Bootstrap-Theme -->
         <link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css">
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/js/search-redirect.js"></script>
         <script src="/js/legend.js"></script>
 </head>
 <body>
@@ -24,12 +26,22 @@
           <a class="navbar-brand" href="./index"><strong>viromark</strong></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="allseries">Alle Serien</a></li>
-            <li><a href="watched">Meine Serienliste</a></li>
-            <li class="active"><a href="./">Mein Profil</a></li>
+            <div style="float:left;">
+                <ul class="nav navbar-nav">
+                    <li><a href="allseries">Alle Serien</a></li>
+                    <li><a href="watched">Meine Serienliste</a></li>
+                    <li class="active"><a href="./">Mein Profil</a></li>
           
-          </ul>
+                </ul>
+            </div>
+            <div style="float:right;">
+                <form class="navbar-form navbar-left" id="searchbar" role="search" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="termInput" placeholder="Suchen">
+                    </div>
+                    <button type="submit" class="btn btn-default searchbutton"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                </form>
+            </div>
         </div><!--/.nav-collapse -->
       </div>
     </nav>

@@ -27,6 +27,7 @@ function getSeriesSearch(app, db) {
 				console.log(seriesListResults);
 
 
+
 				/*return {
 							id: series.id,
 							name: series.name,

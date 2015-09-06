@@ -7,7 +7,36 @@
         <!-- Bootstrap-Theme -->
         <link href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css">
-        <script src="/js/legend.js"></script>
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+		<script>
+		        $(function() {
+            var frm = $('#searchbar');
+
+            $("termInput").keypress(function(event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                    $(frm).submit();
+            }
+            });
+
+            frm.on('submit', function(ev) {
+                var term = $('#termInput').val();
+
+                if(term == '') {
+                    term = "noterm";
+                }
+                
+                term = term.replace(/\s/g, '')
+                var url = "../search/"+term;
+
+                window.location = url;
+                    
+                 ev.preventDefault();
+            });
+
+         
+        });
+	    </script>
 </head>
 <body>
 
@@ -24,12 +53,21 @@
           <a class="navbar-brand" href="../index"><strong>viromark</strong></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="../allseries">Alle Serien</a></li>
-            <li><a href="../watched">Meine Serienliste</a></li>
-            <li><a href="../">Mein Profil</a></li>
-          
-          </ul>
+          	<div style="float:left;">
+        	  	<ul class="nav navbar-nav">
+        	    	<li><a href="../allseries">Alle Serien</a></li>
+        	    	<li><a href="../watched">Meine Serienliste</a></li>
+        	    	<li><a href="../">Mein Profil</a></li>
+        	  	</ul>
+        	  </div>
+        	 <div style="float:right;">
+        	    <form class="navbar-form navbar-left" id="searchbar" role="search" method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="termInput" placeholder="Suchen">
+                    </div>
+                    <button type="submit" class="btn btn-default searchbutton"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                </form>
+            </div>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -46,6 +84,13 @@
 					<strong>Beschreibung:</strong> <%= searchresults.series[i].description %><br /><br />
 					</div>
 					</div>
+    	<%
+    		}
+    		if(searchresults.series.length==0) {
+    	%>
+    			<div class="seriesbox">
+    				<p>Es wurde kein Ergebnis gefunden.</p>
+    			</div>
     	<%
     		}
     	%>
