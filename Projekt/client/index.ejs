@@ -135,17 +135,25 @@ Es hilft dir dabei, den Überblick zu behalten. Um Viromark direkt zu verwenden,
                     </div>
                     <div class="panel-body">
                             <ol>
-                        <%
-                            for(var i = 0; i < popularityData.length && i < 5; i++) {
-                                for(var e = 0; e < allSeriesData.series.length; e++) {
-                                    if(popularityData[i].seriesid == allSeriesData.series[e].id) {
+                        <%  
+                            if(typeof(allSeriesData.series) !== 'undefined') {
+                                for(var i = 0; i < popularityData.length && i < 5; i++) {
+                                    for(var e = 0; e < allSeriesData.series.length; e++) {
+                                        if(typeof(allSeriesData.series[e].id) !== 'undefined') {
+                                        if(popularityData[i].seriesid == allSeriesData.series[e].id) {
                         %>
-                                        <li class="listInPanel"><a href="./allseries/<%=allSeriesData.series[e].id%>"><%= allSeriesData.series[e].name %></a></li>
+                                            <li class="listInPanel"><a href="./allseries/<%=allSeriesData.series[e].id%>"><%= allSeriesData.series[e].name %></a></li>
                                         
                         <%
+                                        }  
+                                        }
                                     }
-                                }
                                 
+                                }
+                            } else {
+                        %>
+                                Keine beliebten Serien.
+                        <%        
                             }
                         %>
                             </ol>

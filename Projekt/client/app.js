@@ -504,6 +504,18 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 			var popularityData = [];
 			var requestCounter = 0;
 
+			var statusCountData;
+
+			// Jetzt holen wir mal die Status-Daten aus unserer JSON-Datei, die wir auf dem Dienstnutzer gespeichert haben
+			fs.readFile(__dirname+"/add-edit-series-to-list.json", function(err, data) { 
+				var emulated = JSON.parse(data.toString());
+
+				// Wir verwenden nur die Serien der letzten sieben Tage
+				
+
+				
+			 });
+
 			requestloop = function() {
 				requestCounter = 0;
 				var externalRequestOne = http.request(allSeriesOptions, function(externalRequestOne) {
@@ -527,22 +539,33 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 							for(var i = 0; i < allSeriesData.series.length; i++) {
 								if(typeof(allSeriesData.series[i].bewertung) !== 'undefined') {
 									var ratingNumber = allSeriesData.series[i].bewertungsanzahl;
+									console.log(allSeriesData.series[i].bewertung);
+									console.log("ratingnumber " + ratingNumber);
 									var minimumRating = 3; // minimale Anzahl Votes, um überhaupt gelistet zu werden
 
 									// Bayesian Rating Formel, um einen Beliebtheitswert für unsere Serien zu berechnen
 									var popularityValue = (parseInt(ratingNumber) * parseInt(allSeriesData.series[i].bewertung) + minimumRating * parseInt(averageRating)) / (parseInt(ratingNumber) + minimumRating);
+									console.log("popularityValue: "+popularityValue);
 									popularityData[i] = {
 														"seriesid": allSeriesData.series[i].id,
 														"popularityValue": Math.round(popularityValue * 100)/100
 									}
+									console.log("popularityData " + i +"" + JSON.stringify(popularityData[i]));
+								} else {
+									popularityData[i] = {
+										"seriesid": "empty",
+										"popularityValue": "empty"
+									}
 								}
 							}
+							console.log(popularityData);
 							// Hier wird unser PopularSeries-Array nach popularityValue sortiert
 							popularityData.sort(function (a,b) {
 								return b.popularityValue > a.popularityValue ? 1
 									: b.popularityValue < a.popularityValue ? -1
 									:0; 
 							});
+
 						};
 
 
@@ -551,7 +574,6 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 
 					});
 				});
-
 
 			
 				var externalRequestTwo = http.request(userOptions, function(externalRequestTwo) {
@@ -738,6 +760,39 @@ app.post("/postwatchedseries/user/:id/allseries/:sid", function(req, res){
        		    "Content-Length": Buffer.byteLength(data)
 				}
 			};
+	// Status-Daten in einer JSON-Datei auf dem Dienstnutzer speichern für spätere Verwendung
+	fs.readFile(__dirname+"/count_status.json", function(err, counterData) { 
+		var emulated = JSON.parse(counterData.toString());
+		console.log(emulated);
+
+			var timeStamp = Math.floor(Date.now());
+			var currentStatusCount = {
+				"seriesid": req.params.sid,
+				"status": req.body.status,
+				"timeStamp": timeStamp
+			}
+			emulated.statusMarker.push(currentStatusCount);
+		
+
+			if(req.body.status == "Abgeschlossen") {
+				emulated.statusCounts.abgeschlossen++;
+			}
+			if(req.body.status == "Schaue ich gerade") {
+				emulated.statusCounts.schaueGerade++;
+			}
+			if(req.body.status == "Abgebrochen") {
+				emulated.statusCounts.abgebrochen++;
+			}
+			if(req.body.status == "Werde ich schauen") {
+				emulated.statusCounts.werdeSchauen++;
+			}
+			console.log(emulated);
+
+			fs.writeFile(__dirname+"/count_status.json", JSON.stringify(emulated), function(err) {
+				if (err) throw err;
+			});
+
+	});	
 
 	var externalRequest = http.request(options, function(res){
 		
@@ -757,7 +812,7 @@ app.post("/postwatchedseries/user/:id/allseries/:sid", function(req, res){
 app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
 	var data = JSON.stringify(req.body);
 	console.log("req.body.watchedid: " + req.body.watchedid);
-	var options = {
+	var putSeriesDataOptions = {
 				host: "localhost",
 				port: 8888,
 				path: "/user/"+req.params.id+"/watched/"+req.body.watchedid,
@@ -767,14 +822,46 @@ app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
 				"Content-Type": "application/json",
        		    "Content-Length": Buffer.byteLength(data)
 				}
-			};
+			}
+	// Status-Daten in einer JSON-Datei auf dem Dienstnutzer speichern für spätere Verwendung
+	fs.readFile(__dirname+"/count_status.json", function(err, counterData) { 
+		var emulated = JSON.parse(counterData.toString());
+		console.log(emulated);
 
-	var externalRequest = http.request(options, function(res){
+			var timeStamp = Math.floor(Date.now());
+			var currentStatusCount = {
+				"seriesid": req.params.sid,
+				"status": req.body.status,
+				"timeStamp": timeStamp
+			}
+			emulated.statusMarker.push(currentStatusCount);
+		
+
+			if(req.body.status == "Abgeschlossen") {
+				emulated.statusCounts.abgeschlossen++;
+			}
+			if(req.body.status == "Schaue ich gerade") {
+				emulated.statusCounts.schaueGerade++;
+			}
+			if(req.body.status == "Abgebrochen") {
+				emulated.statusCounts.abgebrochen++;
+			}
+			if(req.body.status == "Werde ich schauen") {
+				emulated.statusCounts.werdeSchauen++;
+			}
+			console.log(emulated);
+
+			fs.writeFile(__dirname+"/count_status.json", JSON.stringify(emulated), function(err) {
+				if (err) throw err;
+			});
+
+	});	
+
+
+	var externalRequest = http.request(putSeriesDataOptions, function(res){
 		
 		externalRequest.on("data", function(chunk) {
 					console.log("body: " + chunk);
-					
-
 				});
 		
 	});
