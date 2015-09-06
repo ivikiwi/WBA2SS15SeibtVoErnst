@@ -167,24 +167,28 @@ Es hilft dir dabei, den Überblick zu behalten. Um Viromark direkt zu verwenden,
                 </div>
                 <div class="panel-body">
                         <% 
+                        var limit = 0;
                             for(var i = 0; i < allSeriesData.series.length; i++) {
                                 for(var e=0; e<schaueGeradeData.length; e++) {
                                     if(allSeriesData.series[i].id == schaueGeradeData[e].seriesid) {
-                                        var stampToday = Math.floor(Date.now());
-                                        var days = (stampToday - schaueGeradeData[e].timeStamp) / 86400000;
-                                        var hours = (stampToday - schaueGeradeData[e].timeStamp) / 3600000;
-                                        var minutes = (stampToday - schaueGeradeData[e].timeStamp) / 600000;
+                                        if(limit < 5) {
+                                            ++limit;
+                                            var stampToday = Math.floor(Date.now());
+                                            var days = (stampToday - schaueGeradeData[e].timeStamp) / 86400000;
+                                            var hours = (stampToday - schaueGeradeData[e].timeStamp) / 3600000;
+                                            var minutes = (stampToday - schaueGeradeData[e].timeStamp) / 600000;
                     
 
-                                        if (days > 0 && days < 1) {
+                                            if (days > 0 && days < 1) {
                         %>      
-                                            <p><a href="./allseries/<%=allSeriesData.series[i].id%>"><%=allSeriesData.series[i].name %></a> (vor <%= parseInt(hours) %> Stunden)</p>
+                                                <p><a href="./allseries/<%=allSeriesData.series[i].id%>"><%=allSeriesData.series[i].name %></a> (vor <%= parseInt(hours) %> Stunden)</p>
                         <%
-                                        } else {
+                                            } else {
    
                         %>
-                                            <p><a href="./allseries/<%=allSeriesData.series[i].id%>"><%=allSeriesData.series[i].name %></a> (vor <%= parseInt(days) %> Tagen)</p>
+                                                <p><a href="./allseries/<%=allSeriesData.series[i].id%>"><%=allSeriesData.series[i].name %></a> (vor <%= parseInt(days) %> Tagen)</p>
                         <%
+                                            }
                                         }
                                     }
                         %>
@@ -243,7 +247,7 @@ Es hilft dir dabei, den Überblick zu behalten. Um Viromark direkt zu verwenden,
     var abgebrochenData = document.getElementById("abgebrochenData").value;
 
     var statusCountData = {
-        labels : ["Schaue ich gerade","Abgeschlossen","Werde ich schauen","Abgebrochen"],
+        labels : ["Schaue ich gerade","Werde ich schauen","Abgeschlossen","Abgebrochen"],
         datasets : [
             {
                 fillColor : "#4ccdc4",

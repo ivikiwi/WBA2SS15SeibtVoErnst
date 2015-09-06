@@ -9,6 +9,10 @@ app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+
+/// REGISTER FOLDER-REFERENCES - like js-Folder, CSS-Folder, bower-Folders, etc.
+require("./routes/folder-references/import").register(app);
+
 //	first get-method
 app.get("/user/:uid/allseries", jsonParser, function(req, res) {
 	fs.readFile("./allseries.ejs", {encoding: "utf-8"}, function(err, filestring) {
@@ -46,234 +50,6 @@ app.get("/user/:uid/allseries", jsonParser, function(req, res) {
 });
 
 
-
-
-app.get("/cover/:id", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "/img/series/cover/",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.id+'.jpg';
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-app.get("/css/:stylesheetname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "/css/",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.stylesheetname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-
-//JS
-app.get("/js/:jsname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "/js/",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.jsname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-//Jquery Library
-app.get("/bower_components/jquery/dist/:jsname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "../../bower_components/jquery/dist/",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-
-  var fileName = req.params.jsname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-//Allgemeine Images laden
-app.get("/img/:imgname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "/img/",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.imgname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-
-
-//Bootstrap CSS
-app.get("/bower_components/bootstrap/dist/css/:stylesheetname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "../../bower_components/bootstrap/dist/css",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-  var fileName = req.params.stylesheetname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', options.root + "" +fileName);
-    }
-  });
-
-});
-
-//Bootstrap JS
-app.get("/bower_components/bootstrap/dist/js/:jsname", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "../../bower_components/bootstrap/dist/js",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.jsname;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-//Bootstrap fonts
-app.get("/bower_components/bootstrap/dist/fonts/:bfonts", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "../../bower_components/bootstrap/dist/fonts",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-  var fileName = req.params.bfonts;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', fileName);
-    }
-  });
-
-});
-
-//Chart.js
-app.get("/bower_components/Chartjs/:fileName", function (req, res, next) {
-
-  var options = {
-    root: __dirname + "../../bower_components/Chart.js",
-    dotfiles: "deny",
-    headers: {
-        "x-timestamp": Date.now(),
-        "x-sent": true
-    }
-  };
-
-
-  var fileName = req.params.fileName;
-  res.sendFile(fileName, options, function (err) {
-    if (err) {
-      console.log(err);
-      res.status(err.status).end();
-    }
-    else {
-      //console.log('Sent:', options.root + "" +fileName);
-    }
-  });
-
-});
 
 // Variable, um in der get-methode die seriendaten zu speichern und später nochmal zu verwenden.
 var seriesrating;
@@ -517,15 +293,6 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 				var sevenDays = 86400000 * 7;
 				var timeStampToday = Math.floor(Date.now());
 				var timeStampSevenDaysAgo = timeStampToday - sevenDays;
-
-				//Hier holen wir alle Serienids, von Serien, die in den letzten sieben Tagen abgeschlossen wurden
-				for(var i=0; i<emulated.statusMarker.length;i++) {
-					if(emulated.statusMarker[i].timeStamp > timeStampSevenDaysAgo && emulated.statusMarker[i].status === "Abgeschlossen") {
-						abgeschlossenData[i] = emulated.statusMarker[i];
-					} else {
-						abgeschlossenData[i] = {"seriesid": "empty", "status": "empty", "timeStamp": "empty"}
-					}
-				}
 
 				//Hier holen wir alle Serienids, von Serien, die in den letzten sieben Tagen als "Schaue ich gerade" markiert wurden
 				for(var i=0; i<emulated.statusMarker.length;i++) {
@@ -893,7 +660,6 @@ app.put("/putwatchedseries/user/:id/allseries/:sid", function(req, res){
 	});
 	externalRequest.write(data);
 	externalRequest.end();
-	
 });
 
 app.put("/putwatchinglist/user/:id/watched/", function(req, res){
@@ -926,7 +692,7 @@ app.put("/putwatchinglist/user/:id/watched/", function(req, res){
 	
 });
 
-// Serie Bewerten!
+// Serie Bewerten! -- BENOETIGT SERIESRATING
 app.put("/ratewatchedseries/user/:id/allseries/:sid", function(req, res){
 	var data = JSON.stringify(req.body);
 	console.log(seriesrating.bewertung);
