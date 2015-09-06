@@ -505,13 +505,39 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 			var requestCounter = 0;
 
 			var statusCountData;
+			var abgeschlossenData = [];
+			var schaueGeradeData = [];
+			var statusCounts;
 
 			// Jetzt holen wir mal die Status-Daten aus unserer JSON-Datei, die wir auf dem Dienstnutzer gespeichert haben
-			fs.readFile(__dirname+"/add-edit-series-to-list.json", function(err, data) { 
-				var emulated = JSON.parse(data.toString());
+			fs.readFile(__dirname+"/count_status.json", function(err, statData) { 
+				var emulated = JSON.parse(statData.toString());
 
-				// Wir verwenden nur die Serien der letzten sieben Tage
-				
+				// Wir verwenden nur die Serien der letzten sieben Tage (86400000 Millisekunden = 1 Tag)
+				var sevenDays = 86400000 * 7;
+				var timeStampToday = Math.floor(Date.now());
+				var timeStampSevenDaysAgo = timeStampToday - sevenDays;
+
+				//Hier holen wir alle Serienids, von Serien, die in den letzten sieben Tagen abgeschlossen wurden
+				for(var i=0; i<emulated.statusMarker.length;i++) {
+					if(emulated.statusMarker[i].timeStamp > timeStampSevenDaysAgo && emulated.statusMarker[i].status === "Abgeschlossen") {
+						abgeschlossenData[i] = emulated.statusMarker[i];
+					} else {
+						abgeschlossenData[i] = {"seriesid": "empty", "status": "empty", "timeStamp": "empty"}
+					}
+				}
+
+				//Hier holen wir alle Serienids, von Serien, die in den letzten sieben Tagen als "Schaue ich gerade" markiert wurden
+				for(var i=0; i<emulated.statusMarker.length;i++) {
+					if(emulated.statusMarker[i].timeStamp > timeStampSevenDaysAgo && emulated.statusMarker[i].status === "Schaue ich gerade") {
+						schaueGeradeData[i] = emulated.statusMarker[i];
+					} else {
+						schaueGeradeData[i] = {"seriesid": "empty", "status": "empty", "timeStamp": "empty"}
+					}
+
+				}
+
+				statusCounts = emulated.statusCounts;
 
 				
 			 });
@@ -581,7 +607,7 @@ app.get("/user/:uid/index", jsonParser, function(req, res){
 					if(requestCounter==2) {
 						externalRequestTwo.on("data", function(chunk) {
 							userData = JSON.parse(chunk);
-							var finaldata = {"userdata": userData, "allSeriesData": allSeriesData, "popularityData": popularityData}
+							var finaldata = {"userdata": userData, "allSeriesData": allSeriesData, "popularityData": popularityData, "schaueGeradeData": schaueGeradeData, "abgeschlossenData": abgeschlossenData, "statusCounts": statusCounts}
 							console.log(JSON.stringify(finaldata));
 							var html = ejs.render(filestring, finaldata);
 							res.setHeader("content-type", "text/html");
